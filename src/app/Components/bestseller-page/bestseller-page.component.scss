@@ -3,9 +3,35 @@
   padding: 80px 0;
 }
 
-.tea-sections {
-    background-color: #fcebd1;
-    font-family: 'Serif', Georgia, serif;
+/* bestseller-page.component.scss */
+
+.tea-row {
+  opacity: 1; /* سيبها 1 والـ GSAP هيتولى البداية من 0 */
+  margin-bottom: 80px;
+}
+
+.header-title h2 {
+  font-family: 'Playfair Display', serif; /* النوع ده هو اللي في الفيديو */
+  font-size: 3.5rem;
+  color: #4a2c2a;
+}
+
+/* حركة الـ Hover اللي في الفيديو (اختياري) */
+.image-wrapper img {
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.image-wrapper:hover img {
+  transform: translateY(-10px); /* الصورة تترفع لفوق شوية زي الفيديو */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+.image-wrapper img {
+
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-wrapper:hover img {
+  transform: scale(1.03);
 }
 
 .tea-description {
