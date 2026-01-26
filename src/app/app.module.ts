@@ -14,6 +14,7 @@ import { CollectionsComponent } from './Components/HomeContent/collections/colle
 import { FeatureComponent } from './Components/HomeContent/feature/feature.component';
 import { BestSellerComponent } from './Components/HomeContent/best-seller/best-seller.component';
 import { GettyImagesComponent } from './Components/HomeContent/getty-images/getty-images.component';
+import { BestsellerPageComponent } from './Components/bestseller-page/bestseller-page.component';
 
 
 
@@ -28,6 +29,7 @@ import { GettyImagesComponent } from './Components/HomeContent/getty-images/gett
     FeatureComponent,
     BestSellerComponent,
     GettyImagesComponent,
+    BestsellerPageComponent,
 
   ],
   imports: [

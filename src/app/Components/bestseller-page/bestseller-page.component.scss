@@ -1,0 +1,112 @@
+.cont{
+  background-color: #fcebd1;
+  padding: 80px 0;
+}
+
+.tea-sections {
+    background-color: #fcebd1;
+    font-family: 'Serif', Georgia, serif;
+}
+
+.tea-description {
+    color: #4a2c2a;
+    line-height: 1.8;
+    letter-spacing: 2.2px;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+
+.image-wrapper img {
+    width: 80%;
+    height: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.left-curve img {
+    border-radius: 25px 100px 100px 25px;
+}
+
+.right-curve img {
+    border-radius: 100px 25px 25px 100px;
+}
+
+
+.text-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+
+.badge-icon {
+    width: 50%;
+    height: auto;
+    // margin-bottom: 20px;
+    display: block;
+}
+.badge-icon1 {
+    width: 40%;
+    height: auto;
+    display: block;
+}
+
+
+.text-md-end {
+    text-align: center !important;
+}
+
+
+
+.badge-wrapper {
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.badge-icon {
+    width: 40%;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+}
+
+
+.badge-wrapper:hover .badge-icon {
+    transform: scale(1.15);
+}
+
+
+.badge-name {
+    color: #4a2c2a;
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: translateY(-80px);
+    transition: all 0.6s ease-in-out;
+}
+
+
+.badge-wrapper:hover .badge-name {
+    opacity: 1;
+    transform: translateY(-30px);
+}
+
+
+
+
+
+@media (max-width: 768px) {
+    .text-content {
+        text-align: center !important;
+        margin-top: 20px;
+    }
+    .image-wrapper img {
+        border-radius: 20px;
+    }
+}
