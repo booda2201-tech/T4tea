@@ -41,20 +41,6 @@
     height: 100%;
 }
 
-
-.badge-icon {
-    width: 50%;
-    height: auto;
-    // margin-bottom: 20px;
-    display: block;
-}
-.badge-icon1 {
-    width: 40%;
-    height: auto;
-    display: block;
-}
-
-
 .text-md-end {
     text-align: center !important;
 }
@@ -62,18 +48,23 @@
 
 
 .badge-wrapper {
+    min-height: 350px;
     cursor: pointer;
     transition: all 0.4s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-end;
 }
 
 
 .badge-icon {
-    width: 40%;
+    width: 350px;
+    height: 350px;
+    object-fit: contain;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: block;
+    margin: 0 auto;
 }
 
 
@@ -87,7 +78,7 @@
     font-weight: bold;
     font-size: 1.2rem;
     opacity: 0;
-    transform: translateY(-80px);
+    transform: translateY(-85px);
     transition: all 0.6s ease-in-out;
 }
 
@@ -102,11 +93,65 @@
 
 
 @media (max-width: 768px) {
-    .text-content {
-        text-align: center !important;
-        margin-top: 20px;
+
+    .badge-icon {
+        width: 220px;
+        height: 250px;
     }
+
+
+    .badge-wrapper {
+        min-height: 250px;
+        margin-bottom: 10px;
+    }
+
+
+    .badge-name {
+        font-size: 1rem;
+        transform: translateY(-50px);
+    }
+
+    .badge-wrapper:hover .badge-name {
+        transform: translateY(-15px);
+    }
+
+
+    .image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+
     .image-wrapper img {
-        border-radius: 20px;
+        width: 85%;
+        max-width: 400px;
+        margin: 0 auto;
+        display: block;
+        border-radius: 40px !important;
+    }
+
+
+    .left-curve img, .right-curve img {
+        border-radius: 20px !important;
+    }
+
+
+    .text-content {
+        padding: 0 15px;
+        text-align: center !important;
+    }
+
+    .tea-description {
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+    }
+
+
+    .mb-5 {
+        margin-bottom: 3rem !important;
     }
 }
+
