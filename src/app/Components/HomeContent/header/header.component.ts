@@ -1,4 +1,6 @@
-import { Component} from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { gsap } from 'gsap';
 import { trigger, style, animate, transition, state } from '@angular/animations';
 
 @Component({
@@ -30,7 +32,35 @@ trigger('contentFade', [
 })
 export class HeaderComponent{
 
+constructor(private router: Router) {}
 
+  onBestSellerClick() {
+    // نحدد العنصر (الستارة) - يمكنك استخدام document.querySelector للسهولة هنا
+    const overlay = document.querySelector('.transition-overlay');
+
+    const tl = gsap.timeline();
+
+    // 1. حركة إغلاق الشاشة
+    tl.to(overlay, {
+      duration: 0.6,
+      scaleY: 1,
+      ease: "power4.inOut"
+    });
+
+    // 2. الانتقال للصفحة الجديدة في منتصف الأنميشن
+    tl.add(() => {
+      this.router.navigate(['/bestseller-page']);
+    });
+
+    // 3. حركة فتح الشاشة في الصفحة الجديدة
+    tl.to(overlay, {
+      duration: 0.6,
+      scaleY: 0,
+      transformOrigin: "top", // تفتح للأعلى
+      ease: "power4.inOut",
+      delay: 0.2
+    });
+  }
 
 
 }
