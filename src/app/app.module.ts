@@ -13,8 +13,9 @@ import { HeaderComponent } from './Components/HomeContent/header/header.componen
 import { CollectionsComponent } from './Components/HomeContent/collections/collections.component';
 import { FeatureComponent } from './Components/HomeContent/feature/feature.component';
 import { BestSellerComponent } from './Components/HomeContent/best-seller/best-seller.component';
-import { GettyImagesComponent } from './Components/HomeContent/getty-images/getty-images.component';
+
 import { BestsellerPageComponent } from './Components/bestseller-page/bestseller-page.component';
+import { InfiniteSliderComponent } from './Components/HomeContent/infinite-slider/infinite-slider.component';
 
 
 
@@ -28,8 +29,8 @@ import { BestsellerPageComponent } from './Components/bestseller-page/bestseller
     CollectionsComponent,
     FeatureComponent,
     BestSellerComponent,
-    GettyImagesComponent,
     BestsellerPageComponent,
+    InfiniteSliderComponent,
 
   ],
   imports: [

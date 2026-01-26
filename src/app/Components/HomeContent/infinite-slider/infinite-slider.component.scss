@@ -1,0 +1,39 @@
+
+
+
+.infinite-scroll-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: #fcebd1;
+  padding: 30px 0;
+  width: 100%;
+}
+
+.scroll-track {
+  display: inline-flex;
+  align-items: center;
+  animation: scroll-animation 15s linear infinite;
+}
+
+.scroll-track img {
+  height: 200px;
+  width: auto;
+  display: block;
+}
+
+
+@media (min-width: 1024px) {
+  .infinite-scroll-container {
+    padding: 60px 0;
+  }
+
+  .scroll-track img {
+    height: 400px;
+  }
+}
+
+
+@keyframes scroll-animation {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}

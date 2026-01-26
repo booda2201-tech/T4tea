@@ -1,89 +1,3 @@
-// .best-seller-section {
-//   background-color: #f7f2e8;
-//   padding: 100px 0;
-//   position: relative;
-//   overflow: hidden;
-//   display: flex;
-//   align-items: center;
-//   min-height: 600px;
-// }
-
-
-// .section-header {
-//   text-align: center;
-//   margin-bottom: 60px;
-//   position: relative;
-//   z-index: 10;
-
-//   .section-title {
-//     font-family: 'Playfair Display', serif;
-//     color: #003d37;
-//     font-size: 2.5rem;
-//     margin-bottom: 0;
-//   }
-
-//   .section-subtitle {
-//     color: #003d37;
-//     font-size: 1rem;
-//     font-style: italic;
-//   }
-// }
-
-
-// .product-item {
-//   text-align: center;
-//   transition: transform 0.4s ease;
-
-//   img {
-//     width: 100%;
-//     max-width: 260px;
-//     filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.08));
-//   }
-
-//   &:hover {
-//     transform: translateY(-10px);
-//   }
-// }
-
-
-// .press-decor{
-//   position: absolute;
-//   bottom: 0;
-//   right: 150px !important;
-//   z-index: 2;
-// }
-
-
-
-// .tea-bag-decor {
-//   left: 2%;
-//   bottom: 25%;
-//   width: 220px;
-// }
-
-// .press-decor {
-//   right: 0%;
-//   bottom: 20%;
-//   width: 220px;
-// }
-
-
-// @media (max-width: 991px) {
-//   .decor-item {
-//     display: none;
-//   }
-//   .connecting-line {
-//     display: none;
-//   }
-//   .product-item img {
-//     max-width: 200px;
-//     margin-bottom: 20px;
-//   }
-// }
-
-
-
-
 
 
 
@@ -190,13 +104,13 @@
     pointer-events: none;
 
     &.leaves-left {
-      left: -20px;
-      bottom: 50px;
+      left: -10px;
+      bottom: 0px;
       transform: translateX(20px) rotate(-15deg);
     }
 
     &.leaves-right {
-      right: -20px;
+      right: -10px;
       bottom: 50px;
       transform: translateX(-20px) rotate(15deg);
     }
@@ -260,8 +174,27 @@
   .decor-item, .connecting-line {
     display: none;
   }
-  .product-item img {
-    height: 250px;
+
+  .product-item .main-can {
+    height: 300px;
     margin-bottom: 30px;
+  }
+
+
+  .product-item .hover-decor.leaves-left {
+    left: 120px;
+    bottom: 0px;
+    width: 40px;
+  }
+
+  .product-item .hover-decor.leaves-right {
+    right: 120px;
+    bottom: -30px;
+    width: 40px;
+  }
+
+  .product-item .hover-line {
+    bottom: 80px;
+    width: 60px;
   }
 }

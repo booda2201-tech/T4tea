@@ -1,0 +1,96 @@
+.main-footer {
+    background-color: #052c28;
+    color: #fcebd1;
+    padding: 80px 0;
+    font-family: 'Serif', Georgia, serif;
+}
+
+.footer-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+
+.footer-text {
+    line-height: 1.8;
+    font-size: 0.95rem;
+    max-width: 450px;
+    opacity: 0.85;
+}
+
+.footer-logo img {
+    max-width: 130px;
+}
+
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+
+.icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border: 1.5px solid #fcebd1;
+    border-radius: 50%;
+    color: #fcebd1;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    font-size: 1.2rem;
+}
+
+
+.icon-circle:hover {
+    color: #ffffff !important;
+    transform: translateY(-5px);
+    border-color: transparent;
+}
+
+
+.icon-circle.fb:hover {
+    background-color: #1877F2;
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+}
+
+
+.icon-circle.ig:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    box-shadow: 0 4px 15px rgba(214, 36, 159, 0.3);
+}
+
+
+.icon-circle.wa:hover {
+    background-color: #25D366;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+
+.icon-circle.tk:hover {
+    background-color: #000000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border: 1.5px solid #ff0050;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #fcebd1;
+    text-decoration: none;
+    font-size: 1.05rem;
+    transition: 0.3s;
+}
+
+@media (max-width: 768px) {
+    .main-footer { text-align: center; padding: 60px 20px; }
+    .footer-text { margin: 0 auto; }
+    .text-md-end { text-align: center !important; }
+    .social-icons { margin-bottom: 40px; }
+}
