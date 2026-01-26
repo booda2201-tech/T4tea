@@ -10,10 +10,11 @@
       rgb(0, 22, 20) 0%,
       rgba(0, 45, 41, 0.4) 50%,
       rgba(0, 45, 41, 0) 100%),
-    url('../../../../assets/g1.png');
-
+    url('../../../../assets/g2.png');
   background-size: fill;
-  background-position: center right;
+  background-position: 100% center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -39,7 +40,7 @@
 
 .hero-btns {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   width: 100%;
 }
 .custom-btn-white {
