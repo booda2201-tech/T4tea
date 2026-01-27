@@ -15,16 +15,16 @@ ngAfterViewInit() {
     });
 
 
-    tl.fromTo(".header-title",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0 }
+    tl.fromTo(".section-header",
+      { opacity: 0, y: 150 },
+      { opacity: 1, y: 50 }
     );
 
 
 
     tl.fromTo(".tea-row",
-      { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, stagger: 0.3 },
+      { opacity: 0, y: 150 },
+      { opacity: 1, y: 50, stagger: 0.3, },
       "-=0.8"
     );
 
