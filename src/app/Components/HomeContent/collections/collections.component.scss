@@ -1,7 +1,26 @@
+
+
 .collections-section {
   padding: 80px 0;
   background-color: #fcebd1;
+  position: relative; // أضف هذا السطر ضروري جداً
+  overflow: hidden;   // عشان الـ leaf متعملش Scroll بالعرض
 }
+
+
+
+
+
+
+
+
+
+
+
+// .collections-section {
+//   padding: 80px 0;
+//   background-color: #fcebd1;
+// }
 
 .collection-card {
   text-align: left;

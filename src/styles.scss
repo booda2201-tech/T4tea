@@ -51,3 +51,10 @@ $text-white: #ffffff;
 
 
 
+:host ::ng-deep {
+  .owl-carousel .owl-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
