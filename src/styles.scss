@@ -10,22 +10,6 @@
 // تنسيقات الـ Toastr
 @import "ngx-toastr/toastr";
 
-// استيراد تنسيقات الـ Owl Carousel الأساسية
-@import "ngx-owl-carousel-o/lib/styles/scss/owl.carousel";
-@import "ngx-owl-carousel-o/lib/styles/scss/owl.theme.default";
-
-.owl-theme {
-  .owl-dots {
-    .owl-dot {
-      span {
-        background: #ccc;
-      }
-      &.active span {
-        background: #ff9800;
-      }
-    }
-  }
-}
 
 
 
@@ -49,12 +33,3 @@ $text-white: #ffffff;
 
 
 
-
-
-:host ::ng-deep {
-  .owl-carousel .owl-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-}

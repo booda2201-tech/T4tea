@@ -68,7 +68,7 @@ customOptions: OwlOptions = {
     mouseDrag: true,
     touchDrag: true,
     pullDrag: false,
-    dots: true,
+    dots: false,
     navSpeed: 700,
     responsive: {
       0: { items: 1 },
