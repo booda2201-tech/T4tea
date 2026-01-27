@@ -3,6 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+
+
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +40,7 @@ import { InfiniteSliderComponent } from './Components/HomeContent/infinite-slide
   imports: [
     BrowserModule,
     AppRoutingModule,
+    CarouselModule,
     BrowserAnimationsModule,
     HttpClientModule,
     ToastrModule.forRoot({

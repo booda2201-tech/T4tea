@@ -1,18 +1,20 @@
 <section class="collections-section">
   <div class="container">
+    <owl-carousel-o [options]="customOptions">
 
-    <div class="row g-4 justify-content-center">
-      <div class="col-md-4" *ngFor="let category of categories">
-        <div class="collection-card" >
-          <div class="img-wrapper orange-bg">
-            <img [src]="category.img" alt="Tea Cups">
+      <ng-container *ngFor="let category of categories">
+        <ng-template carouselSlide>
+          <div class="collection-card m-2"> <div class="img-wrapper orange-bg">
+              <img [src]="category.img" [alt]="category.title">
+            </div>
+            <h3>{{category.title}}</h3>
+            <p>{{category.description}}</p>
+            <button class="shop-btn">Shop Now</button>
           </div>
-          <h3>{{category.title}}</h3>
-          <p>{{category.description}}</p>
-          <button class="shop-btn">Shop Now</button>
-        </div>
-      </div>
-    </div>
+        </ng-template>
+      </ng-container>
+
+    </owl-carousel-o>
   </div>
   <img src="../../../../assets/w.png" class="leaf-decoration" alt="decoration">
 </section>
