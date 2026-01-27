@@ -38,7 +38,7 @@
 </section> -->
 
 
-<section class="best-seller-section">
+<!-- <section class="best-seller-section">
   <div class="connecting-line"></div>
   <div class="decor-item tea-bag-decor">
     <img src="../../../../assets/Vector (1).png" alt="">
@@ -74,6 +74,44 @@
           <div class="hover-decor leaves-left"><img src="../../../../assets/warda.png" alt=""></div>
           <img src="../../../../assets/Green Tea.png" alt="Green Tea" class="main-can">
           <div class="hover-decor leaves-right"><img src="../../../../assets/warda1.png" alt=""></div>
+          <div class="hover-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="decor-item press-decor">
+    <img src="../../../../assets/Tea Press.png" alt="">
+  </div>
+</section>
+ -->
+
+
+
+  <section class="best-seller-section">
+  <div class="connecting-line"></div>
+  <div class="decor-item tea-bag-decor">
+    <img src="../../../../assets/Vector (1).png" alt="">
+  </div>
+
+  <div class="container position-relative" style="z-index: 5;">
+    <div class="section-header">
+      <h2 class="section-title">Best Seller</h2>
+      <p class="section-subtitle">Savor the Art of Fine Tea.</p>
+    </div>
+
+    <div class="row justify-content-center align-items-end g-4">
+      <div class="col-md-3" *ngFor="let product of bestSellers">
+        <div class="product-item">
+          <div class="hover-decor leaves-left">
+            <img src="../../../../assets/warda.png" alt="">
+          </div>
+
+          <img [src]="product.image" [alt]="product.altText" class="main-can">
+
+          <div class="hover-decor leaves-right">
+            <img src="../../../../assets/warda1.png" alt="">
+          </div>
           <div class="hover-line"></div>
         </div>
       </div>
