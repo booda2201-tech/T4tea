@@ -5,6 +5,46 @@
 
 /* bestseller-page.component.scss */
 
+
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    color: #003d37;
+    font-size: 3rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .section-subtitle {
+    color: #003d37;
+    font-size: 1.1rem;
+    font-style: italic;
+    opacity: 0.8;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .tea-row {
   opacity: 1; /* سيبها 1 والـ GSAP هيتولى البداية من 0 */
   margin-bottom: 80px;

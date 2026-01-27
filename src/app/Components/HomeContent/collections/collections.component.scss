@@ -9,6 +9,28 @@
 
 
 
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    color: #003d37;
+    font-size: 3rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .section-subtitle {
+    color: #003d37;
+    font-size: 1.1rem;
+    font-style: italic;
+    opacity: 0.8;
+  }
+}
 
 
 
@@ -29,7 +51,7 @@
   .img-wrapper {
     width: 100%;
     aspect-ratio: 1 / 1;
-    border-radius: 30px;
+    border-radius: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
