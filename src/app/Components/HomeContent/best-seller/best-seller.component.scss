@@ -170,7 +170,7 @@
 
 
 
-@media (max-width: 991px) {
+@media (max-width: 1100px) {
   .decor-item, .connecting-line {
     display: none;
   }
@@ -182,13 +182,13 @@
 
 
   .product-item .hover-decor.leaves-left {
-    left: 120px;
+    left: 125px;
     bottom: 0px;
     width: 40px;
   }
 
   .product-item .hover-decor.leaves-right {
-    right: 120px;
+    right: 125px;
     bottom: -30px;
     width: 40px;
   }
@@ -197,4 +197,21 @@
     bottom: 80px;
     width: 60px;
   }
+}
+
+
+@media (max-width: 475px) {
+
+  .product-item .hover-decor.leaves-left {
+    left: 110px;
+    bottom: 0px;
+    width: 40px;
+  }
+
+  .product-item .hover-decor.leaves-right {
+    right: 106px;
+    bottom: -30px;
+    width: 40px;
+  }
+
 }

@@ -363,14 +363,14 @@
   }
 }
 
-/* تنسيق روابط القائمة في الموبايل */
+
 .mobile-menu a {
   color: #fcebd1;
   text-decoration: none;
   font-size: 1.1rem;
   padding: 12px 20px;
   border-bottom: 1px solid rgba(252, 235, 209, 0.1);
-  transition: all 0.3s ease-in-out; /* انسيابية التأثير */
+  transition: all 0.3s ease-in-out;
   display: block;
   position: relative;
 }
@@ -399,7 +399,7 @@
   .search-bar-container.active {
     width: 160px;
     position: absolute;
-    right: 100px;
+    right: 50px;
   }
 }
 

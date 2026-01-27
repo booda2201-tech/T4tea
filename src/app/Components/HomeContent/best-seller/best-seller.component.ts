@@ -33,4 +33,27 @@ export class BestSellerComponent {
     }
   ];
 
+
+
+
+
+  // constructor(private api : apiService) { }
+
+
+  // ngOnInit(): void {
+  //   this.api.getallCategories().subscribe({
+  //     next:(res:any)=>{
+  //       console.log(this.categories);
+  //       this.categories = res;
+  //     },
+  //     error:(err:any)=>{
+  //       console.log(err);
+  //     }
+  //   })
+  // }
+
+
+
+
 }
+
