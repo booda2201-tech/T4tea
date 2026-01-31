@@ -41,7 +41,7 @@ onBestSellerClick() {
     y: -30,
     ease: "power2.in",
     onComplete: () => {
-      this.router.navigate(['/bestseller-page']);
+      this.router.navigate(['/explore-page']);
     }
   });
 }

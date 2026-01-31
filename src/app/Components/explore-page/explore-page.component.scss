@@ -1,0 +1,227 @@
+
+
+
+
+.cont{
+  background-color: #fcebd1;
+  padding: 10px 0;
+}
+
+/* bestseller-page.component.scss */
+
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    color: #003d37;
+    font-size: 3.3rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .section-subtitle {
+    color: #003d37;
+    font-size: 1.1rem;
+    font-style: italic;
+    opacity: 0.8;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.tea-row {
+  opacity: 1; /* سيبها 1 والـ GSAP هيتولى البداية من 0 */
+  margin-bottom: 80px;
+}
+
+.header-title h2 {
+  font-family: 'Playfair Display', serif; /* النوع ده هو اللي في الفيديو */
+  font-size: 3.5rem;
+  color: #4a2c2a;
+}
+
+/* حركة الـ Hover اللي في الفيديو (اختياري) */
+.image-wrapper img {
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.image-wrapper:hover img {
+  transform: translateY(-10px); /* الصورة تترفع لفوق شوية زي الفيديو */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+.image-wrapper img {
+
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-wrapper:hover img {
+  transform: scale(1.03);
+}
+
+.tea-description {
+    color: #4a2c2a;
+    line-height: 1.8;
+    letter-spacing: 2.2px;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+
+.image-wrapper img {
+    width: 80%;
+    height: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.left-curve img {
+    border-radius: 25px 100px 100px 25px;
+}
+
+.right-curve img {
+    border-radius: 100px 25px 25px 100px;
+}
+
+
+.text-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.text-md-end {
+    text-align: center !important;
+}
+
+
+
+.badge-wrapper {
+    min-height: 350px;
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+.badge-icon {
+    width: 350px;
+    height: 350px;
+    object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+    margin: 0 auto;
+}
+
+
+.badge-wrapper:hover .badge-icon {
+    transform: scale(1.15);
+}
+
+
+.badge-name {
+    color: #4a2c2a;
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: translateY(-85px);
+    transition: all 0.6s ease-in-out;
+}
+
+
+.badge-wrapper:hover .badge-name {
+    opacity: 1;
+    transform: translateY(-30px);
+}
+
+
+
+
+
+@media (max-width: 768px) {
+
+    .badge-icon {
+        width: 220px;
+        height: 250px;
+    }
+
+
+    .badge-wrapper {
+        min-height: 250px;
+        margin-bottom: 10px;
+    }
+
+
+    .badge-name {
+        font-size: 1rem;
+        transform: translateY(-50px);
+    }
+
+    .badge-wrapper:hover .badge-name {
+        transform: translateY(-15px);
+    }
+
+
+    .image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+
+    .image-wrapper img {
+        width: 85%;
+        max-width: 400px;
+        margin: 0 auto;
+        display: block;
+        border-radius: 40px !important;
+    }
+
+
+    .left-curve img, .right-curve img {
+        border-radius: 20px !important;
+    }
+
+
+    .text-content {
+        padding: 0 15px;
+        text-align: center !important;
+    }
+
+    .tea-description {
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+    }
+
+
+    .mb-5 {
+        margin-bottom: 3rem !important;
+    }
+}
+

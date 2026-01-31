@@ -20,6 +20,7 @@ import { BestSellerComponent } from './Components/HomeContent/best-seller/best-s
 
 import { BestsellerPageComponent } from './Components/bestseller-page/bestseller-page.component';
 import { InfiniteSliderComponent } from './Components/HomeContent/infinite-slider/infinite-slider.component';
+import { ExplorePageComponent } from './Components/explore-page/explore-page.component';
 
 
 
@@ -35,6 +36,7 @@ import { InfiniteSliderComponent } from './Components/HomeContent/infinite-slide
     BestSellerComponent,
     BestsellerPageComponent,
     InfiniteSliderComponent,
+    ExplorePageComponent,
 
   ],
   imports: [

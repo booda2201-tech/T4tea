@@ -7,6 +7,7 @@ import { CollectionsComponent } from './Components/HomeContent/collections/colle
 import { FeatureComponent } from './Components/HomeContent/feature/feature.component';
 import { BestSellerComponent } from './Components/HomeContent/best-seller/best-seller.component';
 import { BestsellerPageComponent } from './Components/bestseller-page/bestseller-page.component';
+import { ExplorePageComponent } from './Components/explore-page/explore-page.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
     { path: 'feature', component: FeatureComponent },
     { path: 'best-seller', component: BestSellerComponent },
     { path: 'bestseller-page', component: BestsellerPageComponent },
+    { path: 'explore-page', component: ExplorePageComponent },
 
 ];
 
