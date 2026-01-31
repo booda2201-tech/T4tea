@@ -260,16 +260,65 @@
 }
 
 .carousel-wrapper {
-  background-color: #0b3d2e;
+  background-color: #0b3d2e; // لون الموقع الأخضر
+  background-image: url('../../../assets/_2.png');
+  background-size: cover;
+
+
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+  background-position: center center;
+
   border-radius: 50px;
   padding: 60px 40px;
   max-width: 1000px;
   margin: 40px auto;
   position: relative;
-
-  background-image: url('../../../assets/_2.png');
-  background-size: cover;
 }
+
+
+
+// .carousel-wrapper {
+//   background-color: #0b3d2e; /* اللون الأخضر الغامق */
+//   border-radius: 50px;
+//   padding: 60px 40px;
+//   max-width: 1000px;
+//   margin: 40px auto;
+//   position: relative;
+//   background-image: url('../../../assets/-1.png');
+//   background-size: cover;
+// }
+
+
+
+
+// .carousel-wrapper {
+
+//   background-color: #0b3d2e;
+
+
+
+//   background-image:
+//     linear-gradient(rgba(255, 140, 0, 0.4), rgba(255, 140, 0, 0.589)),
+//     url('../../../assets/_2.png');
+
+//   background-size: cover;
+//   background-position: center;
+
+
+//   background-blend-mode: screen;
+
+//   border-radius: 50px;
+//   padding: 60px 40px;
+//   max-width: 1350px; // مطابقة لمقاس العرض في فيجما
+//   height: 492px;     // مطابقة للارتفاع في فيجما
+//   margin: 40px auto;
+//   position: relative;
+//   display: flex;
+//   align-items: center;
+// }
+
+
 
 .product-card img {
   height: 300px;
@@ -283,10 +332,7 @@
 }
 
 
-swiper-container {
-  --swiper-navigation-color: #fff;
-  --swiper-pagination-color: #fff;
-}
+
 
 .footer-text {
   max-width: 600px;
