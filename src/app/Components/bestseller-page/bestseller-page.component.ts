@@ -43,8 +43,9 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
       navigation: false,
       pagination: false,
       breakpoints: {
-        640: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 }
+        640: { slidesPerView: 1 },
+        868: { slidesPerView: 2 },
+        1200: { slidesPerView: 3 }
       }
     };
 
