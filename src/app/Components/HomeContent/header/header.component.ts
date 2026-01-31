@@ -34,7 +34,7 @@ export class HeaderComponent{
 
 constructor(private router: Router) {}
 
-onBestSellerClick() {
+onExploreClick() {
   gsap.to(".hero-section", {
     duration: 0.4,
     opacity: 0,
@@ -45,4 +45,16 @@ onBestSellerClick() {
     }
   });
 }
+onBestSellerClick() {
+  gsap.to(".hero-section", {
+    duration: 0.4,
+    opacity: 0,
+    y: -5,
+    ease: "power2.in",
+    onComplete: () => {
+      this.router.navigate(['/bestseller-page']);
+    }
+  });
+}
+
 }

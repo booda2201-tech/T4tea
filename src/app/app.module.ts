@@ -18,6 +18,12 @@ import { BestSellerComponent } from './Components/HomeContent/best-seller/best-s
 import { BestsellerPageComponent } from './Components/bestseller-page/bestseller-page.component';
 import { InfiniteSliderComponent } from './Components/HomeContent/infinite-slider/infinite-slider.component';
 import { ExplorePageComponent } from './Components/explore-page/explore-page.component';
+import { CategoryComponent } from './Components/category/category.component';
+import { TeawaresComponent } from './Components/teawares/teawares.component';
+import { AboutUsComponent } from './Components/about-us/about-us.component';
+import { CartComponent } from './Components/cart/cart.component';
+import { LoginComponent } from './Components/login/login.component';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 
 
@@ -34,6 +40,12 @@ import { ExplorePageComponent } from './Components/explore-page/explore-page.com
     // BestsellerPageComponent,
     InfiniteSliderComponent,
     ExplorePageComponent,
+    CategoryComponent,
+    TeawaresComponent,
+    AboutUsComponent,
+    CartComponent,
+    LoginComponent,
+    ProfileComponent,
 
   ],
   imports: [

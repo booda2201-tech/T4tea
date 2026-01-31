@@ -1,5 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, AfterViewInit, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { gsap } from 'gsap';
 // @ts-ignore
 import { register } from 'swiper/element/bundle';
 register();
@@ -51,5 +52,37 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
 
     Object.assign(this.swiperRef.nativeElement, swiperParams);
     this.swiperRef.nativeElement.initialize();
-  }
+
+
+  setTimeout(() => {
+    const tl = gsap.timeline({
+      defaults: { ease: "expo.out", duration: 1.2 }
+    });
+
+
+    tl.fromTo(".section-header",
+      { opacity: 0, y: 150 },
+      { opacity: 1, y: 50 }
+    );
+
+
+
+    tl.fromTo(".tea-row",
+      { opacity: 0, y: 150 },
+      { opacity: 1, y: 50, stagger: 0.3, },
+      "-=0.8"
+    );
+
+
+    tl.from(".image-wrapper img", {
+      scale: 0.95,
+      duration: 1.5,
+      stagger: 0.3
+    }, "-=1.2");
+
+  }, 100);
+}
+
+
+
 }
