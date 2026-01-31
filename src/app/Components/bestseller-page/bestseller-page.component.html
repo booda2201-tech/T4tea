@@ -89,21 +89,24 @@
 <div class="cont">
 <section class="container">
   <div class="header">
-    <h2>Best Seller</h2>
-    <p class="subtitle">The Art of Quality</p>
+    <h2 class="section-title">Best Seller</h2>
+    <p class="section-subtitle">The Art of Quality</p>
   </div>
     <div class="carousel-wrapper">
       <swiper-container #swiperRef init="false">
         <swiper-slide *ngFor="let product of teaProducts">
           <div class="product-card">
             <img [src]="product.img" [alt]="product.name" class="badge-icon">
-            <h4 class="badge-name">Pomegranate</h4>
+            <h4 class="badge-name">{{ product.name }}</h4>
           </div>
         </swiper-slide>
       </swiper-container>
     </div>
-  <div class="footer-text">
-    <p>Our best-selling essentials are celebrated for their exceptional quality, refined comfort, and timeless appeal.</p>
-  </div>
+<div class="footer-text">
+  <p>
+    Our best-selling essentials are celebrated for their exceptional quality, refined comfort, and timeless appeal.
+    Chosen by those who value excellence, these products represent the perfect balance of craftsmanship, performance, and enduring elegance.
+  </p>
+</div>
 </section>
 </div>

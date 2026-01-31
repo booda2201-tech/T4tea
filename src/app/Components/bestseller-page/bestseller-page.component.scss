@@ -23,7 +23,7 @@
   background-repeat: no-repeat;
   background-position: center center;
   border-radius: 50px;
-  padding: 60px 40px;
+  padding: 30px;
   max-width: 1200px;
   margin: 40px auto;
   position: relative;
@@ -121,7 +121,7 @@
 
 
 .badge-name {
-    color: #e9e9e9;
+    color: #fcebd1;
     font-weight: bold;
     font-size: 1.2rem;
     opacity: 0;
@@ -133,6 +133,53 @@
 .product-card:hover .badge-name {
     opacity: 1;
     transform: translateY(-30px);
+}
+
+
+
+.footer-text {
+  max-width: 900px;
+  margin: 80px auto;
+  position: relative;
+  padding: 60px 100px;
+  text-align: center;
+
+  p {
+    font-family: 'Serif', serif;
+    font-style: italic;
+    color: #1a3c34;
+    line-height: 1.8;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    width: 120px;
+    height: 120px;
+    background-image: url('../../../assets/Vector\ \(3\).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top left;
+  }
+
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    width: 120px;
+    height: 120px;
+    background-image: url('../../../assets/Vector\ \(4\).png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+  }
 }
 
 
@@ -157,6 +204,10 @@
         margin: 20px auto;
     }
 
+    .section-title{
+        font-size: 2.3rem !important;
+    }
+
     .badge-icon {
         width: 250px;
         height: 250px;
@@ -172,6 +223,30 @@
     .product-card:hover .badge-name {
         transform: translateY(-50px);
     }
+
+    .footer-text {
+        padding: 30px 40px;
+        margin: 40px 20px;
+
+        p {
+            font-size: 1.1rem;
+        }
+
+        &::before, &::after {
+          width: 80px;
+          height: 80px;
+        }
+
+      &::after {
+        bottom: 8px;
+        right: 20px;
+      }
+      &::before {
+        top: 5px;
+        left: 5px;
+      }
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -204,5 +279,21 @@
         transform: translateY(-30px) !important;
         transition: all 0.4s ease-in-out;
     }
+
+
+      .footer-text {
+        padding: 30px 40px;
+        margin: 40px 20px;
+
+        p {
+            font-size: 16px;
+        }
+
+        &::before, &::after {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
 
 }

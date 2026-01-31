@@ -31,10 +31,10 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
 
 
     setTimeout(() => {
-      if (this.swiperRef) {
-        this.swiperRef.nativeElement.swiper.update();
-      }
-    }, 0);
+        if (this.swiperRef && this.swiperRef.nativeElement.swiper) {
+          this.swiperRef.nativeElement.swiper.update();
+        }
+      }, 100);
   }
 
   ngAfterViewInit() {
