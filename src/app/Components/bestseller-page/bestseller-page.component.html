@@ -1,6 +1,6 @@
 
 
-<div class="cont">
+<!-- <div class="cont">
   <div class="tea-sections py-5 main-wrapper">
   <div class="container">
     <div class="section-header">
@@ -76,6 +76,33 @@
   </div>
 </div>
 </div>
+ -->
 
 
 
+
+
+
+
+
+
+<div class="cont">
+<section class="container">
+  <div class="header">
+    <h2>Best Seller</h2>
+    <p class="subtitle">The Art of Quality</p>
+  </div>
+    <div class="carousel-wrapper">
+      <swiper-container #swiperRef init="false">
+        <swiper-slide *ngFor="let product of teaProducts">
+          <div class="product-card">
+            <img [src]="product.img" [alt]="product.name">
+          </div>
+        </swiper-slide>
+      </swiper-container>
+    </div>
+  <div class="footer-text">
+    <p>Our best-selling essentials are celebrated for their exceptional quality, refined comfort, and timeless appeal.</p>
+  </div>
+</section>
+</div>

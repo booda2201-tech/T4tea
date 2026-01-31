@@ -1,11 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-
-
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,7 +15,6 @@ import { HeaderComponent } from './Components/HomeContent/header/header.componen
 import { CollectionsComponent } from './Components/HomeContent/collections/collections.component';
 import { FeatureComponent } from './Components/HomeContent/feature/feature.component';
 import { BestSellerComponent } from './Components/HomeContent/best-seller/best-seller.component';
-
 import { BestsellerPageComponent } from './Components/bestseller-page/bestseller-page.component';
 import { InfiniteSliderComponent } from './Components/HomeContent/infinite-slider/infinite-slider.component';
 import { ExplorePageComponent } from './Components/explore-page/explore-page.component';
@@ -34,7 +31,7 @@ import { ExplorePageComponent } from './Components/explore-page/explore-page.com
     CollectionsComponent,
     FeatureComponent,
     BestSellerComponent,
-    BestsellerPageComponent,
+    // BestsellerPageComponent,
     InfiniteSliderComponent,
     ExplorePageComponent,
 
@@ -52,6 +49,7 @@ import { ExplorePageComponent } from './Components/explore-page/explore-page.com
     }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

@@ -221,3 +221,78 @@
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.container {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.header h2 {
+  color: #1a3c34;
+  font-family: 'Serif', serif;
+  font-size: 2.5rem;
+  margin-bottom: 5px;
+}
+
+.carousel-wrapper {
+  background-color: #0b3d2e;
+  border-radius: 50px;
+  padding: 60px 40px;
+  max-width: 1000px;
+  margin: 40px auto;
+  position: relative;
+
+  background-image: url('/assets/pattern-overlay.png');
+  background-size: cover;
+}
+
+.product-card img {
+  height: 300px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+
+.product-card img:hover {
+  transform: scale(1.05);
+}
+
+
+swiper-container {
+  --swiper-navigation-color: #fff;
+  --swiper-pagination-color: #fff;
+}
+
+.footer-text {
+  max-width: 600px;
+  margin: 0 auto;
+  font-style: italic;
+  color: #1a3c34;
+  line-height: 1.6;
+}
+
