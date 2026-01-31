@@ -50,23 +50,23 @@
 
 
 .tea-row {
-  opacity: 1; /* سيبها 1 والـ GSAP هيتولى البداية من 0 */
+  opacity: 1; 
   margin-bottom: 80px;
 }
 
 .header-title h2 {
-  font-family: 'Playfair Display', serif; /* النوع ده هو اللي في الفيديو */
+  font-family: 'Playfair Display', serif;
   font-size: 3.5rem;
   color: #4a2c2a;
 }
 
-/* حركة الـ Hover اللي في الفيديو (اختياري) */
+
 .image-wrapper img {
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .image-wrapper:hover img {
-  transform: translateY(-10px); /* الصورة تترفع لفوق شوية زي الفيديو */
+  transform: translateY(-10px);
   box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 .image-wrapper img {

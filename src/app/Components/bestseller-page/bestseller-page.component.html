@@ -96,7 +96,8 @@
       <swiper-container #swiperRef init="false">
         <swiper-slide *ngFor="let product of teaProducts">
           <div class="product-card">
-            <img [src]="product.img" [alt]="product.name">
+            <img [src]="product.img" [alt]="product.name" class="badge-icon">
+            <h4 class="badge-name">Pomegranate</h4>
           </div>
         </swiper-slide>
       </swiper-container>
