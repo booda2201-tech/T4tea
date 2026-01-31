@@ -1,5 +1,110 @@
 /* home.component.scss */
 
+
+
+// .hero-section {
+//   height: calc(85vh - 140px);
+//   background-color: #00221f;
+//   background-image:
+//     linear-gradient(to right,
+//       rgb(0, 22, 20) 0%,
+//       rgba(0, 45, 41, 0.4) 50%,
+//       rgba(0, 45, 41, 0) 100%),
+//     url('../../../../assets/g2.png');
+//   background-size: fill;
+//   background-position: 100% center;
+//   background-repeat: no-repeat;
+//   background-attachment: fixed;
+//   position: relative;
+//   overflow: hidden;
+//   display: flex;
+//   align-items: center;
+// }
+
+// .hero-text-part {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   text-align: left;
+// }
+
+// .hero-title {
+//   color: #fcebd1;
+//   font-size: 3.5rem;
+//   font-weight: 400;
+//   line-height: 1.2;
+//   margin-bottom: 40px;
+//   font-family: 'Playfair Display', serif;
+//   display: block;
+// }
+
+// .hero-btns {
+//   display: flex;
+//   justify-content: flex-start;
+//   width: 100%;
+// }
+// .custom-btn-white {
+//   background-color: #fcebd1 !important;
+//   color: #002d29 !important;
+//   border-radius: 10px;
+//   padding: 12px 35px;
+//   font-weight: 500;
+//   border: none;
+// }
+
+// .custom-btn-outline {
+//   border: 1px solid #fcebd1 !important;
+//   color: #fcebd1 !important;
+//   border-radius: 10px;
+//   padding: 12px 35px;
+//   background: transparent;
+// }
+
+
+// .hero-content-wrapper {
+//   animation: floating 4s ease-in-out infinite;
+// }
+
+
+// @keyframes floating {
+//   0% { transform: translateY(0px); }
+//   50% { transform: translateY(-10px); }
+//   100% { transform: translateY(0px); }
+// }
+
+
+// @media (max-width: 991.98px) {
+//   .hero-text-part{
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     margin-bottom: 15rem !important;
+//   }
+
+
+//   .hero-title {
+//     font-size: 2.2rem;
+//     text-align: center;
+//   }
+//   .hero-btns {
+//     justify-content: center;
+//   }
+//   .hero-section {
+//     height: 80vh;
+//     background-position: 70% center;
+//   }
+// }
+
+
+
+
+
+
+
+/* header.component.scss */
+
+// 1. الحاوية الرئيسية للهيرو
 .hero-section {
   height: calc(85vh - 140px);
   background-color: #00221f;
@@ -9,38 +114,56 @@
       rgba(0, 45, 41, 0.4) 50%,
       rgba(0, 45, 41, 0) 100%),
     url('../../../../assets/g2.png');
-  background-size: fill;
+  background-size: cover;
   background-position: 100% center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   position: relative;
-  overflow: hidden;
+  overflow: hidden; // ضروري جداً لإخفاء النصوص قبل ظهورها من الأسفل
   display: flex;
   align-items: center;
 }
 
+// 2. كلاسات العزل (القناع) - السر في الأنميشن الاحترافي
+.mask-wrapper, .btn-mask {
+  overflow: hidden; // أي شيء خارج حدود هذه الحاوية (بالأسفل) سيكون مخفياً
+  display: block;
+  margin-bottom: 5px;
+}
+
+// 3. محتوى النصوص
 .hero-text-part {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  z-index: 2;
 }
 
 .hero-title {
   color: #fcebd1;
   font-size: 3.5rem;
   font-weight: 400;
-  line-height: 1.2;
-  margin-bottom: 40px;
+  line-height: 1.1;
+  margin: 0; // لضمان دقة الأبعاد داخل القناع
   font-family: 'Playfair Display', serif;
   display: block;
+  will-change: transform; // لتحسين أداء كارت الشاشة أثناء الأنميشن
 }
 
+// 4. حاوية الأزرار
 .hero-btns {
   display: flex;
   justify-content: flex-start;
   width: 100%;
+  margin-top: 30px;
 }
+
+.btn-mask {
+  display: inline-block; // لجعل الأزرار بجانب بعضها داخل الأقنعة
+}
+
+// 5. تنسيق الأزرار (ألوانك الأصلية مع لمسة فخامة)
 .custom-btn-white {
   background-color: #fcebd1 !important;
   color: #002d29 !important;
@@ -48,6 +171,13 @@
   padding: 12px 35px;
   font-weight: 500;
   border: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    filter: brightness(1.1);
+  }
 }
 
 .custom-btn-outline {
@@ -56,40 +186,37 @@
   border-radius: 10px;
   padding: 12px 35px;
   background: transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #fcebd1 !important;
+    color: #002d29 !important;
+    transform: translateY(-3px);
+  }
 }
 
-
-.hero-content-wrapper {
-  animation: floating 4s ease-in-out infinite;
-}
-
-
-@keyframes floating {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-
+// 6. استجابة الشاشات (Responsive)
 @media (max-width: 991.98px) {
-  .hero-text-part{
-    display: flex;
-    flex-direction: column;
+  .hero-text-part {
     align-items: center;
     justify-content: center;
-    margin-bottom: 15rem !important;
+    margin-bottom: 5rem !important;
+    width: 100%;
   }
-
 
   .hero-title {
     font-size: 2.2rem;
     text-align: center;
   }
+
   .hero-btns {
     justify-content: center;
+    flex-wrap: wrap; // لضمان عدم خروج الأزرار عن الشاشة في الموبايل
+    gap: 15px;
   }
+
   .hero-section {
     height: 80vh;
-    background-position: 70% center;
+    background-position: 70% center; // تحريك الصورة قليلاً لتناسب الموبايل
   }
 }

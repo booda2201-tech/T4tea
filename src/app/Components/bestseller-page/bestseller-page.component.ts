@@ -30,15 +30,15 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
       { id: 4, name: 'Extra Tea', img: '../../../assets/11.png' }
     ];
 
-
     setTimeout(() => {
-        if (this.swiperRef && this.swiperRef.nativeElement.swiper) {
-          this.swiperRef.nativeElement.swiper.update();
-        }
-      }, 100);
+      if (this.swiperRef && this.swiperRef.nativeElement.swiper) {
+        this.swiperRef.nativeElement.swiper.update();
+      }
+    }, 100);
   }
 
   ngAfterViewInit() {
+    // 1. إعداد السوايبير
     const swiperParams = {
       slidesPerView: 1,
       navigation: false,
@@ -53,36 +53,52 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
     Object.assign(this.swiperRef.nativeElement, swiperParams);
     this.swiperRef.nativeElement.initialize();
 
+    // 2. تشغيل الأنميشن بعد تأكد من وجود العناصر
+    this.initAnimations();
+  }
 
-  setTimeout(() => {
-    const tl = gsap.timeline({
-      defaults: { ease: "expo.out", duration: 1.2 }
-    });
+  initAnimations() {
+    // نستخدم setTimeout بسيط لضمان أن Angular انتهى من رندر القائمة
+    setTimeout(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: "expo.out", duration: 1.2 }
+      });
 
+      // تحريك الهيدر (استخدمنا الكلاس الموجود في الـ HTML فعلياً)
+      if (document.querySelector('.header')) {
+        tl.fromTo(".header",
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0 }
+        );
+      }
 
-    tl.fromTo(".section-header",
-      { opacity: 0, y: 150 },
-      { opacity: 1, y: 50 }
-    );
+      // تحريك حاوية السوايبير (بديلة لـ tea-row غير الموجودة)
+      if (this.swiperRef) {
+        tl.fromTo(this.swiperRef.nativeElement,
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0 },
+          "-=0.8"
+        );
+      }
 
+      // تحريك الكروت والصور داخلها
+      const cards = document.querySelectorAll('.product-card');
+      if (cards.length > 0) {
+        tl.fromTo(cards,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, stagger: 0.2 },
+          "-=1"
+        );
+      }
 
-
-    tl.fromTo(".tea-row",
-      { opacity: 0, y: 150 },
-      { opacity: 1, y: 50, stagger: 0.3, },
-      "-=0.8"
-    );
-
-
-    tl.from(".image-wrapper img", {
-      scale: 0.95,
-      duration: 1.5,
-      stagger: 0.3
-    }, "-=1.2");
-
-  }, 100);
-}
-
-
-
+      // تحريك الفوتر (النص والأقواس)
+      if (document.querySelector('.footer-text')) {
+        tl.fromTo(".footer-text",
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1 },
+          "-=0.5"
+        );
+      }
+    }, 200);
+  }
 }

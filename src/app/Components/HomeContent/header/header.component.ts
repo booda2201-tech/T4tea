@@ -1,60 +1,54 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+/* header.component.ts */
+import { Component, NgZone, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { gsap } from 'gsap';
-import { trigger, style, animate, transition, state } from '@angular/animations';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  animations: [
-trigger('contentFade', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateX(-30px)' }),
-        animate('800ms 200ms ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
-      ])
-    ]),
-
-    trigger('buttonsFade', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(15px)' }),
-        animate('600ms 800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ])
-    ]),
-
-    trigger('imageFade', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.9) translateX(30px)' }),
-        animate('1000ms 400ms ease-out', style({ opacity: 1, transform: 'scale(1) translateX(0)' }))
-      ])
-    ])
-  ]
+  styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent{
+export class HeaderComponent implements AfterViewInit {
 
-constructor(private router: Router) {}
+  constructor(private router: Router, private ngZone: NgZone) {}
 
-onExploreClick() {
-  gsap.to(".hero-section", {
-    duration: 0.4,
-    opacity: 0,
-    y: -30,
-    ease: "power2.in",
-    onComplete: () => {
-      this.router.navigate(['/explore-page']);
-    }
-  });
-}
-onBestSellerClick() {
-  gsap.to(".hero-section", {
-    duration: 0.4,
-    opacity: 0,
-    y: -5,
-    ease: "power2.in",
-    onComplete: () => {
-      this.router.navigate(['/bestseller-page']);
-    }
-  });
-}
+  ngAfterViewInit() {
+    this.startEntranceAnimation();
+  }
 
+  private startEntranceAnimation() {
+    const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.4 } });
+
+    // تصفير القيم (إزاحة لأسفل بـ 100 بكسل)
+    gsap.set(".hero-title", { y: 120, opacity: 0 });
+    gsap.set(".btn", { y: 40, opacity: 0 });
+
+    // تشغيل الأنميشن بالترتيب
+    tl.to(".hero-title", {
+        y: 0,
+        opacity: 1,
+        stagger: 0.2, // الفرق الزمني بين السطر الأول والثاني
+        delay: 0.4
+      })
+      .to(".btn", {
+        y: 0,
+        opacity: 1,
+        stagger: 0.15
+      }, "-=1"); // يبدأ الأزرار قبل انتهاء العنوان بـ ثانية واحدة
+  }
+
+  private exitTo(path: string) {
+    gsap.to(".hero-text-part", {
+      opacity: 0,
+      y: -40,
+      duration: 0.7,
+      ease: "expo.in",
+      onComplete: () => {
+        this.ngZone.run(() => this.router.navigate([path]));
+      }
+    });
+  }
+
+  onExploreClick() { this.exitTo('/explore-page'); }
+  onBestSellerClick() { this.exitTo('/bestseller-page'); }
 }
