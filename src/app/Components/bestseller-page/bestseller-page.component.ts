@@ -38,7 +38,8 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // 1. إعداد السوايبير
+
+
     const swiperParams = {
       slidesPerView: 1,
       navigation: false,
@@ -53,52 +54,32 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
     Object.assign(this.swiperRef.nativeElement, swiperParams);
     this.swiperRef.nativeElement.initialize();
 
-    // 2. تشغيل الأنميشن بعد تأكد من وجود العناصر
+
     this.initAnimations();
   }
 
   initAnimations() {
-    // نستخدم setTimeout بسيط لضمان أن Angular انتهى من رندر القائمة
     setTimeout(() => {
       const tl = gsap.timeline({
-        defaults: { ease: "expo.out", duration: 1.2 }
+        defaults: { ease: "power4.out", duration: 1.4 }
       });
 
-      // تحريك الهيدر (استخدمنا الكلاس الموجود في الـ HTML فعلياً)
-      if (document.querySelector('.header')) {
-        tl.fromTo(".header",
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0 }
-        );
-      }
 
-      // تحريك حاوية السوايبير (بديلة لـ tea-row غير الموجودة)
-      if (this.swiperRef) {
-        tl.fromTo(this.swiperRef.nativeElement,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0 },
-          "-=0.8"
-        );
-      }
+      gsap.set([".header", ".carousel-wrapper", ".footer-text"], { opacity: 0, y: 30 });
+      gsap.set(".product-card", { opacity: 0, scale: 0.8, y: 50 });
 
-      // تحريك الكروت والصور داخلها
-      const cards = document.querySelectorAll('.product-card');
-      if (cards.length > 0) {
-        tl.fromTo(cards,
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, stagger: 0.2 },
-          "-=1"
-        );
-      }
 
-      // تحريك الفوتر (النص والأقواس)
-      if (document.querySelector('.footer-text')) {
-        tl.fromTo(".footer-text",
-          { opacity: 0, scale: 0.95 },
-          { opacity: 1, scale: 1 },
-          "-=0.5"
-        );
-      }
+      tl.to(".header", { opacity: 1, y: 0, duration: 1 })
+        .to(".carousel-wrapper", { opacity: 1, y: 0, duration: 1.2 }, "-=0.6")
+
+        .to(".product-card", {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.2,
+          ease: "back.out(1.7)"
+        }, "-=0.8")
+        .to(".footer-text", { opacity: 1, y: 0, duration: 1 }, "-=0.5");
     }, 200);
   }
 }

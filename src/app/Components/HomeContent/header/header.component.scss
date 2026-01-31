@@ -102,9 +102,7 @@
 
 
 
-/* header.component.scss */
 
-// 1. الحاوية الرئيسية للهيرو
 .hero-section {
   height: calc(85vh - 140px);
   background-color: #00221f;
@@ -119,19 +117,19 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   position: relative;
-  overflow: hidden; // ضروري جداً لإخفاء النصوص قبل ظهورها من الأسفل
+  overflow: hidden;
   display: flex;
   align-items: center;
 }
 
-// 2. كلاسات العزل (القناع) - السر في الأنميشن الاحترافي
+
 .mask-wrapper, .btn-mask {
-  overflow: hidden; // أي شيء خارج حدود هذه الحاوية (بالأسفل) سيكون مخفياً
+  overflow: hidden;
   display: block;
   margin-bottom: 5px;
 }
 
-// 3. محتوى النصوص
+
 .hero-text-part {
   display: flex;
   flex-direction: column;
@@ -145,13 +143,13 @@
   font-size: 3.5rem;
   font-weight: 400;
   line-height: 1.1;
-  margin: 0; // لضمان دقة الأبعاد داخل القناع
+  margin: 0;
   font-family: 'Playfair Display', serif;
   display: block;
-  will-change: transform; // لتحسين أداء كارت الشاشة أثناء الأنميشن
+  will-change: transform;
 }
 
-// 4. حاوية الأزرار
+
 .hero-btns {
   display: flex;
   justify-content: flex-start;
@@ -160,10 +158,10 @@
 }
 
 .btn-mask {
-  display: inline-block; // لجعل الأزرار بجانب بعضها داخل الأقنعة
+  display: inline-block;
 }
 
-// 5. تنسيق الأزرار (ألوانك الأصلية مع لمسة فخامة)
+
 .custom-btn-white {
   background-color: #fcebd1 !important;
   color: #002d29 !important;
@@ -195,7 +193,7 @@
   }
 }
 
-// 6. استجابة الشاشات (Responsive)
+
 @media (max-width: 991.98px) {
   .hero-text-part {
     align-items: center;
@@ -211,12 +209,16 @@
 
   .hero-btns {
     justify-content: center;
-    flex-wrap: wrap; // لضمان عدم خروج الأزرار عن الشاشة في الموبايل
+    flex-wrap: wrap;
     gap: 15px;
   }
 
   .hero-section {
     height: 80vh;
-    background-position: 70% center; // تحريك الصورة قليلاً لتناسب الموبايل
+    background-position: 70% center;
   }
 }
+
+
+
+
