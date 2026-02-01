@@ -1,0 +1,118 @@
+.about-section {
+  background-color: #fcebd1;
+  padding: 80px 20px; // إضافة padding جانبي للموبايل
+  text-align: center;
+  color: #003d37;
+  overflow: hidden;
+
+  .about-header {
+    margin-bottom: 40px;
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 8vw, 3.5rem); // حجم خط مرن يتناسب مع الشاشة
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-style: italic;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      opacity: 0.8;
+    }
+  }
+
+  .products-showcase {
+    max-width: 1000px; // عرض متناسق أكثر
+    margin: 0 auto 50px;
+    padding: 0 10px;
+
+    .main-img {
+      width: 100%;
+      height: 500px; // طول ثابت للديسكتوب
+      object-fit: cover; // تجعل الصورة تملأ المساحة كـ "Cover"
+      object-position: center; // لضمان تمركز محتوى الصورة
+      border-radius: 35px;
+      display: block;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      transition: transform 0.5s ease;
+
+      &:hover {
+        transform: scale(1.02); // تأثير تفاعلي بسيط عند التحويم
+      }
+    }
+  }
+
+  .about-content {
+    max-width: 800px;
+    margin: 0 auto 50px;
+
+    p {
+      line-height: 1.8;
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      font-weight: 400;
+      white-space: pre-line; // للحفاظ على المسافات بين الأسطر كما في Figma
+    }
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+
+    a {
+      color: #fff;
+      background-color: #1a1a1a;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+      &:hover {
+        transform: translateY(-5px);
+        background-color: #003d37; // تغيير اللون عند الهوفر
+      }
+    }
+  }
+}
+
+/* --- Responsive Media Queries --- */
+
+@media (max-width: 992px) {
+  .about-section {
+    padding: 60px 15px;
+
+    .products-showcase .main-img {
+      height: 400px; // تقليل الطول في الشاشات المتوسطة
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .about-section {
+    .products-showcase .main-img {
+      height: 300px; // تقليل الطول في الموبايل ليتناسب مع العرض
+      border-radius: 20px; // تقليل الحواف لتناسب الشاشة الصغيرة
+    }
+
+    .about-content {
+      padding: 0 10px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .about-section {
+    padding: 40px 10px;
+
+    .products-showcase .main-img {
+      height: 250px;
+    }
+  }
+}

@@ -84,16 +84,24 @@
 
 
 .nav-icon {
-  color: #003d37 !important;
-  font-size: 1.5rem;
+  background-color: #003d37;
+  color:  #fcebd1 !important;
+  width: 45px;
+  height: 45px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   text-decoration: none;
-  display: inline-block;
+
   transition: all 0.3s ease-in-out;
 }
 
 
 .nav-icon:hover {
-  color: #c4a47c !important;
+  background-color: #fcebd1 !important;
+  color: #003d37 !important;
+  box-shadow: 0 0 0 1px #003d37;
   transform: scale(1.1);
 }
 
@@ -138,10 +146,7 @@
   box-shadow: 0 0 0 1px #003d37;
 }
 
-.nav-icon .bi-cart3 {
-  color: #003d37;
-  transition: 0.3s;
-}
+
 
 .account-dropdown {
   position: absolute;

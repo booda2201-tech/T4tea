@@ -8,7 +8,12 @@ import { FeatureComponent } from './Components/HomeContent/feature/feature.compo
 import { BestSellerComponent } from './Components/HomeContent/best-seller/best-seller.component';
 import { BestsellerPageComponent } from './Components/bestseller-page/bestseller-page.component';
 import { ExplorePageComponent } from './Components/explore-page/explore-page.component';
-
+import { CategoryComponent } from './Components/category/category.component';
+import { TeawaresComponent } from './Components/teawares/teawares.component';
+import { AboutUsComponent } from './Components/about-us/about-us.component';
+import { CartComponent } from './Components/cart/cart.component';
+import { LoginComponent } from './Components/login/login.component';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -19,6 +24,12 @@ const routes: Routes = [
     { path: 'best-seller', component: BestSellerComponent },
     { path: 'bestseller-page', component: BestsellerPageComponent },
     { path: 'explore-page', component: ExplorePageComponent },
+    { path: 'category', component: CategoryComponent },
+    { path: 'teawares', component: TeawaresComponent },
+    { path: 'about-us', component: AboutUsComponent },
+    { path: 'cart', component: CartComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'profile', component: ProfileComponent },
 
 ];
 

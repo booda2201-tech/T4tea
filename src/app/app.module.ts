@@ -54,6 +54,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
     CarouselModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    BestSellerComponent,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',

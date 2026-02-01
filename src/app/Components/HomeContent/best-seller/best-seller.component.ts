@@ -26,7 +26,6 @@ export class BestSellerComponent implements OnInit, AfterViewInit {
   @ViewChild('swiperRef') swiperRef!: ElementRef;
 
   teaProducts: Product[] = [];
-
   constructor() {}
 
   ngOnInit(): void {
@@ -34,7 +33,6 @@ export class BestSellerComponent implements OnInit, AfterViewInit {
   }
 
   fetchData() {
-
     this.teaProducts = [
       { id: 1, name: 'Rooibos Peppermint', img: '../../../../assets/Herbal Tea.png', altText: 'Herbal Tea' },
       { id: 2, name: 'Pomegranate Black Tea', img: '../../../../assets/Black Tea.png', altText: 'Black Tea' },
@@ -46,25 +44,18 @@ export class BestSellerComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
 
     const swiperEl = this.swiperRef.nativeElement;
-
     const swiperParams = {
-      slidesPerView: 1,
-      spaceBetween: 20,
-      loop: true,
-      grabCursor: true,
-      pagination: {
-        clickable: true,
-        dynamicBullets: true
-      },
-      breakpoints: {
-        768: {
-          slidesPerView: 2,
-        },
+        slidesPerView: 1,
+        spaceBetween: 10,
+        loop: true,
+        grabCursor: true,
+        // pagination: false,  {clickable: false,dynamicBullets: false,},
+        breakpoints: {
+        768: {slidesPerView: 2,},
         1100: {
-          slidesPerView: 3,
-          spaceBetween: 40,
-          centeredSlides: false
-        }
+                slidesPerView: 3,
+                centeredSlides: false
+              }
       },
 
       autoplay: {
@@ -72,7 +63,6 @@ export class BestSellerComponent implements OnInit, AfterViewInit {
         disableOnInteraction: false,
       }
     };
-
 
     Object.assign(swiperEl, swiperParams);
     swiperEl.initialize();
