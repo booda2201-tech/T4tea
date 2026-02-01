@@ -88,7 +88,7 @@
 
 
 
-  <section class="best-seller-section">
+  <!-- <section class="best-seller-section">
   <div class="connecting-line"></div>
   <div class="decor-item tea-bag-decor">
     <img src="../../../../assets/Vector (1).png" alt="">
@@ -116,7 +116,45 @@
         </div>
       </div>
     </div>
-    
+
+  </div>
+
+  <div class="decor-item press-decor">
+    <img src="../../../../assets/Tea Press.png" alt="">
+  </div>
+</section> -->
+
+
+<section class="best-seller-section">
+  <div class="connecting-line"></div>
+  <div class="decor-item tea-bag-decor">
+    <img src="../../../../assets/Vector (1).png" alt="">
+  </div>
+
+  <div class="container position-relative" style="z-index: 5;">
+    <div class="section-header">
+      <h2 class="section-title">Best Seller</h2>
+      <p class="section-subtitle">Savor the Art of Fine Tea.</p>
+    </div>
+
+    <div class="carousel-wrapper">
+      <swiper-container #swiperRef init="false" class="best-seller-swiper">
+        <swiper-slide *ngFor="let product of teaProducts">
+          <div class="product-item">
+            <div class="hover-decor leaves-left">
+              <img src="../../../../assets/warda.png" alt="">
+            </div>
+
+            <img [src]="product.img" [alt]="product.name" class="main-can">
+
+            <div class="hover-decor leaves-right">
+              <img src="../../../../assets/warda1.png" alt="">
+            </div>
+            <div class="hover-line"></div>
+          </div>
+        </swiper-slide>
+      </swiper-container>
+    </div>
   </div>
 
   <div class="decor-item press-decor">

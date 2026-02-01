@@ -51,5 +51,5 @@ export class HeaderComponent implements AfterViewInit {
   }
 
   onExploreClick() { this.exitTo('/explore-page'); }
-  onBestSellerClick() { this.exitTo('/bestseller-page'); }
+  onBestSellerClick() { this.exitTo('/best-seller'); }
 }

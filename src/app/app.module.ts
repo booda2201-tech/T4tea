@@ -36,7 +36,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
     HeaderComponent,
     CollectionsComponent,
     FeatureComponent,
-    BestSellerComponent,
+    // BestSellerComponent,
     // BestsellerPageComponent,
     InfiniteSliderComponent,
     ExplorePageComponent,
