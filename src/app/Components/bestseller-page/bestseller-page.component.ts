@@ -14,6 +14,7 @@ register();
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class BestsellerPageComponent implements OnInit, AfterViewInit {
+
   @ViewChild('swiperRef') swiperRef!: ElementRef;
 
   teaProducts: any[] = [];

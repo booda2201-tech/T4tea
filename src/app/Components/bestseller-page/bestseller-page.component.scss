@@ -213,7 +213,6 @@
         height: 250px;
     }
 
-
     .badge-name {
         opacity: -1;
         transform: translateY(-100px);
@@ -246,7 +245,6 @@
         left: 5px;
       }
     }
-
 }
 
 @media (max-width: 480px) {
@@ -259,8 +257,8 @@
     }
 
     .badge-icon {
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
     }
 
     .footer-text {
@@ -268,18 +266,16 @@
         padding: 0 15px;
     }
 
-
     .badge-name {
         opacity: -1;
-        transform: translateY(-10px);
+        transform: translateY( 25px);
         font-size: 1rem;
     }
 
     .product-card:hover .badge-name {
-        transform: translateY(-30px) !important;
+        transform: translateY(-25px) !important;
         transition: all 0.4s ease-in-out;
     }
-
 
       .footer-text {
         padding: 30px 40px;
@@ -294,7 +290,5 @@
             height: 50px;
         }
     }
-
-
 }
 
