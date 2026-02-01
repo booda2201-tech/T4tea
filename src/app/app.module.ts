@@ -41,7 +41,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
     InfiniteSliderComponent,
     ExplorePageComponent,
     CategoryComponent,
-    TeawaresComponent,
+    // TeawaresComponent,
     AboutUsComponent,
     CartComponent,
     LoginComponent,

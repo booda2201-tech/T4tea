@@ -1,0 +1,47 @@
+
+
+
+
+<section class="teawares-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Teawares</h2>
+      <p class="section-subtitle">Designed to exceed expectations</p>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let item of topProducts">
+        <div class="img-wrapper">
+          <img [src]="item.img" [alt]="item.name">
+        </div>
+        <h3 class="product-name">{{item.name}}</h3>
+        <p class="product-price">{{item.price}} EGP</p>
+      </div>
+    </div>
+
+    <div class="collection-banner">
+      <div class="banner-content">
+        <div class="banner-img">
+          <img src="../../../assets/tea hold 1 (1).png" alt="T4Tea Collection">
+        </div>
+        <div class="banner-text">
+          <h2>T4Tea Collection</h2>
+          <p>Where craftsmanship meets calm.<br>
+              A vessel shaped by patience and precision.<br>
+              Soft ceramic, crowned in warm gold.<br>
+              Designed to elevate every ritual.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let item of bottomProducts">
+        <div class="img-wrapper">
+          <img [src]="item.img" [alt]="item.name">
+        </div>
+        <h3 class="product-name">{{item.name}}</h3>
+        <p class="product-price">{{item.price}} EGP</p>
+      </div>
+    </div>
+  </div>
+</section>
