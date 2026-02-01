@@ -124,8 +124,8 @@
 
       <div class="nav-side-part d-none d-lg-flex order-lg-1">
         <ul class="navbar-nav flex-row gap-2">
-          <li class="nav-item"><a class="nav-link custom-pill active">Category</a></li>
-          <li class="nav-item"><a class="nav-link custom-pill">Teawares</a></li>
+          <li class="nav-item" routerLink="/category"><a class="nav-link custom-pill active">Category</a></li>
+          <li class="nav-item" routerLink="/teawares"><a class="nav-link custom-pill">Teawares</a></li>
           <li class="nav-item" routerLink="/about-us"><a class="nav-link custom-pill">About us</a></li>
         </ul>
       </div>
@@ -136,7 +136,7 @@
         </a>
       </div>
 
-      <div class="nav-side-part d-flex justify-content-end align-items-center gap-2 gap-md-3 order-lg-3">
+      <div class="nav-side-part d-flex justify-content-end align-items-center gap-md-3 order-lg-3">
         <div class="search-bar-container" [class.active]="isSearchOpen">
           <i class="bi bi-search search-icon" (click)="toggleSearch()"></i>
           <input type="text" class="search-input" placeholder=" Search..." [style.opacity]="isSearchOpen ? '1' : '0'">
@@ -155,10 +155,12 @@
           </div>
         </div>
 
-        <a href="#" class="nav-icon position-relative mx-2">
-          <i class="bi bi-cart3 fs-4"></i>
-          <span class="badge-count">0</span>
-        </a>
+          <div class="cart-wrapper position-relative">
+            <a routerLink="/cart" class="nav-icon">
+              <i class="bi bi-cart3 fs-4"></i>
+              <span class="badge-count">0</span>
+            </a>
+          </div>
       </div>
 
       <div class="mobile-menu d-lg-none" *ngIf="isMobileMenuOpen">

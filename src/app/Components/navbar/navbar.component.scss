@@ -211,7 +211,7 @@
 }
 
 .search-bar-container.active {
-  width: 250px;
+  width: 500px;
   padding: 0 15px;
   justify-content: flex-start;
   flex-direction: row;
@@ -284,7 +284,7 @@
   .search-bar-container.active {
     width: 150px;
     position: absolute;
-    right: 110px;
+    right: 115px;
     z-index: 101;
   }
 }
@@ -402,19 +402,44 @@
 
 
   .search-bar-container.active {
-    width: 160px;
+    width: 150px;
     position: absolute;
     right: 50px;
   }
 }
 
+
+@media (max-width: 875px) and (min-width: 575px) {
+
+    .search-bar-container.active {
+      width: 300px;
+      position: absolute;
+      right: 65px;
+  }
+}
+
+
+
+
 @media (max-width: 575px) {
-  .nav-side-part.gap-3 {
-    gap: 10px !important;
+
+  .search-bar-container{
+    width: 35px;
+    height: 35px;
   }
 
+  .account-circle, .nav-icon{
+    width: 35px !important;
+    height: 35px !important;
+  }
 
+  .badge-count {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
 }
+
 
 
 
