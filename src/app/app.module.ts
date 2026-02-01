@@ -24,6 +24,7 @@ import { AboutUsComponent } from './Components/about-us/about-us.component';
 import { CartComponent } from './Components/cart/cart.component';
 import { LoginComponent } from './Components/login/login.component';
 import { ProfileComponent } from './Components/profile/profile.component';
+import { WishlistComponent } from './Components/wishlist/wishlist.component';
 
 
 
@@ -46,6 +47,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
     CartComponent,
     LoginComponent,
     ProfileComponent,
+    WishlistComponent,
 
   ],
   imports: [
