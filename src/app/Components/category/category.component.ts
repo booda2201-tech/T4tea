@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { gsap } from 'gsap';
 
 export interface Product {
@@ -15,7 +15,8 @@ export interface Product {
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss']
 })
-export class CategoryComponent implements AfterViewInit {
+export class CategoryComponent implements AfterViewInit, OnDestroy {
+  private tl: any;
   categories = ['Black Tea', 'Green Tea', 'Herbal Tea'];
 
   products: Product[] = [
@@ -48,25 +49,33 @@ export class CategoryComponent implements AfterViewInit {
     console.log(`Product ${product.name} is now ${product.isFavorite ? 'in' : 'out of'} wishlist`);
   }
 
-  ngAfterViewInit() {
-    const tl = gsap.timeline();
+ngAfterViewInit() {
 
-    tl.from('.page-header', {
-      y: 30,
-      opacity: 0,
-      duration: 0.8,
+    this.tl = gsap.timeline();
+
+
+    gsap.set(['.page-header', '.product-card'], { opacity: 0, y: 20 });
+
+    this.tl.to('.page-header', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
       ease: 'power3.out'
     })
-    .from('.product-card', {
-      scale: 0.8,
-      opacity: 0,
-      y: 50,
-      stagger: 0.1,
-      duration: 0.6,
-      ease: 'back.out(1.5)'
-    }, "-=0.4");
+    .to('.product-card', {
+      opacity: 1,
+      y: 0,
+      stagger: 0.08,
+      duration: 0.5,
+      ease: 'power2.out',
+      clearProps: 'all'
+    }, "-=0.3");
   }
 
+  ngOnDestroy() {
+
+    if (this.tl) this.tl.kill();
+  }
 
 
 

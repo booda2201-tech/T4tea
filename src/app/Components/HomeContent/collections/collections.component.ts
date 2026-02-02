@@ -59,24 +59,25 @@ export class CollectionsComponent {
   // }
 
 onCollectionClick() {
-    const tl = gsap.timeline({
+  const cards = document.querySelectorAll('.collection-card');
+
+  if (cards.length > 0) {
+    gsap.to(cards, {
+      y: -30,
+      opacity: 0,
+      stagger: 0.05,
+      duration: 0.3,
+      ease: 'power2.in',
       onComplete: () => {
-        this.router.navigate(['/category']);
+        this.router.navigate(['/teawares']).then(() => {
+          console.log('Navigation successful');
+        });
       }
     });
+  } else {
 
-    tl.to('.collection-card', {
-      y: -50,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.4,
-      ease: 'power2.in'
-    })
-    .to('.section-header', {
-      opacity: 0,
-      duration: 0.3
-    }, "-=0.2");
+    this.router.navigate(['/teawares']);
   }
-
+}
 
 }
