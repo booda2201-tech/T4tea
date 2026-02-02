@@ -45,187 +45,202 @@ export class WishlistComponent implements AfterViewInit {
       price: 350,
       image: '../../../assets/Green Tea.png',
     },
-    // {
-    //   id: 5,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 6,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 7,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 8,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 9,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 10,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 11,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 12,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 13,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 14,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 15,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 16,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 18,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 19,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 20,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 21,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
-    // {
-    //   id: 22,
-    //   name: 'Pomegranate',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Black Tea.png'
-    // },
-    // {
-    //   id: 23,
-    //   name: 'Moroccan Mint',
-    //   description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
-    //   price: 350,
-    //   image: '../../../assets/Green Tea.png'
-    // },
+    {
+      id: 5,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 6,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 7,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 8,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 9,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 10,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 11,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 12,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 13,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 14,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 15,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 16,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 18,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 19,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 20,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 21,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
+    {
+      id: 22,
+      name: 'Pomegranate',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Black Tea.png'
+    },
+    {
+      id: 23,
+      name: 'Moroccan Mint',
+      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      price: 350,
+      image: '../../../assets/Green Tea.png'
+    },
   ];
 
-  ngAfterViewInit() {
+ngAfterViewInit() {
     this.initDraggable();
     this.initAnimation();
+  }
+
+  initAnimation() {
+    gsap.from('.item-card', {
+      x: 50,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.6,
+      ease: 'power2.out'
+    });
   }
 
   initDraggable() {
     Draggable.create('#scrollWrapper', {
       type: 'x',
-      edgeResistance: 0.65,
       bounds: '#scrollContainer',
       inertia: true,
-      onDrag: function () {},
+      onPress: function(this: any) {
+
+        if (this.wishlistItems.length <= 4) {
+          this.disable();
+        } else {
+          this.enable();
+        }
+      }.bind(this)
     });
   }
 
-  initAnimation() {
-    // Add animation logic here
-  }
-
   moveScroll(direction: 'left' | 'right') {
+    if (this.wishlistItems.length <= 4) return;
+
     const wrapper = document.getElementById('scrollWrapper');
     const container = document.getElementById('scrollContainer');
     if (!wrapper || !container) return;
 
     const maxScroll = -(wrapper.scrollWidth - container.offsetWidth + 60);
-
-    let currentX = gsap.getProperty(wrapper, 'x') as number;
+    let currentX = gsap.getProperty(wrapper, "x") as number;
 
     if (direction === 'right') {
-      currentX = Math.max(currentX - 410, maxScroll);
+      currentX = Math.max(currentX - this.cardStep, maxScroll);
     } else {
-      currentX = Math.min(currentX + 410, 0);
+      currentX = Math.min(currentX + this.cardStep, 0);
     }
 
     gsap.to(wrapper, {
       x: currentX,
       duration: 0.5,
-      ease: 'power2.out',
+      ease: 'power2.out'
     });
   }
 
   onDelete(id: number) {
     gsap.to(`#item-${id}`, {
       opacity: 0,
-      scale: 0.8,
+      scale: 0.5,
       duration: 0.3,
       onComplete: () => {
-        this.wishlistItems = this.wishlistItems.filter(
-          (item) => item.id !== id,
-        );
-        this.currentTranslate = 0;
-        gsap.to('#scrollWrapper', { x: 0 });
-      },
+        this.wishlistItems = this.wishlistItems.filter(item => item.id !== id);
+
+        // إعادة التمركز لو بقوا 4 أو أقل
+        if (this.wishlistItems.length <= 4) {
+          this.currentTranslate = 0;
+          gsap.to('#scrollWrapper', { x: 0, duration: 0.5 });
+        }
+      }
     });
   }
 

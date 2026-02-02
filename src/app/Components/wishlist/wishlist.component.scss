@@ -251,9 +251,16 @@
 .items-scroll-wrapper {
   display: flex;
   gap: 30px;
-  padding: 0 60px;
-  width: max-content; /* هذا السطر هو مفتاح الحل */
+  padding: 0 80px;
+  width: max-content;
   will-change: transform;
+
+
+  &.justify-center {
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+  }
 }
 
 .item-card {
@@ -285,3 +292,114 @@
   &:hover { background: #b89a67; scale: 1.1; }
   &:disabled { opacity: 0.3; cursor: not-allowed; }
 }
+
+
+
+
+
+  //    //    //
+
+//   .wishlist-container {
+//   background-color: #fcebd1;
+//   min-height: 100vh;
+//   padding: 40px 20px;
+//   overflow-x: hidden;
+// }
+
+// .wishlist-main-wrapper {
+//   position: relative;
+//   width: 100%;
+//   margin-top: 30px;
+// }
+
+// .wishlist-scroll-container {
+//   width: 100%;
+//   overflow: hidden;
+//   cursor: grab;
+//   &:active { cursor: grabbing; }
+// }
+
+// .items-scroll-wrapper {
+//   display: flex;
+//   gap: 30px;
+//   padding: 0 60px;
+//   width: max-content;
+//   will-change: transform;
+
+//   // تنسيق خاص لما يكون العدد قليل (بدون سكرول)
+//   &.no-scroll {
+//     width: 100%;
+//     justify-content: center;
+//     padding: 0;
+//     transform: none !important;
+//   }
+// }
+
+// .item-card {
+//   flex: 0 0 380px;
+//   background: rgba(255, 255, 255, 0.25);
+//   border: 2px solid #b89a67;
+//   border-radius: 40px;
+//   padding: 30px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   text-align: center;
+//   transition: transform 0.3s;
+
+//   &:hover {
+//     box-shadow: 0 10px 30px rgba(184, 154, 103, 0.2);
+//   }
+
+//   img {
+//     width: 250px;
+//     height: 250px;
+//     object-fit: contain;
+//     pointer-events: none; // لمنع مشاكل الـ Drag
+//   }
+// }
+
+// .nav-arrow {
+//   position: absolute;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   z-index: 100;
+//   background: #1b3d33;
+//   color: white;
+//   border: none;
+//   width: 50px;
+//   height: 50px;
+//   border-radius: 50%;
+//   cursor: pointer;
+//   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+//   &.left { left: 10px; }
+//   &.right { right: 10px; }
+
+//   &:hover { background: #b89a67; scale: 1.1; }
+// }
+
+// .product-info {
+//   margin: 15px 0;
+//   border-bottom: 1.5px solid #b89a67;
+//   padding-bottom: 15px;
+//   width: 100%;
+// }
+
+// .product-actions {
+//   display: flex;
+//   justify-content: space-around;
+//   width: 100%;
+// }
+
+// .icon-circle {
+//   width: 45px;
+//   height: 45px;
+//   border-radius: 50%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   color: white;
+//   &.red { background: #d93025; }
+//   &.dark { background: #1b3d33; }
+// }
