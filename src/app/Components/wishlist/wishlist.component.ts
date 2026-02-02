@@ -204,28 +204,34 @@ ngAfterViewInit() {
     });
   }
 
-  moveScroll(direction: 'left' | 'right') {
-    if (this.wishlistItems.length <= 4) return;
+moveScroll(direction: 'left' | 'right') {
+  const wrapper = document.getElementById('scrollWrapper');
+  const container = document.getElementById('scrollContainer');
 
-    const wrapper = document.getElementById('scrollWrapper');
-    const container = document.getElementById('scrollContainer');
-    if (!wrapper || !container) return;
+  if (!wrapper || !container || this.wishlistItems.length <= 4) return;
 
-    const maxScroll = -(wrapper.scrollWidth - container.offsetWidth + 60);
-    let currentX = gsap.getProperty(wrapper, "x") as number;
 
-    if (direction === 'right') {
-      currentX = Math.max(currentX - this.cardStep, maxScroll);
-    } else {
-      currentX = Math.min(currentX + this.cardStep, 0);
-    }
+  const wrapperWidth = wrapper.scrollWidth;
+  const containerWidth = container.offsetWidth;
+  const maxScroll = -(wrapperWidth - containerWidth + 80);
 
-    gsap.to(wrapper, {
-      x: currentX,
-      duration: 0.5,
-      ease: 'power2.out'
-    });
+
+  if (direction === 'right') {
+
+    this.currentTranslate = Math.max(this.currentTranslate - this.cardStep, maxScroll);
+  } else {
+
+    this.currentTranslate = Math.min(this.currentTranslate + this.cardStep, 0);
   }
+
+
+  gsap.to(wrapper, {
+    x: this.currentTranslate,
+    duration: 0.6,
+    ease: 'power2.out',
+    overwrite: true
+  });
+}
 
   onDelete(id: number) {
     gsap.to(`#item-${id}`, {
