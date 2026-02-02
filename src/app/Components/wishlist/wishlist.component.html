@@ -1,4 +1,4 @@
-<div class="wishlist-container">
+<!-- <div class="wishlist-container">
   <header class="wishlist-header">
     <h1>WishList</h1>
     <p>Where luxury is felt</p>
@@ -29,6 +29,101 @@
         </button>
       </div>
 
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+<!-- <div class="wishlist-container">
+  <header class="wishlist-header">
+    <h1>WishList</h1>
+    <p>Where luxury is felt</p>
+  </header>
+
+  <div class="wishlist-main-wrapper position-relative">
+    <button class="nav-arrow left" (click)="moveScroll('left')"><i class="bi bi-chevron-left"></i></button>
+    <button class="nav-arrow right" (click)="moveScroll('right')"><i class="bi bi-chevron-right"></i></button>
+
+  <div class="wishlist-scroll-container">
+    <div class="items-scroll-wrapper">
+      <div class="item-card" *ngFor="let item of wishlistItems" [id]="'item-' + item.id">
+
+        <div class="product-image">
+          <img [src]="item.image" [alt]="item.name">
+        </div>
+
+        <div class="product-info">
+          <h2 class="product-title">{{ item.name }}</h2>
+          <p class="product-description">{{ item.description }}</p>
+          <div class="product-price">{{ item.price }} EGP</div>
+        </div>
+
+        <div class="product-actions">
+          <button class="action-btn delete" (click)="onDelete(item.id)">
+            <div class="icon-circle red"><i class="bi bi-trash fs-5"></i></div>
+            <span>Delete</span>
+          </button>
+
+          <button class="action-btn add-to-cart" (click)="onAddToCart(item)">
+            <div class="icon-circle dark"><i class="bi bi-cart fs-5"></i></div>
+            <span>Add To Cart</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+<div class="wishlist-container">
+  <header class="section-header">
+    <h1 class="section-title">WishList</h1>
+    <p class="section-subtitle">Where luxury is felt</p>
+  </header>
+
+  <div class="wishlist-main-wrapper">
+    <button class="nav-arrow left" (click)="moveScroll('left')">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <button class="nav-arrow right" (click)="moveScroll('right')">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <div class="wishlist-scroll-container" id="scrollContainer">
+      <div class="items-scroll-wrapper" id="scrollWrapper">
+        <div class="item-card" *ngFor="let item of wishlistItems" [id]="'item-' + item.id">
+
+          <div class="product-image">
+            <img [src]="item.image" [alt]="item.name">
+          </div>
+
+          <div class="product-info">
+            <h2 class="product-title">{{ item.name }}</h2>
+            <p class="product-description">{{ item.description }}</p>
+            <div class="product-price">{{ item.price }} EGP</div>
+          </div>
+
+          <div class="product-actions">
+            <button class="action-btn delete" (click)="onDelete(item.id)">
+              <div class="icon-circle red"><i class="bi bi-trash"></i></div>
+              <span>Delete</span>
+            </button>
+
+            <button class="action-btn add-to-cart" (click)="onAddToCart(item)">
+              <div class="icon-circle dark"><i class="bi bi-cart"></i></div>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 </div>
