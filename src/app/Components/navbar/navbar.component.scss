@@ -123,6 +123,41 @@
 
 
 
+.active-link {
+  background-color: #fcebd1 !important;
+  color: #003d37 !important;            
+  border-color: #003d37 !important;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+  font-weight: bold;
+}
+
+
+.active-mobile {
+  background-color: rgba(252, 235, 209, 0.15);
+  color: white !important;
+  padding-left: 35px !important;
+}
+
+.active-mobile::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #c4a47c;
+  border-radius: 50%;
+}
+
+
+
+
+
+
+
+
+
 
 
 

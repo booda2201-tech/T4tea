@@ -46,4 +46,5 @@ export class CategoryComponent {
     product.isFavorite = !product.isFavorite;
     console.log(`Product ${product.name} is now ${product.isFavorite ? 'in' : 'out of'} wishlist`);
   }
+  
 }
