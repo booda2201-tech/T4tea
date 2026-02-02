@@ -1,22 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import 'swiper/swiper-bundle.css';
 // استيراد Bootstrap (النسخة الكاملة)
 @import "bootstrap/scss/bootstrap";
-
 // الأيقونات
 @import "bootstrap-icons/font/bootstrap-icons.css";
 @import "font-awesome/css/font-awesome.min.css";
-
 // تنسيقات الـ Toastr
 @import "ngx-toastr/toastr";
-
-
-
-
-
-
-
-
 
 
 body{
@@ -25,21 +15,14 @@ body{
   margin: auto;
 }
 
-
 $primary-dark: #003d37; // اللون الأخضر الداكن للأزرار
 $gold-gradient: linear-gradient(90deg, #d4b081, #f1dec4); // التدرج الذهبي للخلفية
 $text-white: #ffffff;
-
-
-
-
 
 .cont{
     background-color: #fcebd1;
     margin: auto;
 }
-
-
 
   .section-title {
     font-family: 'Playfair Display', serif;
