@@ -1,45 +1,49 @@
-
-import { Component, AfterViewInit  } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { gsap } from 'gsap';
+import { Draggable } from 'gsap/Draggable';
 
-
+gsap.registerPlugin(Draggable);
 
 @Component({
   selector: 'app-wishlist',
   templateUrl: './wishlist.component.html',
-  styleUrls: ['./wishlist.component.scss']
+  styleUrls: ['./wishlist.component.scss'],
 })
-export class WishlistComponent {
+export class WishlistComponent implements AfterViewInit {
   currentTranslate = 0;
   cardStep = 410;
   wishlistItems = [
     {
       id: 1,
       name: 'Pomegranate',
-      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      description:
+        'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
       price: 350,
-      image: '../../../assets/Black Tea.png'
+      image: '../../../assets/Black Tea.png',
     },
     {
       id: 2,
       name: 'Moroccan Mint',
-      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      description:
+        'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
       price: 350,
-      image: '../../../assets/Green Tea.png'
+      image: '../../../assets/Green Tea.png',
     },
     {
       id: 3,
       name: 'Pomegranate',
-      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      description:
+        'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
       price: 350,
-      image: '../../../assets/Black Tea.png'
+      image: '../../../assets/Black Tea.png',
     },
     {
       id: 4,
       name: 'Moroccan Mint',
-      description: 'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
+      description:
+        'A refined blend of tangy black tea layered with ripe pomegranate, delicate raspberry, and soft floral hibiscus...',
       price: 350,
-      image: '../../../assets/Green Tea.png'
+      image: '../../../assets/Green Tea.png',
     },
     // {
     //   id: 5,
@@ -169,60 +173,63 @@ export class WishlistComponent {
     // },
   ];
 
-// ngAfterViewInit() {
-//     this.initAnimation();
-//   }
+  ngAfterViewInit() {
+    this.initDraggable();
+    this.initAnimation();
+  }
 
-//   initAnimation() {
-//     gsap.from('.item-card', {
-//       x: 100,
-//       opacity: 0,
-//       stagger: 0.1,
-//       duration: 0.8,
-//       ease: 'power2.out'
-//     });
-//   }
+  initDraggable() {
+    Draggable.create('#scrollWrapper', {
+      type: 'x',
+      edgeResistance: 0.65,
+      bounds: '#scrollContainer',
+      inertia: true,
+      onDrag: function () {},
+    });
+  }
+
+  initAnimation() {
+    // Add animation logic here
+  }
 
   moveScroll(direction: 'left' | 'right') {
     const wrapper = document.getElementById('scrollWrapper');
     const container = document.getElementById('scrollContainer');
-
     if (!wrapper || !container) return;
-
 
     const maxScroll = -(wrapper.scrollWidth - container.offsetWidth + 60);
 
+    let currentX = gsap.getProperty(wrapper, 'x') as number;
+
     if (direction === 'right') {
-      this.currentTranslate = Math.max(this.currentTranslate - this.cardStep, maxScroll);
+      currentX = Math.max(currentX - 410, maxScroll);
     } else {
-      this.currentTranslate = Math.min(this.currentTranslate + this.cardStep, 0);
+      currentX = Math.min(currentX + 410, 0);
     }
 
     gsap.to(wrapper, {
-      x: this.currentTranslate,
-      duration: 0.6,
-      ease: 'power3.out'
+      x: currentX,
+      duration: 0.5,
+      ease: 'power2.out',
     });
   }
 
   onDelete(id: number) {
-
     gsap.to(`#item-${id}`, {
       opacity: 0,
       scale: 0.8,
       duration: 0.3,
       onComplete: () => {
-        this.wishlistItems = this.wishlistItems.filter(item => item.id !== id);
+        this.wishlistItems = this.wishlistItems.filter(
+          (item) => item.id !== id,
+        );
         this.currentTranslate = 0;
         gsap.to('#scrollWrapper', { x: 0 });
-      }
+      },
     });
   }
 
   onAddToCart(item: any) {
     console.log('Added to cart:', item.name);
   }
-
 }
-
-
