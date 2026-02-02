@@ -708,7 +708,7 @@
   margin: 0 auto;
 }
 
-/* إعدادات Swiper لإجبار الرص الأفقي */
+
 .wishlist-swiper {
   width: 100%;
   overflow: hidden;
@@ -716,17 +716,17 @@
 
   .swiper-wrapper {
     display: flex !important;
-    flex-direction: row !important; /* ضمان عدم نزول الكروت تحت بعضها */
+    flex-direction: row !important;
   }
 }
 
 .swiper-slide {
-  width: 400px !important; /* العرض المثالي للكارت */
+  width: 400px !important;
   height: auto;
   padding: 10px;
 }
 
-/* تصميم الكارت Luxury (القديم المحسن) */
+
 .item-card {
   border: 2px solid #b89a67;
   border-radius: 40px;
@@ -841,7 +841,7 @@
   }
 }
 
-/* تنسيق الأسهم الجانبية */
+
 .nav-arrow {
   position: absolute;
   top: 55%;
@@ -874,7 +874,7 @@
   }
 }
 
-/* --- ريسبونسيف كامل للموبايل والتابلت --- */
+
 @media (max-width: 992px) {
   .swiper-slide { width: 340px !important; }
   .wishlist-container .section-header .section-title { font-size: 2.8rem; }
@@ -882,7 +882,7 @@
 
 @media (max-width: 768px) {
   .wishlist-main-wrapper { padding: 0 10px; }
-  .nav-arrow { display: none; } /* إخفاء الأسهم في الموبايل والاعتماد على السحب باليد */
+  .nav-arrow { display: none; }
   .swiper-slide { width: 300px !important; }
   .item-card { padding: 20px; }
   .item-card .product-info .product-title { font-size: 1.5rem; }
