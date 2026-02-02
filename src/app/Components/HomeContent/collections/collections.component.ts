@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { gsap } from 'gsap';
 
 @Component({
   selector: 'app-collections',
@@ -57,7 +58,25 @@ export class CollectionsComponent {
   //   })
   // }
 
-  onCollectionClick() {
-    this.router.navigate(['/category']);
+onCollectionClick() {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.router.navigate(['/category']);
+      }
+    });
+
+    tl.to('.collection-card', {
+      y: -50,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.4,
+      ease: 'power2.in'
+    })
+    .to('.section-header', {
+      opacity: 0,
+      duration: 0.3
+    }, "-=0.2");
   }
+
+
 }

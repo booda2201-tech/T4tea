@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
+import { gsap } from 'gsap';
 
 export interface Product {
   id: number;
@@ -14,7 +15,7 @@ export interface Product {
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss']
 })
-export class CategoryComponent {
+export class CategoryComponent implements AfterViewInit {
   categories = ['Black Tea', 'Green Tea', 'Herbal Tea'];
 
   products: Product[] = [
@@ -46,5 +47,28 @@ export class CategoryComponent {
     product.isFavorite = !product.isFavorite;
     console.log(`Product ${product.name} is now ${product.isFavorite ? 'in' : 'out of'} wishlist`);
   }
-  
+
+  ngAfterViewInit() {
+
+    const tl = gsap.timeline();
+
+    tl.from('.page-header', {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power3.out'
+    })
+    .from('.product-card', {
+      scale: 0.8,
+      opacity: 0,
+      y: 50,
+      stagger: 0.1,
+      duration: 0.6,
+      ease: 'back.out(1.5)'
+    }, "-=0.4");
+  }
+
+
+
+
 }
