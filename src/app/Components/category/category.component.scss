@@ -28,6 +28,17 @@ $favorite-red: #e74c3c;
     p { font-style: italic; opacity: 0.8; font-size: 14px; }
   }
 
+
+.price{
+  color: #fcebd1;
+}
+
+
+
+
+
+
+
   .category-section {
     max-width: 1200px;
     margin: 0 auto 100px;
@@ -145,7 +156,7 @@ $favorite-red: #e74c3c;
     .add-to-cart {
       margin-top: auto;
       background: $btn-black;
-      color: white;
+      color:  #fcebd1;
       border: none;
       width: 100%;
       border-radius: 8px;
@@ -172,4 +183,32 @@ $favorite-red: #e74c3c;
 }
 
 
+
+
+
+
+
+@keyframes shake-cart {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(30deg); }
+  50% { transform: rotate(-30deg); }
+  75% { transform: rotate(30deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.category-wrapper .product-card .add-to-cart {
+
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #000;
+
+
+    i {
+      display: inline-block;
+      animation: shake-cart 0.4s ease-in-out;
+      animation-iteration-count: 1;
+    }
+  }
+}
 
