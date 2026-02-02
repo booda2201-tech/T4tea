@@ -49,7 +49,6 @@ export class CategoryComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-
     const tl = gsap.timeline();
 
     tl.from('.page-header', {

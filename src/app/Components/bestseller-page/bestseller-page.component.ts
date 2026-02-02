@@ -62,7 +62,7 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
   initAnimations() {
     setTimeout(() => {
       const tl = gsap.timeline({
-        defaults: { ease: "power4.out", duration: 1.4 }
+        defaults: { ease: "power4.out", duration: 1 }
       });
 
 
@@ -78,9 +78,9 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
           y: 0,
           scale: 1,
           stagger: 0.2,
-          ease: "back.out(1.7)"
+          ease: "back.out(2.5)"
         }, "-=0.8")
         .to(".footer-text", { opacity: 1, y: 0, duration: 1 }, "-=0.5");
-    }, 200);
+    }, 100);
   }
 }

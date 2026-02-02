@@ -1,7 +1,7 @@
 // 1. Variables - المتغيرات
 $dark-green: #2d4239;
 $bg-page: #fcebd1;
-$card-white: #ffffff;
+$card-white: #fafafa;
 $btn-black: #333333;
 $favorite-red: #e74c3c;
 
@@ -17,15 +17,19 @@ $favorite-red: #e74c3c;
     padding: 60px 20px;
   }
 
-  .page-header {
-    margin-bottom: 50px;
-    h1 {
-      font-family: 'Serif', serif;
-      font-size: 32px;
-      margin-bottom: 5px;
-      @media (min-width: 768px) { font-size: 42px; }
+  .section-header {
+    margin-bottom: 60px;
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      margin-bottom: 10px;
     }
-    p { font-style: italic; opacity: 0.8; font-size: 14px; }
+    .subtitle {
+      font-style: italic;
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
   }
 
 
