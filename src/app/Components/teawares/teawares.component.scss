@@ -191,6 +191,28 @@ $accent-color: #c4a47c;
 }
 
 
+
+.section-header, .product-card, .collection-banner {
+  visibility: visible;
+  will-change: transform, opacity;
+}
+
+.product-card {
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-10px) !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
 // @media (max-width: 992px) {
 //   .teawares-section {
 //     padding: 60px 20px;

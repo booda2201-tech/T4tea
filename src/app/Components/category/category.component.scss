@@ -1,11 +1,11 @@
-// 1. Variables - المتغيرات
+
 $dark-green: #2d4239;
 $bg-page: #fcebd1;
 $card-white: #fafafa;
 $btn-black: #333333;
 $favorite-red: #e74c3c;
 
-// 2. Main Wrapper - الغلاف الخارجي
+
 .category-wrapper {
   background-color: $bg-page;
   min-height: 100vh;
@@ -72,7 +72,7 @@ $favorite-red: #e74c3c;
     }
   }
 
-  // 3. Product Card - كارت المنتج
+
   .product-card {
     background-color: $card-white;
     border-radius: 15px;
@@ -215,4 +215,10 @@ $favorite-red: #e74c3c;
     }
   }
 }
+
+
+
+
+
+
 

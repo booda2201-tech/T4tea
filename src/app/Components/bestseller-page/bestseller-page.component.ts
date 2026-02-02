@@ -66,11 +66,11 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
       });
 
 
-      gsap.set([".header", ".carousel-wrapper", ".footer-text"], { opacity: 0, y: 30 });
+      gsap.set([".section-header", ".carousel-wrapper", ".footer-text"], { opacity: 0, y: 30 });
       gsap.set(".product-card", { opacity: 0, scale: 0.8, y: 50 });
 
 
-      tl.to(".header", { opacity: 1, y: 0, duration: 1 })
+      tl.to(".section-header", { opacity: 1, y: 0, duration: 1 })
         .to(".carousel-wrapper", { opacity: 1, y: 0, duration: 1.2 }, "-=0.6")
 
         .to(".product-card", {

@@ -153,6 +153,7 @@
           <img src="../../../assets/logo.png" alt="T4tea Logo" routerLink="/home">
         </a>
       </div>
+
       <div class="nav-side-part d-flex justify-content-end align-items-center gap-md-3 order-lg-3">
         <div class="search-bar-container" [class.active]="isSearchOpen">
           <i class="bi bi-search search-icon" (click)="toggleSearch()"></i>
@@ -183,13 +184,6 @@
             </a>
           </div>
       </div>
-
-      <!-- <div class="mobile-menu d-lg-none" *ngIf="isMobileMenuOpen">
-          <a href="#" (click)="isMobileMenuOpen = false">Category</a>
-          <a href="#" (click)="isMobileMenuOpen = false">Teawares</a>
-          <a href="#" (click)="isMobileMenuOpen = false">About us</a>
-      </div> -->
-
     </div>
   </nav>
 </div>
