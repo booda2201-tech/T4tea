@@ -4,6 +4,16 @@ $dark-bg: #222222;
 $primary-dark: #1a3a3a;
 $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
+
+.container {
+  width: 90%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+
+
+
 .cart-page-wrapper {
   min-height: 100vh;
   padding: 40px 0;
@@ -195,11 +205,12 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 .product-card {
   transition: $transition;
   border: 1px solid transparent;
-
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 20px rgba(0,0,0,0.1);
-    border-color: rgba(255,255,255,0.5);
+    border: 2px solid rgba(0, 0, 0, 0.222);
+    background-color: #fcebd1;
+
   }
 
   &:hover .img-box img {
@@ -294,6 +305,100 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover::after {
       left: 100%;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+//
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+  .cart-layout {
+    gap: 30px;
+  }
+
+  .items-column {
+    flex: 2;
+  }
+}
+
+
+@media (max-width: 992px) {
+  .cart-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .summary-column {
+    position: relative;
+    top: 0;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .items-column {
+    width: 100%;
+  }
+
+  .product-card {
+    padding: 15px;
+
+    .controls-box {
+      gap: 20px;
+    }
+  }
+}
+
+// للموبايل الصغير جداً (أقل من 576px)
+@media (max-width: 576px) {
+  .section-title {
+    font-size: 2.5rem !important;
+  }
+
+  .product-card {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+
+    .img-box {
+      width: 100%;
+      height: 180px;
+      margin-right: 0;
+      margin-bottom: 15px;
+      img { width: auto; margin: 0 auto; }
+    }
+
+    .info-box {
+      flex: none;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .controls-box {
+      width: 100%;
+      justify-content: space-between;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding-top: 15px;
+    }
+
+    .remove-btn {
+      top: 10px;
+      right: 10px;
+    }
+  }
+
+  .sticky-card {
+    padding: 20px;
+
+    .total-row {
+      font-size: 1.1rem;
     }
   }
 }

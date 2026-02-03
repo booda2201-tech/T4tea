@@ -9,51 +9,26 @@
 
     <div class="cart-layout">
       <div class="items-column">
-        <!-- <div class="product-card" *ngFor="let item of cartItems">
-          <div class="img-box">
-            <img [src]="item.image" alt="tea">
-          </div>
-          <div class="info-box">
-            <h3>{{item.name}}</h3>
-            <span>{{item.type}}</span>
-          </div>
-
-          <div class="controls-box">
-            <div class="qty-selector">
-              <button (click)="decrease(item)">-</button>
-              <span class="qty-val">{{item.quantity}}</span>
-              <button (click)="increase(item)">+</button>
+        <div class="product-card" *ngFor="let item of cartItems" [id]="'item-' + item.id">
+            <div class="img-box">
+              <img [src]="item.image" [alt]="item.name">
             </div>
-            <div class="price-tag">{{item.price}} EGP</div>
-          </div>
-          <button class="remove-btn">
-            <i class="bi bi-trash fs-5 text-danger"></i>
-          </button>
-        </div> -->
-
-        <div class="product-card" *ngFor="let item of cartItems">
-          <div class="img-box">
-            <img [src]="item.image" [alt]="item.name">
-          </div>
-
-          <div class="info-box">
-            <h3>{{item.name}}</h3>
-            <span class="badge-type">{{item.type}}</span>
-          </div>
-
-          <div class="controls-box">
-            <div class="qty-selector">
-              <button class="qty-btn" (click)="decrease(item)" [disabled]="item.quantity <= 1">-</button>
-              <span class="qty-val">{{item.quantity}}</span>
-              <button class="qty-btn" (click)="increase(item)">+</button>
+            <div class="info-box">
+              <h3>{{item.name}}</h3>
+              <span class="badge-type">{{item.type}}</span>
             </div>
-            <div class="price-tag">{{item.price}} <small>EGP</small></div>
+            <div class="controls-box">
+              <div class="qty-selector">
+                <button class="qty-btn" (click)="decrease(item)">-</button>
+                <span class="qty-val">{{item.quantity}}</span>
+                <button class="qty-btn" (click)="increase(item)">+</button>
+              </div>
+              <div class="price-tag">{{item.price}} EGP</div>
+            </div>
+            <button class="remove-btn" (click)="onDelete(item.id)">
+              <i class="bi bi-trash3-fill"></i>
+            </button>
           </div>
-
-          <button class="remove-btn" title="Remove Item">
-            <i class="bi bi-trash3-fill"></i>
-          </button>
-        </div>
       </div>
       <div class="summary-column">
         <div class="sticky-card">
