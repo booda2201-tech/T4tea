@@ -33,14 +33,6 @@ $favorite-red: #e74c3c;
   }
 
 
-.price{
-  color: #fcebd1;
-}
-
-
-
-
-
 
 
   .category-section {
@@ -168,6 +160,7 @@ $favorite-red: #e74c3c;
       height: 40px;
 
       .btn-content {
+        color: white !important;
         display: flex;
         justify-content: space-between;
         align-items: center;

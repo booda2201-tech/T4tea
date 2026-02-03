@@ -449,46 +449,94 @@ export class WishlistComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.initSwiper();
+    this.playEntranceAnimation();
+  }
+  initSwiper() {
+    this.swiperInstance = new Swiper('.wishlist-swiper', {
+      modules: [Navigation, Pagination, Mousewheel, Keyboard],
+      slidesPerView: 1,
+      spaceBetween: 0,
+      centeredSlides: true,
+      grabCursor: true,
+
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        dynamicBullets: true,
+      },
+
+      navigation: {
+        nextEl: '.custom-next',
+        prevEl: '.custom-prev',
+      },
+
+      breakpoints: {
+
+        0: {
+          slidesPerView: 1,
+          spaceBetween: 0,
+          centeredSlides: true,
+        },
+
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 25,
+          centeredSlides: false,
+        },
+
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+          centeredSlides: false,
+        },
+        1400: {
+          slidesPerView: 4,
+          spaceBetween: 30,
+          centeredSlides: false,
+        },
+      },
+    });
   }
 
-initSwiper() {
-  this.swiperInstance = new Swiper('.wishlist-swiper', {
-    modules: [Navigation, Pagination, Mousewheel, Keyboard],
-    slidesPerView: 1,
-    spaceBetween: 20,
-    centeredSlides: false,
-    grabCursor: true,
-    loop: false,
+  playEntranceAnimation() {
 
-    keyboard: { enabled: true },
-    mousewheel: { forceToAxis: true },
-    navigation: {
-      nextEl: '.custom-next',
-      prevEl: '.custom-prev',
-    },
+  setTimeout(() => {
 
-    // pagination: false, {el: '.swiper-pagination',clickable: true,  dynamicBullets: false,},
 
-    breakpoints: {
-      640: {
-        slidesPerView: 1,
-        spaceBetween: 80,
-      },
-      768: {
-        slidesPerView: 2,
-        spaceBetween: 25,
-      },
-      1024: {
-        slidesPerView: 3,
-        spaceBetween: 30,
-      },
-      1400: {
-        slidesPerView: 4,
-        spaceBetween: 30,
-      },
-    },
-  });
-}
+    gsap.from('.section-header', {
+      y: -130,
+      x: 650,
+      opacity: 1.55,
+      duration: 0.8,
+      ease: 'power5.out'
+    });
+
+
+    gsap.from('.item-card', {
+      y: 60,
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: 'power2.out',
+          clearProps: "all",
+          force3D: true
+        });
+
+
+    gsap.from('.nav-arrow', {
+          opacity: 0,
+          scale: 0,
+          duration: 0.6,
+          delay: 0.5,
+          onComplete: () => {
+
+            gsap.set('.nav-arrow', { opacity: 1, visibility: 'visible', clearProps: 'all' });
+          }
+        });
+      }, 100);
+  }
+
 
 
   trackByFn(index: number, item: any) {
@@ -498,12 +546,12 @@ initSwiper() {
   onDelete(id: number) {
     gsap.to(`#item-${id}`, {
       opacity: 0,
-      scale: 0.8,
-      duration: 0.3,
+      scale: 0.22,
+      duration: 0.5,
       onComplete: () => {
         this.wishlistItems = this.wishlistItems.filter(item => item.id !== id);
 
-        setTimeout(() => this.swiperInstance?.update(), 100);
+        setTimeout(() => this.swiperInstance?.update(), 300);
       }
     });
   }
