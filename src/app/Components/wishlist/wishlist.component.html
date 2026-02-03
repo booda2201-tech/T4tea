@@ -137,7 +137,7 @@
 
 
 
-<div class="wishlist-container">
+<!-- <div class="wishlist-container">
   <header class="section-header">
     <h1 class="section-title">WishList</h1>
     <p class="section-subtitle">Where luxury is felt</p>
@@ -176,6 +176,59 @@
                 <span>Add to Cart</span>
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+<div class="wishlist-container">
+  <header class="section-header">
+    <h1 class="section-title">WishList</h1>
+    <p class="section-subtitle">Where luxury is felt</p>
+  </header>
+
+  <div class="wishlist-main-wrapper">
+    <button class="nav-arrow left custom-prev">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <button class="nav-arrow right custom-next">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <div class="swiper wishlist-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let item of wishlistItems">
+          <div class="item-card" [id]="'item-' + item.id">
+
+            <div class="product-image">
+              <img [src]="item.image" [alt]="item.name">
+            </div>
+
+            <div class="product-info">
+              <h2 class="product-title">{{ item.name }}</h2>
+              <p class="product-description">{{ item.description }}</p>
+              <div class="product-price">{{ item.price }} EGP</div>
+            </div>
+
+            <div class="product-actions">
+              <button class="action-btn delete" (click)="$event.stopPropagation(); onDelete(item.id)">
+                <div class="icon-circle red"><i class="bi bi-trash fs-5"></i></div>
+                <span>Delete</span>
+              </button>
+
+              <button class="action-btn add-to-cart" (click)="onAddToCart(item)">
+                <div class="icon-circle dark"><i class="bi bi-cart fs-5"></i></div>
+                <span>Add to Cart</span>
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
