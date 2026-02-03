@@ -19,6 +19,16 @@ export class CartComponent {
 
   increase(item: any) { item.quantity++; }
   decrease(item: any) { if(item.quantity > 1) item.quantity--; }
+
+
+  calculateTotal() {
+  return this.cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+}
+
+
+
+
+
 }
 
 

@@ -1,104 +1,127 @@
+$primary-bg: #FDF5E6;
+$card-bg: #F2D2A9;
+$dark-bg: #222222;
 
-
-
-
-.cart-container {
-  padding: 50px 10%;
+.cart-page-wrapper {
+  // background-color: $primary-bg;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+  padding: 40px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-  .cart-header {
-    text-align: center;
-    margin-bottom: 40px;
-    h1 {
-      color: #1a3a3a;
-      font-size: 2.5rem;
-      margin-bottom: 5px; }
+  // .cart-header {
+  //   text-align: center;
+  //   margin-bottom: 50px;
+  //   h1 {
+  //     font-size: 3rem;
+  //     color: #1a1a1a;
+  //     margin: 0;
+  //   }
+  //   p {
+  //       color: #555;
+  //       font-size: 1.1rem;
+  //     }
+  // }
+}
 
-      p {
-      color: #4a6a6a;
-      }
-  }
+.cart-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
 
-  .cart-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 60px;
-  }
+.items-column {
+  flex: 2;
+}
 
-  .cart-item {
-    display: flex;
-    align-items: center;
-    background: #f2d2a9;
-    padding: 10px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    position: relative;
+.summary-column {
+  flex: 1;
+  position: sticky;
+  top: 20px;
+}
 
-    .product-img {
-      width: 150px;
-      height: 220px;
-    }
 
-    .item-details {
-      flex-grow: 1;
-    }
+.product-card {
+  background: $card-bg;
+  border-radius: 20px;
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 
-    .quantity-control {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin: 0 40px;
-      button {
-        border: none;
-        background: none;
-        cursor: pointer;
-        font-size: 1.2rem;
-      }
-    }
-    .remove-btn {
-      position: absolute;
-      right: 15px;
-      top: 15px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 1.5rem;
-    }
-  }
-
-  .cart-summary {
-    background: #333;
-    color: white;
-    padding: 30px;
-    border-radius: 20px;
-    height: fit-content;
-
-    h2 { text-align: center; margin-bottom: 30px; }
-    .summary-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-        .summary-info {
-          display: flex;
-          flex-direction: column;
-          small { color: #aaa; }
-        }
-    }
-    .total-section {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.2rem;
-      margin: 20px 0;
-    }
-    .checkout-btn {
+  .img-box {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-right: 20px;
+    img {
       width: 100%;
-      padding: 12px;
-      border-radius: 25px;
-      border: none;
-      background: white;
-      color: black;
-      font-weight: bold; cursor: pointer;
+      height: 100%;
+      object-fit: cover;
     }
+  }
+
+  .info-box {
+    flex: 1;
+    h3 { margin: 0; font-size: 1.2rem; color: #333; }
+    span { color: #666; font-size: 0.9rem; }
+  }
+
+  .controls-box {
+    display: flex; align-items: center; gap: 40px;
+
+    .qty-selector {
+      display: flex; align-items: center; gap: 15px;
+      button {
+        border: none; background: transparent; font-size: 1.5rem;
+        cursor: pointer; padding: 0 5px;
+      }
+      .qty-val { font-weight: bold; font-size: 1.1rem; }
+    }
+    .price-tag { font-weight: bold; font-size: 1.1rem; color: #333; min-width: 80px; }
+  }
+
+  .remove-btn {
+    position: absolute; right: 15px; top: 15px;
+    background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #555;
+  }
+}
+
+// كارد الملخص الغامق
+.sticky-card {
+  background: $dark-bg;
+  color: white;
+  border-radius: 25px;
+  padding: 30px;
+
+  .summary-title { text-align: center; margin-bottom: 25px; font-weight: 500; }
+
+  .summary-list {
+    margin-bottom: 20px;
+    .summary-line {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+      .line-info {
+        display: flex; flex-direction: column;
+        small { color: #888; margin-top: 2px; }
+      }
+      .line-qty { font-weight: bold; }
+    }
+  }
+
+  .divider { border: 0; border-top: 1px solid #444; margin: 20px 0; }
+
+  .total-row {
+    display: flex; justify-content: space-between;
+    font-size: 1.3rem; font-weight: bold; margin-bottom: 30px;
+  }
+
+  .checkout-btn {
+    width: 100%; padding: 15px; border-radius: 30px; border: none;
+    background: white; color: black; font-weight: bold; font-size: 1.1rem;
+    cursor: pointer; transition: 0.3s;
+    &:hover { background: #eee; transform: translateY(-2px); }
   }
 }
