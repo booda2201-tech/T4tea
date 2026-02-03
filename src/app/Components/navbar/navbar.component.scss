@@ -35,13 +35,13 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -55%);
+  transform: translate(-50%, -65%);
   z-index: 10;
   text-align: center;
 }
 
 .logo-part img {
-  height: 90px;
+  height: 95px;
   width: auto;
   filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.05));
 }
@@ -294,7 +294,7 @@
   }
 
   .logo-part img {
-    height: 60px;
+    height: 75px !important;
   }
 
 
