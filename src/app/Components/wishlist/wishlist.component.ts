@@ -274,7 +274,8 @@
 import { Component, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { gsap } from 'gsap';
 import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
+// import { Navigation } from 'swiper/modules';
+import { Pagination, Navigation, Mousewheel, Keyboard } from 'swiper/modules';
 
 @Component({
   selector: 'app-wishlist',
@@ -452,33 +453,47 @@ export class WishlistComponent implements AfterViewInit {
 
 initSwiper() {
   this.swiperInstance = new Swiper('.wishlist-swiper', {
-    modules: [Navigation],
-    slidesPerView: 'auto',
-    spaceBetween: 30,
+    modules: [Navigation, Pagination, Mousewheel, Keyboard],
+    slidesPerView: 1,
+    spaceBetween: 20,
+    centeredSlides: false,
+    grabCursor: true,
+    loop: false,
+
+    keyboard: { enabled: true },
+    mousewheel: { forceToAxis: true },
     navigation: {
       nextEl: '.custom-next',
       prevEl: '.custom-prev',
     },
+
+    // pagination: false, {el: '.swiper-pagination',clickable: true,  dynamicBullets: false,},
+
     breakpoints: {
-      0: {
+      640: {
         slidesPerView: 1,
-        spaceBetween: 10,
+        spaceBetween: 20,
       },
       768: {
-        slidesPerView: 1,
-        spaceBetween: 10,
+        slidesPerView: 2,
+        spaceBetween: 25,
       },
-      1000: {
+      1024: {
         slidesPerView: 3,
-        spaceBetween: 10,
+        spaceBetween: 30,
       },
       1400: {
         slidesPerView: 4,
-        spaceBetween: 28,
+        spaceBetween: 30,
       },
     },
   });
 }
+
+
+  trackByFn(index: number, item: any) {
+    return item.id;
+  }
 
   onDelete(id: number) {
     gsap.to(`#item-${id}`, {
