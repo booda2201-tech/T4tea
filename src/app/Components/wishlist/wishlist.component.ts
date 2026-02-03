@@ -459,6 +459,24 @@ initSwiper() {
       nextEl: '.custom-next',
       prevEl: '.custom-prev',
     },
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+        spaceBetween: 10,
+      },
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      1000: {
+        slidesPerView: 3,
+        spaceBetween: 10,
+      },
+      1400: {
+        slidesPerView: 4,
+        spaceBetween: 28,
+      },
+    },
   });
 }
 
