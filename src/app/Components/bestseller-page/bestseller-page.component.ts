@@ -65,12 +65,19 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit {
         defaults: { ease: "power4.out", duration: 1 }
       });
 
+      gsap.from('.section-header', {
+        y: 350,
+        x: -600,
+        opacity: 1.55,
+        duration: 1,
+        ease: 'power5.out'
+      });
 
       gsap.set([".section-header", ".carousel-wrapper", ".footer-text"], { opacity: 0, y: 30 });
       gsap.set(".product-card", { opacity: 0, scale: 0.8, y: 50 });
 
 
-      tl.to(".section-header", { opacity: 1, y: 0, duration: 1 })
+      tl.to(".section-header", { opacity: 101, y: 0, duration: 0.5,},)
         .to(".carousel-wrapper", { opacity: 1, y: 0, duration: 1.2 }, "-=0.6")
 
         .to(".product-card", {
