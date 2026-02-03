@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core'; // ضروري جداً
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -17,7 +17,7 @@ isSearchOpen = false;
       this.isMobileMenuOpen = false;
     }
   }
-  
+
   toggleAccountMenu(event: Event) {
     event.stopPropagation();
     this.isAccountMenuOpen = !this.isAccountMenuOpen;
