@@ -24,6 +24,12 @@ $text-white: #ffffff;
     margin: auto;
 }
 
+  .section-header {
+    text-align: center;
+    margin-bottom: 50px;
+    will-change: transform, opacity;
+  }
+
   .section-title {
     font-family: 'Playfair Display', serif;
     color: #003d37;
@@ -38,3 +44,5 @@ $text-white: #ffffff;
     font-style: italic;
     opacity: 0.8;
   }
+
+

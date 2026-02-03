@@ -1,0 +1,50 @@
+
+
+<div class="cont">
+<div class="cart-container">
+  <div class="section-header">
+    <h1 class="section-title">Cart</h1>
+    <p class="section-subtitle">Thank You For Choosing Us</p>
+  </div>
+
+  <div class="cart-content">
+    <div class="items-list">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <img [src]="item.image" [alt]="item.name" class="product-img">
+        <div class="item-details">
+          <h3>{{item.name}}</h3>
+          <p>{{item.type}}</p>
+        </div>
+        <div class="quantity-control">
+          <button (click)="decrease(item)">-</button>
+          <span>{{item.quantity}}</span>
+          <button (click)="increase(item)">+</button>
+        </div>
+        <div class="price">
+          {{item.price}} EGP
+        </div>
+        <button class="remove-btn">×</button>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h2>Cart Summary</h2>
+      <div class="summary-details">
+        <div class="summary-item" *ngFor="let item of cartItems">
+          <div class="summary-info">
+            <span>{{item.name}}</span>
+            <small>{{item.type}}</small>
+          </div>
+          <span class="summary-qty">x {{item.quantity}}</span>
+        </div>
+      </div>
+      <hr>
+      <div class="total-section">
+        <span>Total :</span>
+        <span>2100 EGP</span>
+      </div>
+      <button class="checkout-btn">Check Out</button>
+    </div>
+  </div>
+</div>
+</div>
