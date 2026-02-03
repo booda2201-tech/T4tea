@@ -113,20 +113,21 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     font-size: 1.4rem;
     cursor: pointer;
-    color: #555;
+    background: rgba(255, 0, 0, 0.1);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: #dc3545;
+    transition: $transition;
 
-    i{
-      transition: all 0.3s ease;
-
-      &:hover {
-        color: #333;
-      }
+    &:hover {
+      background: #dc3545;
+      color: white;
+      transform: scale(1.1) rotate(15deg);
     }
-
-
-
+    }
   }
-}
+
 
 
 // Sticky Card
@@ -169,7 +170,7 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   .divider {
     border: 0;
-    border-top: 1px solid #444;
+    border-top: 1px solid #e0e0e0;
     margin: 20px 0;
   }
 
@@ -194,7 +195,7 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transition: 0.3s;
 
     &:hover {
-      background: #eee;
+      background: #cecece;
       transform: translateY(-2px);
     }
   }
@@ -233,8 +234,9 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   .qty-selector {
     background: rgba(255,255,255,0.3);
-    padding: 5px 15px;
+    padding: 8px 15px;
     border-radius: 30px;
+
 
     .qty-btn {
       width: 32px;
@@ -267,23 +269,6 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 
-  .remove-btn {
-    background: rgba(255, 0, 0, 0.1);
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    color: #dc3545;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: $transition;
-
-    &:hover {
-      background: #dc3545;
-      color: white;
-      transform: scale(1.1) rotate(15deg);
-    }
-  }
 }
 
 

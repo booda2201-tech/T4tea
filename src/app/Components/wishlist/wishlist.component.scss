@@ -148,7 +148,12 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         transition: 0.3s;
 
-        &.red { background-color: #d93025; }
+        &.red {
+          background-color:  rgba(200, 0, 0, 0.45);
+          &:hover {
+            background-color: #dc3545;
+          }
+        }
         &.dark { background-color: #1b3d33; }
       }
 
@@ -169,7 +174,7 @@
 
 .nav-arrow {
   position: absolute;
-  top: 55%;
+  top: 50%;
   transform: translateY(-50%);
   z-index: 100;
   background: #1b3d33;
