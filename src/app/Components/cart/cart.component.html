@@ -30,19 +30,26 @@
             </button>
           </div>
       </div>
-      <div class="summary-column">
-        <div class="sticky-card">
-          <h2 class="summary-title">Cart Summary</h2>
-          <div class="summary-list">
-            <div class="summary-line" *ngFor="let item of cartItems">
-              <div class="line-info">
-                <strong>{{item.name}}</strong>
-                <small>{{item.type}}</small>
+    <div class="summary-column">
+        <div class="sticky-card" [class.is-active]="isSummaryOpen">
+          <h2 class="summary-title" (click)="toggleSummary()">
+            Cart Summary
+            <i class="bi" [ngClass]="isSummaryOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </h2>
+
+          <div class="collapsible-content" [class.show]="isSummaryOpen">
+            <div class="summary-list">
+              <div class="summary-line" *ngFor="let item of cartItems">
+                <div class="line-info">
+                  <strong>{{item.name}}</strong>
+                  <small>{{item.type}}</small>
+                </div>
+                <span class="line-qty">x {{item.quantity}}</span>
               </div>
-              <span class="line-qty">x {{item.quantity}}</span>
             </div>
+            <hr class="divider">
           </div>
-          <hr class="divider">
+
           <div class="total-row">
             <span>Total :</span>
             <span class="total-val">{{ calculateTotal() }} EGP</span>

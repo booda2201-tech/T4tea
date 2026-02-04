@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent {
+  isSummaryOpen: boolean = false;
   cartItems = [
     { id: 1, name: 'Pomegranate', type: 'Black Tea', price: 350, quantity: 2, image: '../../../assets/Black Tea.png' },
     { id: 2, name: 'Moroccan Mint', type: 'Black Tea', price: 350, quantity: 1, image: '../../../assets/Green Tea.png' },
@@ -32,8 +33,16 @@ export class CartComponent {
       onComplete: () => {
         this.cartItems = this.cartItems.filter(item => item.id !== id);
       }
-      
+
     });
+  }
+
+
+
+
+
+  toggleSummary() {
+    this.isSummaryOpen = !this.isSummaryOpen;
   }
 }
 

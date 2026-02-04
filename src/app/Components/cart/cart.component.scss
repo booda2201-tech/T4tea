@@ -317,7 +317,7 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 @media (max-width: 992px) {
   .cart-layout {
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: stretch;
   }
 
@@ -385,5 +385,48 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     .total-row {
       font-size: 1.1rem;
     }
+  }
+}
+
+
+
+.sticky-card {
+  .summary-title {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+
+    i {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  // الجزء المسؤول عن حركة الفتح والغلق
+  .collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 0;
+
+    &.show {
+      max-height: 500px; // رقم تقريبي يكفي لعرض المنتجات
+      opacity: 1;
+      margin-top: 20px;
+    }
+  }
+}
+
+// تعديل خاص للموبايل فقط (إختياري: إذا أردتها مفتوحة دائماً في الديسكتوب ومغلقة في الموبايل)
+@media (min-width: 993px) {
+  .collapsible-content {
+    max-height: none !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+  }
+  .summary-title i {
+    display: none; // إخفاء السهم في الشاشات الكبيرة
   }
 }
