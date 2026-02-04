@@ -4,7 +4,7 @@
 
 
 
-<div class="wishlist-container">
+<!-- <div class="wishlist-container">
   <header class="section-header">
     <h1 class="section-title">WishList</h1>
     <p class="section-subtitle">Where luxury is felt</p>
@@ -45,5 +45,66 @@
       </div>
       <div class="swiper-pagination"></div>
     </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+<div class="wishlist-container">
+  <header class="section-header">
+    <h1 class="section-title">WishList</h1>
+    <p class="section-subtitle">Where luxury is felt</p>
+  </header>
+
+  <div class="wishlist-main-wrapper">
+
+    <div class="layout-luxury-wide" *ngIf="wishlistItems.length <= 2">
+      <div class="wide-card" *ngFor="let item of wishlistItems; trackBy: trackByFn" [id]="'item-' + item.id">
+        <div class="product-content">
+          <div class="image-box">
+            <img [src]="item.image" [alt]="item.name">
+          </div>
+          <div class="info-box">
+            <h2 class="title">{{ item.name }}</h2>
+            <p class="desc">{{ item.description }}</p>
+            <div class="price">{{ item.price }} EGP</div>
+          </div>
+        </div>
+        <div class="side-actions">
+          <button class="action-btn delete" (click)="onDelete(item.id)">
+            <i class="bi bi-trash"></i>
+            <span>Delete</span>
+          </button>
+          <div class="vertical-divider"></div>
+          <button class="action-btn add" (click)="onAddToCart(item)">
+            <i class="bi bi-cart"></i>
+            <span>Add To Cart</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-swiper-wrapper" *ngIf="wishlistItems.length > 2">
+      <button class="nav-arrow left custom-prev"><i class="bi bi-chevron-left"></i></button>
+      <button class="nav-arrow right custom-next"><i class="bi bi-chevron-right"></i></button>
+
+      <div class="swiper wishlist-swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" *ngFor="let item of wishlistItems; trackBy: trackByFn">
+              <div class="item-card" [id]="'item-' + item.id">
+                </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+
   </div>
 </div>
