@@ -500,29 +500,51 @@ export class WishlistComponent implements AfterViewInit {
   }
 
   initSwiper() {
+    this.swiperInstance = new Swiper('.wishlist-swiper', {
+      modules: [Navigation, Pagination, Mousewheel, Keyboard],
+      slidesPerView: 1,
+      spaceBetween: 0,
+      centeredSlides: true,
+      grabCursor: true,
 
-    if (this.swiperInstance) {
-      this.swiperInstance.destroy(true, true);
-    }
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        dynamicBullets: true,
+      },
 
-    setTimeout(() => {
-      this.swiperInstance = new Swiper('.wishlist-swiper', {
-        modules: [Navigation, Pagination, Mousewheel, Keyboard],
-        slidesPerView: 1,
-        spaceBetween: 0,
-        centeredSlides: true,
-        grabCursor: true,
-        pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
-        navigation: { nextEl: '.custom-next', prevEl: '.custom-prev' },
-        breakpoints: {
-          768: { slidesPerView: 2, spaceBetween: 25 },
-          1024: { slidesPerView: 3, spaceBetween: 30 },
-          1400: { slidesPerView: 4, spaceBetween: 30 },
+      navigation: {
+        nextEl: '.custom-next',
+        prevEl: '.custom-prev',
+      },
+
+      breakpoints: {
+
+        0: {
+          slidesPerView: 1,
+          spaceBetween: 0,
+          centeredSlides: true,
         },
-      });
-    }, 100);
-  }
 
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 25,
+          centeredSlides: false,
+        },
+
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+          centeredSlides: false,
+        },
+        1400: {
+          slidesPerView: 4,
+          spaceBetween: 30,
+          centeredSlides: false,
+        },
+      },
+    });
+  }
   onDelete(id: number) {
 
     gsap.to(`#item-${id}`, {
@@ -559,12 +581,38 @@ export class WishlistComponent implements AfterViewInit {
   }
 
   playEntranceAnimation() {
-    setTimeout(() => {
-      gsap.from('.section-header', { y: -50, opacity: 0, duration: 0.8, ease: 'power3.out' });
+  setTimeout(() => {
+    gsap.from('.section-header', {
+      y: -130,
+      x: 650,
+      opacity: 1.55,
+      duration: 0.8,
+      ease: 'power5.out'
+    });
 
-      const cardClass = this.wishlistItems.length > 2 ? '.item-card' : '.wide-card';
-      gsap.from(cardClass, { y: 60, opacity: 0, scale: 0.8, duration: 0.6, stagger: 0.1 });
-    }, 100);
+
+    gsap.from('.item-card', {
+      y: 60,
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: 'power2.out',
+          clearProps: "all",
+          force3D: true
+        });
+
+
+    gsap.from('.nav-arrow', {
+          opacity: 0,
+          scale: 0,
+          duration: 0.6,
+          delay: 0.5,
+          onComplete: () => {
+            gsap.set('.nav-arrow', { opacity: 1, visibility: 'visible', clearProps: 'all' });
+          }
+        });
+      }, 100);
   }
 
   trackByFn(index: number, item: any) { return item.id; }
