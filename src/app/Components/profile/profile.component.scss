@@ -1,5 +1,41 @@
 
 
+.custom-navbar {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  transition: background 0.3s ease;
+
+
+  background: linear-gradient(90deg, rgba(227, 210, 186, 0) 0%, #c4a47c 30%, #c4a47c00 50%, #c4a47c00 50%, #c4a47c 70%, rgba(227, 210, 186, 0) 100%);
+}
+
+
+.navbar-scrolled {
+  background: rgba(0, 61, 55, 0.9) !important;
+  backdrop-filter: blur(10px);
+  height: 65px !important;
+  top: 10px;
+  width: 90% !important;
+  border-radius: 50px;
+  border: 1px solid rgba(196, 164, 124, 0.5);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -484,3 +520,55 @@
   }
 }
 
+
+
+
+
+
+
+
+
+.contt {
+  background-color: #fcebd1;
+  width: 100%;
+  height: 140px;
+  position: relative;
+  z-index: 1001;
+}
+
+.custom-navbar {
+
+  position: fixed !important;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 95% !important;
+  z-index: 2000 !important;
+  transition: background 0.3s, border 0.3s;
+
+
+  background: linear-gradient(90deg, rgba(227, 210, 186, 0) 0%, #c4a47c 30%, #c4a47c00 50%, #c4a47c00 50%, #c4a47c 70%, rgba(227, 210, 186, 0) 100%);
+  border: 3px solid #c4a47c;
+}
+
+
+
+
+
+
+
+.custom-pill {
+  display: inline-block; 
+  will-change: transform;
+
+}
+
+.nav-icon {
+  will-change: transform;
+
+}
+
+.custom-navbar {
+
+  backdrop-filter: blur(5px);
+}
