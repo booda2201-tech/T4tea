@@ -25,6 +25,7 @@ import { CartComponent } from './Components/cart/cart.component';
 import { LoginComponent } from './Components/login/login.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
+import { ProductDetailsComponent } from './Components/product-details/product-details.component';
 
 
 
@@ -48,6 +49,7 @@ import { WishlistComponent } from './Components/wishlist/wishlist.component';
     LoginComponent,
     ProfileComponent,
     WishlistComponent,
+    ProductDetailsComponent,
 
   ],
   imports: [
