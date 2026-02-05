@@ -10,22 +10,21 @@ import { gsap } from 'gsap';
 export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private route = inject(ActivatedRoute);
 
-  // المتغيرات المطلوبة في الـ HTML
-  product: any;
+  product: any = null;
   quantity: number = 1;
   activeTab: string = 'desc';
   private tl: any;
 
-  // داتا المنتجات بنفس هيكل الـ HTML بتاعك
+  // الداتا موحدة مع صفحة الـ Category عشان الربط يشتغل صح
   products = [
     {
       id: 1,
       name: 'Moroccan Mint',
       price: '350',
       category: 'Black Tea',
-      mainImage: 'assets/1 (3) 6.png', // مطابقة لـ [src]="product.mainImage"
-      gallery: ['assets/1 (3) 6.png', 'assets/Black Tea.png', 'assets/4 (3) 4.png'], // مطابقة لـ product.gallery
-      description: 'A refined blend of tangy black tea with ripe pomegranate, delicate raspberry, and soft floral hibiscus.',
+      mainImage: 'assets/1 (3) 6.png',
+      gallery: ['assets/1 (3) 6.png', 'assets/Black Tea.png', 'assets/4 (3) 4.png'],
+      description: 'A refreshing blend of premium black tea infused with authentic Moroccan mint leaves for a cooling, sophisticated experience.',
       brewing: { temp: '95°C', time: '3-5 min', dose: '1 tsp' }
     },
     {
@@ -35,23 +34,33 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy
       category: 'Black Tea',
       mainImage: 'assets/Black Tea.png',
       gallery: ['assets/Black Tea.png', 'assets/1 (3) 6.png'],
-      description: 'Crafted from select leaves, it transforms tea into a refined daily ritual.',
+      description: 'Experience the perfect balance of bold black tea and the sweet, tangy notes of ripe pomegranate jewels.',
       brewing: { temp: '90°C', time: '4 min', dose: '1.5 tsp' }
+    },
+    {
+      id: 3,
+      name: 'Lavender Grey',
+      price: '350',
+      category: 'Black Tea',
+      mainImage: 'assets/4 (3) 4.png',
+      gallery: ['assets/4 (3) 4.png', 'assets/Black Tea.png'],
+      description: 'A floral twist on the classic Earl Grey, featuring fragrant lavender buds and bergamot citrus notes.',
+      brewing: { temp: '95°C', time: '3-5 min', dose: '1 tsp' }
     }
-    // ضيف باقي المنتجات هنا..
   ];
 
   ngOnInit(): void {
-    const idFromRoute = Number(this.route.snapshot.paramMap.get('id'));
-    const foundProduct = this.products.find(p => p.id === idFromRoute);
-
-    if (foundProduct) {
-      // بنعمل Shallow Copy عشان لما نغير الـ mainImage في الجاليري ما نضربش الداتا الأصلية
-      this.product = { ...foundProduct };
-    }
+    // مراقبة التغير في الـ URL (عشان لو العميل داس على منتج مشابه والصفحة مفتوحة)
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      const found = this.products.find(p => p.id === id);
+      if (found) {
+        this.product = { ...found }; // نأخذ نسخة لعدم تعديل الأصل
+        this.quantity = 1; // نصفر الكمية عند تغيير المنتج
+      }
+    });
   }
 
-  // الدوال المطلوبة في الـ HTML
   changeQuantity(val: number) {
     if (this.quantity + val >= 1) {
       this.quantity += val;
@@ -60,6 +69,7 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngAfterViewInit(): void {
     this.tl = gsap.timeline();
+    // أنيميشن ناعم للعناصر
     gsap.set(['.image-section', '.info-section'], { opacity: 0, y: 30 });
     this.tl.to(['.image-section', '.info-section'], {
       opacity: 1,

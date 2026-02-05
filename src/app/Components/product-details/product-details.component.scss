@@ -23,12 +23,12 @@ $white: #ffffff;
   .image-section {
     .main-img-container {
       background: $white;
-      height: 400px;
+      height: 450px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 20px;
-      padding: 2rem;
+      padding: 0rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
       margin-bottom: 1.5rem;
 
@@ -44,7 +44,7 @@ $white: #ffffff;
       gap: 1rem;
       img {
         width: 120px;
-        height: 180px;
+        height: 200px;
         border-radius: 10px;
         cursor: pointer;
         border: 2px solid transparent;
