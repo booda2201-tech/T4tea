@@ -1,0 +1,42 @@
+
+
+
+
+<div class="auth-container">
+  <div class="background-overlay"></div>
+
+  <div class="auth-content">
+    <div class="auth-card">
+      <div class="logo-wrapper">
+        <img src="assets/logo.png" alt="T4TEA Logo" class="logo" routerLink="">
+      </div>
+
+      <h2 class="welcome-text">Hello</h2>
+
+      <form class="auth-form">
+        <div class="input-group">
+          <label>User Name</label>
+          <input type="text" placeholder="User Name">
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" placeholder="Password">
+        </div>
+
+        <div class="input-group" *ngIf="!isLoginMode">
+          <label>Re-Password</label>
+          <input type="password" placeholder="Re-Password">
+        </div>
+
+        <button type="submit" class="submit-btn">
+          {{ isLoginMode ? 'Login' : 'Signup' }}
+        </button>
+      </form>
+
+      <p class="toggle-text" (click)="toggleMode()">
+        {{ isLoginMode ? "Don't have an account? Create one" : "Already have an account? Login" }}
+      </p>
+    </div>
+  </div>
+</div>

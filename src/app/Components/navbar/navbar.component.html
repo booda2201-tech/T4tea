@@ -166,7 +166,7 @@
           <div class="account-dropdown" *ngIf="isAccountMenuOpen" (click)="$event.stopPropagation()">
             <div class="dropdown-links">
               <a routerLink="/profile" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Profile</a>
-              <a routerLink="/login" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Login</a>
+              <a routerLink="authentication/login" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Login</a>
               <a routerLink="/logout" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Logout</a>
             </div>
           </div>
@@ -187,4 +187,3 @@
     </div>
   </nav>
 </div>
- 

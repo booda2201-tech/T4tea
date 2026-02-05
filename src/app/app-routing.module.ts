@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+
+import { AuthenticationComponent } from './Components/layout/authentication/authentication.component';
+import { MainComponent } from './Components/layout/main/main.component';
 import { HomeComponent } from './Components/home/home.component';
 import { HeaderComponent } from './Components/HomeContent/header/header.component';
 import { CollectionsComponent } from './Components/HomeContent/collections/collections.component';
@@ -20,6 +23,7 @@ import { LogoutComponent } from './Components/logout/logout.component';
 
 
 const routes: Routes = [
+    { path: '', component: MainComponent,children: [
     { path: 'home', component: HomeComponent },
     { path: '', component: HomeComponent },
     { path: 'header', component: HeaderComponent },
@@ -34,11 +38,14 @@ const routes: Routes = [
     { path: 'teawares', component: TeawaresComponent },
     { path: 'about-us', component: AboutUsComponent },
     { path: 'cart', component: CartComponent },
-    { path: 'login', component: LoginComponent },
     { path: 'profile', component: ProfileComponent },
     { path: 'wishlist', component: WishlistComponent },
-    { path: 'logout', component: LogoutComponent },
+  ]},
 
+    { path: 'authentication', component: AuthenticationComponent,children:[
+      { path: 'login', component: LoginComponent  },
+      { path: '', redirectTo: '/login', pathMatch: 'full' },
+    ]},
 
 ];
 
