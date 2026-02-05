@@ -7,17 +7,13 @@ $white: #ffffff;
   min-height: 100vh;
   padding: 4rem 10%;
   color: $primary-green;
+  // background-color: $bg-cream; // لضمان تطابق الخلفية مع البراند
 
   .main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: start;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      padding: 1rem;
-    }
   }
 
   .image-section {
@@ -28,14 +24,18 @@ $white: #ffffff;
       align-items: center;
       justify-content: center;
       border-radius: 20px;
-      padding: 0rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
       margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
 
       img {
-        width: 40%;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
         height: auto;
         object-fit: contain;
+        transition: all 0.3s ease;
       }
     }
 
@@ -43,28 +43,35 @@ $white: #ffffff;
       display: flex;
       gap: 1rem;
       img {
-        width: 120px;
-        height: 200px;
-        border-radius: 10px;
+        width: 100px;
+        height: 140px;
+        border-radius: 12px;
+        object-fit: cover;
         cursor: pointer;
         border: 2px solid transparent;
         transition: 0.3s;
-        &:hover {
-          border-color:
-          $gold-accent;
+        &:hover, &.active {
+          border-color: $gold-accent;
+          transform: translateY(-3px);
         }
       }
     }
   }
 
   .info-section {
+    .breadcrumb {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 3rem;
+      font-size: 3.5rem;
       margin-bottom: 0.5rem;
+      line-height: 1.1;
     }
     .price {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       color: $gold-accent;
       font-weight: bold;
       margin-bottom: 1.5rem;
@@ -73,6 +80,7 @@ $white: #ffffff;
       line-height: 1.8;
       color: #555;
       margin-bottom: 2rem;
+      font-style: italic;
     }
 
     .action-bar {
@@ -84,19 +92,19 @@ $white: #ffffff;
       .qty-selector {
         display: flex;
         align-items: center;
-        border: 1px solid #ccc;
+        border: 1px solid #ddd;
         border-radius: 50px;
-        padding: 5px 15px;
+        padding: 8px 20px;
+        background: $white;
         button {
-          background: none;
-          border: none;
-          font-size: 1.2rem;
-          cursor: pointer;
-          padding: 5px 10px;
+          background: none; border: none;
+          font-size: 1.5rem; cursor: pointer;
+          color: $primary-green;
         }
         span {
           padding: 0 15px;
           font-weight: bold;
+          font-size: 1.2rem;
         }
       }
 
@@ -104,14 +112,15 @@ $white: #ffffff;
         background: $primary-green;
         color: $white;
         border: none;
-        padding: 12px 40px;
+        padding: 15px 45px;
         border-radius: 50px;
         font-weight: 600;
         cursor: pointer;
-        transition: 0.3s;
+        transition: 0.3s ease;
         &:hover {
-          background: lighten($primary-green, 10%);
+          background: lighten($primary-green, 5%);
           transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(11, 61, 46, 0.2);
         }
       }
     }
@@ -120,7 +129,6 @@ $white: #ffffff;
   .tabs-system {
     border-top: 1px solid rgba(0,0,0,0.1);
     padding-top: 2rem;
-
     .tab-headers {
       display: flex;
       gap: 2rem;
@@ -128,29 +136,82 @@ $white: #ffffff;
       span {
         cursor: pointer;
         font-weight: 600;
-        padding-bottom: 5px;
+        font-size: 1.1rem;
+        padding-bottom: 8px;
         &.active {
           border-bottom: 2px solid $gold-accent;
           color: $gold-accent;
         }
       }
     }
+    .tab-content {
+      color: #666;
+      line-height: 1.7;
+    }
 
     .brewing-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      gap: 1.5rem;
       .step {
         background: rgba($white, 0.5);
         padding: 1.5rem;
         border-radius: 15px;
         text-align: center;
-        i {
+        border: 1px solid rgba(255,255,255,0.8);
+        strong {
           display: block;
-          font-size: 1.5rem;
-          margin-bottom: 0.5rem;
+          color: $primary-green;
+          margin: 5px 0;
+        }
+        p {
+          margin: 0;
+          font-size: 0.9rem;
         }
       }
+    }
+  }
+
+
+  @media (max-width: 992px) {
+    padding: 2rem 5%;
+    .main-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .image-section {
+      .main-img-container {
+        height: 350px;
+        img {
+          max-width: 60%;
+        }}
+      .gallery {
+        justify-content: center;
+        img {
+          width: 85px;
+          height: 105px;
+        }}
+    }
+    .info-section {
+      // text-align: center;
+      h1 {
+        font-size: 2.5rem;
+      }
+      .action-bar {
+        text-align: start;
+        flex-direction: row column;
+        .add-to-cart {
+          width: 100%;
+        }
+        .qty-selector {
+          width: fit-content;
+          margin: 0 auto;
+        }
+      }
+    }
+    .tabs-system
+    .brewing-grid {
+      grid-template-columns: 1fr;
     }
   }
 }
@@ -160,6 +221,136 @@ $white: #ffffff;
 
 
 
+
+
+// $primary-green: #0B3D2E;
+// $gold-accent: #B18B5E;
+// $bg-cream: #F9F4E8;
+
+// .product-page {
+//   background-color: $bg-cream;
+//   min-height: 100vh;
+//   padding: 2rem 5%; // تقليل الـ padding في الموبايل
+
+//   @media (min-width: 1024px) {
+//     padding: 4rem 10%;
+//   }
+
+//   .main-grid {
+//     display: grid;
+//     grid-template-columns: 1fr; // عمود واحد للموبايل
+//     gap: 2rem;
+//     align-items: center;
+
+//     @media (min-width: 768px) {
+//       grid-template-columns: 1fr 1fr; // عمودين للتابلت واللابتوب
+//       gap: 4rem;
+//     }
+//   }
+
+//   .image-section {
+//     width: 100%;
+
+//     .main-img-container {
+//       background: #fff;
+//       border-radius: 25px;
+//       padding: 2rem;
+//       aspect-ratio: 1 / 1; // بيحافظ على الكادر مربع مهما كان حجم الشاشة
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+
+//       img {
+//         max-width: 100%;
+//         max-height: 100%;
+//         object-fit: contain;
+//       }
+//     }
+
+//     .gallery {
+//       display: flex;
+//       justify-content: center;
+//       gap: 0.8rem;
+//       margin-top: 1rem;
+
+//       img {
+//         width: 60px;
+//         height: 60px;
+//         border-radius: 12px;
+//         @media (min-width: 768px) { width: 80px; height: 80px; }
+//       }
+//     }
+//   }
+
+//   .info-section {
+//     text-align: left; // محاذاة النص
+
+//     h1 {
+//       font-family: 'Playfair Display', serif;
+//       font-size: clamp(1.8rem, 5vw, 3rem); // خط مرن يصغر ويكبر مع الشاشة
+//       color: $primary-green;
+//       margin-bottom: 0.5rem;
+//     }
+
+//     .breadcrumb {
+//       font-size: 0.9rem;
+//       color: #888;
+//       margin-bottom: 1rem;
+//     }
+
+//     .price {
+//       font-size: 1.5rem;
+//       font-weight: bold;
+//       color: $gold-accent;
+//     }
+
+//     .description {
+//       font-size: 1rem;
+//       line-height: 1.6;
+//       margin: 1.5rem 0;
+//       color: #555;
+//     }
+
+//     .action-bar {
+//       display: flex;
+//       flex-wrap: wrap; // عشان لو المساحة ضاقت ينزلوا تحت بعض
+//       gap: 1rem;
+//       align-items: center;
+//       margin-top: 2rem;
+
+//       .qty-selector {
+//         display: flex;
+//         align-items: center;
+//         background: #fff;
+//         border-radius: 50px;
+//         padding: 0.5rem 1rem;
+//         border: 1px solid #ddd;
+
+//         button { background: none; border: none; font-size: 1.2rem; padding: 0 10px; cursor: pointer; }
+//         span { min-width: 30px; text-align: center; font-weight: bold; }
+//       }
+
+//       .add-to-cart {
+//         flex-grow: 1; // الزرار ياخد باقي المساحة
+//         background: $primary-green;
+//         color: #fff;
+//         padding: 1rem 2rem;
+//         border-radius: 50px;
+//         border: none;
+//         font-weight: 600;
+//         cursor: pointer;
+//         transition: 0.3s ease;
+
+//         &:hover { transform: translateY(-3px); background: #154d3c; }
+
+//         @media (max-width: 480px) {
+//           width: 100%; // الزرار ياخد العرض كامل في الموبايلات الصغيرة
+//         }
+//       }
+//     }
+//   }
+// }
 
 
 

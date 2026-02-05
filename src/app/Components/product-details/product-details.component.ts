@@ -83,4 +83,32 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   ngOnDestroy(): void {
     if (this.tl) this.tl.kill();
   }
+
+
+
+
+
+
+changeMainImage(newImg: string) {
+  if (this.product.mainImage === newImg) return;
+
+  // أنيميشن اختفاء بسيط
+  gsap.to('.main-img-container img', {
+    opacity: 0,
+    scale: 0.9,
+    duration: 0.2,
+    onComplete: () => {
+      this.product.mainImage = newImg; // تغيير الصورة
+      // أنيميشن ظهور
+      gsap.to('.main-img-container img', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.3,
+        ease: 'back.out(1.7)'
+      });
+    }
+  });
+}
+
+
 }
