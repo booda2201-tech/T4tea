@@ -107,16 +107,15 @@
           <label for="username">User Name</label>
         </div>
 
-        <div class="input-group">
-          <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder=" ">
-          <label for="password">Password</label>
-          <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"
-              (click)="togglePasswordVisibility('pass')"></i>
+<div class="input-group">
+  <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder=" ">
+  <label for="password">Password</label>
 
-          <div class="forgot-wrapper" *ngIf="isLoginMode">
-            <a href="#" class="forgot-link">Forgot Password?</a>
-          </div>
-        </div>
+  <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"
+     (click)="togglePasswordVisibility('pass')"></i>
+</div>
+
+
 
         <div class="input-group" *ngIf="!isLoginMode">
           <input [type]="showRePassword ? 'text' : 'password'" id="repassword" placeholder=" ">
@@ -130,6 +129,10 @@
         </button>
       </form>
 
+
+          <div class="options-link mt-3" *ngIf="isLoginMode">
+            <a href="#" class="forgot-link">Forgot Password?</a>
+          </div>
       <p class="toggle-text" (click)="toggleMode()">
         {{ isLoginMode ? "Don't have an account? Create one" : "Already have an account? Login" }}
       </p>
