@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
-
     gsap.from('.auth-form, .title', {
       opacity: 0,
       y: 10,
