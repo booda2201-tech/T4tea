@@ -14,13 +14,13 @@
       <h2 class="welcome-text">Hello</h2>
       <form class="auth-form">
         <div class="input-group">
-          <label>User Name</label>
-          <input type="text" placeholder="User Name">
+          <input type="text" id="username" placeholder=" ">
+          <label for="username">User Name</label>
         </div>
 
         <div class="input-group">
-          <label>Password</label>
-          <input type="password" placeholder="Password">
+          <input type="password" id="password" placeholder=" ">
+          <label for="password">Password</label>
         </div>
 
         <div class="input-group" *ngIf="!isLoginMode">

@@ -49,31 +49,55 @@
     }
 
     .auth-form {
-      .input-group {
-        text-align: left;
-        margin-bottom: 1.5rem;
+.input-group {
+  position: relative;
+  margin-bottom: 2rem; // مسافة كافية بين الحقول
+  text-align: left;
 
-        label {
-          display: block;
-          color: #fff;
-          margin-bottom: 0.5rem;
-          font-size: 0.9rem;
-          font-weight: 300;
-        }
+  input {
+    width: 100%;
+    padding: 20px 20px 10px 20px;
+    background: rgba(255, 250, 240, 0.9);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
 
-        input {
-          width: 100%;
-          padding: 12px 20px;
-          background: rgba(255, 250, 240, 0.9);
-          border: none;
-          border-radius: 10px;
-          outline: none;
-          font-size: 1rem;
-          color: #333;
+    // تأثير الهوفر والفوكس
+    &:focus, &:hover {
+      border: 1px solid rgba(74, 58, 42, 0.4);
+      background: #fff;
+    }
 
-          &::placeholder { color: #aaa; }
-        }
-      }
+    // حركة الليبل عند الكتابة أو التركيز
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      top: 6px;             // مكانه الجديد جوه الـ input من فوق
+      left: 15px;           // إزاحة بسيطة لليسار
+      transform: translateY(0);
+      font-size: 0.7rem;    // تصغير الحجم
+      color: #4a3a2a;       // لون أغمق للوضوح
+      font-weight: 700;
+      opacity: 0.8;
+    }
+  }
+
+  label {
+    position: absolute;
+    left: 20px;
+    top: 50%;               // توسيط رأسي في البداية
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.95rem;
+    pointer-events: none;   // عشان الماوس يضغط من خلال الليبل
+    transition: all 0.25s ease-out;
+    z-index: 10;
+  }
+}
+
+
 
       .submit-btn {
         width: 100%;
