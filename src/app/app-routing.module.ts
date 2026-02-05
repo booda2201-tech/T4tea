@@ -27,13 +27,15 @@ const routes: Routes = [
     { path: 'bestseller-page', component: BestsellerPageComponent },
     { path: 'explore-page', component: ExplorePageComponent },
     { path: 'category', component: CategoryComponent },
+    { path: 'product-details/:id', component: ProductDetailsComponent }, 
+    { path: '', redirectTo: '/category', pathMatch: 'full' },
     { path: 'teawares', component: TeawaresComponent },
     { path: 'about-us', component: AboutUsComponent },
     { path: 'cart', component: CartComponent },
     { path: 'login', component: LoginComponent },
     { path: 'profile', component: ProfileComponent },
     { path: 'wishlist', component: WishlistComponent },
-    { path: 'product-details', component: ProductDetailsComponent },
+
 
 ];
 

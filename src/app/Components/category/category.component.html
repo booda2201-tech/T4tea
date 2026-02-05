@@ -47,8 +47,8 @@
     <h2 class="title mb-4">{{ cat }}</h2>
 
     <div class="products-grid">
-      <div class="product-card" *ngFor="let product of getProductsByCategory(cat)">
-        <div class="wishlist" (click)="toggleFavorite(product)">
+      <div class="product-card" *ngFor="let product of getProductsByCategory(cat)" [routerLink]="['/product-details', product.id]">
+        <div class="wishlist" (click)="toggleFavorite(product); $event.stopPropagation()" >
           <i class="bi" [ngClass]="product.isFavorite ? 'bi-heart-fill active' : 'bi-heart'"></i>
         </div>
 
