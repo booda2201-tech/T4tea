@@ -51,7 +51,7 @@
     .auth-form {
 .input-group {
   position: relative;
-  margin-bottom: 2rem; // مسافة كافية بين الحقول
+  margin-bottom: 2rem; 
   text-align: left;
 
   input {
@@ -65,20 +65,20 @@
     color: #333;
     transition: all 0.3s ease;
 
-    // تأثير الهوفر والفوكس
+
     &:focus, &:hover {
       border: 1px solid rgba(74, 58, 42, 0.4);
       background: #fff;
     }
 
-    // حركة الليبل عند الكتابة أو التركيز
+
     &:focus + label,
     &:not(:placeholder-shown) + label {
-      top: 6px;             // مكانه الجديد جوه الـ input من فوق
-      left: 15px;           // إزاحة بسيطة لليسار
+      top: 6px;
+      left: 15px;
       transform: translateY(0);
-      font-size: 0.7rem;    // تصغير الحجم
-      color: #4a3a2a;       // لون أغمق للوضوح
+      font-size: 0.7rem;
+      color: #4a3a2a;
       font-weight: 700;
       opacity: 0.8;
     }
@@ -87,11 +87,11 @@
   label {
     position: absolute;
     left: 20px;
-    top: 50%;               // توسيط رأسي في البداية
+    top: 50%;
     transform: translateY(-50%);
     color: #999;
     font-size: 0.95rem;
-    pointer-events: none;   // عشان الماوس يضغط من خلال الليبل
+    pointer-events: none;
     transition: all 0.25s ease-out;
     z-index: 10;
   }
