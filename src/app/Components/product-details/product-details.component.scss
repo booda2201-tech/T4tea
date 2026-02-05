@@ -9,6 +9,36 @@ $white: #ffffff;
   color: $primary-green;
   // background-color: $bg-cream; // لضمان تطابق الخلفية مع البراند
 
+.back-link {
+  background: none;
+  border: none;
+  color: $primary-green;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: $gold-accent;
+    width: fit-content;
+    color: #000;
+    font-weight: bold;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    transform: translateX(-5px);
+  }
+}
+
+
+.product-card {
+  cursor: pointer;
+}
+
+
   .main-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
