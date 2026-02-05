@@ -15,7 +15,6 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   activeTab: string = 'desc';
   private tl: any;
 
-  // الداتا موحدة مع صفحة الـ Category عشان الربط يشتغل صح
   products = [
     {
       id: 1,
@@ -50,13 +49,12 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   ];
 
   ngOnInit(): void {
-    // مراقبة التغير في الـ URL (عشان لو العميل داس على منتج مشابه والصفحة مفتوحة)
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
       const found = this.products.find(p => p.id === id);
       if (found) {
-        this.product = { ...found }; // نأخذ نسخة لعدم تعديل الأصل
-        this.quantity = 1; // نصفر الكمية عند تغيير المنتج
+        this.product = { ...found };
+        this.quantity = 1;
       }
     });
   }
@@ -67,9 +65,28 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
+  changeMainImage(newImg: string) {
+    if (this.product.mainImage === newImg) return;
+
+    // أنيميشن تبديل الصور الاحترافي
+    gsap.to('.main-img-container img', {
+      opacity: 0,
+      y: 20,
+      duration: 0.2,
+      onComplete: () => {
+        this.product.mainImage = newImg;
+        gsap.to('.main-img-container img', {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: 'back.out(1.7)'
+        });
+      }
+    });
+  }
+
   ngAfterViewInit(): void {
     this.tl = gsap.timeline();
-    // أنيميشن ناعم للعناصر
     gsap.set(['.image-section', '.info-section'], { opacity: 0, y: 30 });
     this.tl.to(['.image-section', '.info-section'], {
       opacity: 1,
@@ -83,32 +100,4 @@ export class ProductDetailsComponent implements OnInit, AfterViewInit, OnDestroy
   ngOnDestroy(): void {
     if (this.tl) this.tl.kill();
   }
-
-
-
-
-
-
-changeMainImage(newImg: string) {
-  if (this.product.mainImage === newImg) return;
-
-  // أنيميشن اختفاء بسيط
-  gsap.to('.main-img-container img', {
-    opacity: 0,
-    scale: 0.9,
-    duration: 0.2,
-    onComplete: () => {
-      this.product.mainImage = newImg; // تغيير الصورة
-      // أنيميشن ظهور
-      gsap.to('.main-img-container img', {
-        opacity: 1,
-        scale: 1,
-        duration: 0.3,
-        ease: 'back.out(1.7)'
-      });
-    }
-  });
-}
-
-
 }

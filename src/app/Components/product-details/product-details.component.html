@@ -82,25 +82,17 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 <div class="product-page" *ngIf="product">
   <div class="main-grid">
-
     <div class="image-section">
       <div class="main-img-container">
         <img [src]="product.mainImage" alt="Product Image">
       </div>
       <div class="gallery">
-        <img *ngFor="let img of product.gallery" [src]="img" (click)="product.mainImage = img">
+        <img *ngFor="let img of product.gallery"
+              [src]="img"
+              [class.active]="product.mainImage === img"
+              (click)="changeMainImage(img)">
       </div>
     </div>
 
@@ -108,10 +100,7 @@
       <nav class="breadcrumb">Category / {{product.category}}</nav>
       <h1>{{product.name}}</h1>
       <p class="price">{{product.price}} EGP</p>
-
-      <p class="description italic">
-        "{{product.description}}"
-      </p>
+      <p class="description italic">"{{product.description}}"</p>
 
       <div class="action-bar">
         <div class="qty-selector">
@@ -127,33 +116,21 @@
           <span [class.active]="activeTab === 'desc'" (click)="activeTab = 'desc'">Description</span>
           <span [class.active]="activeTab === 'brew'" (click)="activeTab = 'brew'">Brewing Guide</span>
         </div>
-
         <div class="tab-content">
           <div *ngIf="activeTab === 'desc'">
             <p>Our {{product.name}} is hand-picked from the finest gardens...</p>
           </div>
-
           <div *ngIf="activeTab === 'brew'" class="brewing-grid">
-            <div class="step">
-              <i>🌡️</i>
-              <strong>Temp</strong>
-              <p>{{product.brewing.temp}}</p>
-            </div>
-            <div class="step">
-              <i>⏳</i>
-              <strong>Time</strong>
-              <p>{{product.brewing.time}}</p>
-            </div>
-            <div class="step">
-              <i>🥄</i>
-              <strong>Dose</strong>
-              <p>{{product.brewing.dose}}</p>
-            </div>
+            <div class="step"><i>🌡️</i><strong>Temp</strong><p>{{product.brewing.temp}}</p></div>
+            <div class="step"><i>⏳</i><strong>Time</strong><p>{{product.brewing.time}}</p></div>
+            <div class="step"><i>🥄</i><strong>Dose</strong><p>{{product.brewing.dose}}</p></div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
+
+
+
 </div>
