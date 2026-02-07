@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/auth.service';
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   authForm!: FormGroup;
+  authMode: 'login' | 'signup' | 'forgot' = 'login';
   isLoginMode = false;
   showPassword = false;
   showRePassword = false;
@@ -32,41 +33,59 @@ constructor(private fb: FormBuilder, private authService: AuthService, private r
     });
   }
 
+
+  setMode(mode: 'login' | 'signup' | 'forgot') {
+    this.authMode = mode;
+
+
+    gsap.fromTo('.welcome-text',
+      { opacity: 0, y: -50 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+    );
+
+
+    gsap.from('.input-group', {
+      opacity: 0,
+      y: 30,
+      duration: 0.4,
+      stagger: 0.1,
+      ease: 'back.out(1.7)'
+    });
+  }
+
+  get isLoginMode(): boolean { return this.authMode === 'login'; }
+
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-  const password = control.get('password');
-  const repassword = control.get('repassword');
-
-
-  if (password && repassword && password.value !== repassword.value) {
-    return { mismatch: true };
+      if (this.authMode !== 'signup') return null;
+      const password = control.get('password');
+      const repassword = control.get('repassword');
+      return password && repassword && password.value !== repassword.value ? { mismatch: true } : null;
   }
-  return null;
-}
 
-onSubmit() {
-  if (this.authForm.valid) {
-    const data = this.authForm.value;
+  onSubmit() {
+    if (this.authForm.valid) {
+      const data = this.authForm.value;
 
-    if (this.isLoginMode) {
+      if (this.isLoginMode) {
 
-      this.authService.login({username: data.username, password: data.password}).subscribe({
-        next: (res) => {
-          console.log('نجح الدخول!', res);
-          this.router.navigate(['/home']);
-        },
-        error: (err) => alert('خطأ في البيانات!')
-      });
+        this.authService.login({username: data.username, password: data.password}).subscribe({
+          next: (res) => {
+            console.log('نجح الدخول!', res);
+            this.router.navigate(['/home']);
+          },
+          error: (err) => alert('خطأ في البيانات!')
+        });
+      } else {
+
+        this.authService.signup(data).subscribe({
+          next: (res) => alert('تم إنشاء الحساب بنجاح!'),
+          error: (err) => alert('حدث خطأ أثناء التسجيل')
+        });
+      }
     } else {
-
-      this.authService.signup(data).subscribe({
-        next: (res) => alert('تم إنشاء الحساب بنجاح!'),
-        error: (err) => alert('حدث خطأ أثناء التسجيل')
-      });
+      this.markAllAsTouched();
     }
-  } else {
-    this.markAllAsTouched();
   }
-}
 
   private markAllAsTouched() {
     Object.values(this.authForm.controls).forEach(control => {
@@ -108,24 +127,20 @@ onSubmit() {
   }
 
 
-togglePasswordVisibility(type: string) {
+  togglePasswordVisibility(type: string) {
     if (type === 'pass') this.showPassword = !this.showPassword;
     if (type === 'repass') this.showRePassword = !this.showRePassword;
   }
 
   isButtonDisabled(): boolean {
-    const usernameInvalid = this.authForm.get('username')?.invalid;
-    const passwordInvalid = this.authForm.get('password')?.invalid;
-    const mismatch = this.authForm.hasError('mismatch');
+      const userInvalid = this.authForm.get('username')?.invalid;
+      const passInvalid = this.authForm.get('password')?.invalid;
 
-    if (this.isLoginMode) {
-
-      return !!(usernameInvalid || passwordInvalid);
-    } else {
+      if (this.authMode === 'forgot') return !!userInvalid;
+      if (this.authMode === 'login') return !!(userInvalid || passInvalid);
 
       const repassInvalid = this.authForm.get('repassword')?.invalid;
-      return !!(usernameInvalid || passwordInvalid || repassInvalid || mismatch);
-    }
+      return !!(userInvalid || passInvalid || repassInvalid || this.authForm.hasError('mismatch'));
   }
 
 }
