@@ -238,9 +238,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
           error: () => alert('Signup failed')
         });
       } else {
-        // منطق إرسال بريد استعادة كلمة المرور
+
         alert('Reset link sent to your email');
-        this.setMode('login'); // العودة للوجن بعد الإرسال
+        this.setMode('login');
       }
     } else {
       this.markAllAsTouched();
