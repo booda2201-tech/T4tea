@@ -160,8 +160,11 @@
       </div>
 
       <h2 class="welcome-text">
-        {{ authMode === 'login' ? 'Welcome Back' : authMode === 'signup' ? 'Hello' : 'Reset Password' }}
+        {{ authMode === 'login' ? 'Welcome Back' : authMode === 'signup' ? 'Hello' : 'Forgot your password?' }}
+
+          <p class="subtext " *ngIf="authMode === 'forgot'">Enter your email to receive a password reset link.</p>
       </h2>
+
 
       <form class="auth-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
         <div class="input-group">
@@ -198,7 +201,7 @@
       </div>
 
         <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">
-          {{ authMode === 'login' ? 'Login' : authMode === 'signup' ? 'Signup' : 'Send Reset Link' }}
+          {{ authMode === 'login' ? 'Login' : authMode === 'signup' ? 'Signup' : 'Send Email' }}
         </button>
       </form>
 
