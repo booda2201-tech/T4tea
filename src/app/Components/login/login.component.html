@@ -207,9 +207,15 @@
 
 
 
-      <p class="toggle-text" (click)="setMode(authMode === 'login' ? 'signup' : 'login')">
-        {{ authMode === 'forgot' ? 'Back to Login' : (authMode === 'login' ? "Don't have an account? Create one" : "Already have an account? Login") }}
-      </p>
+<div class="back-to-login-wrapper" *ngIf="authMode === 'forgot' || authMode === 'signup'">
+  <a href="javascript:void(0)" (click)="setMode('login')" class="back-link">
+    <i class="bi bi-chevron-left"></i> Back to Login
+  </a>
+</div>
+
+<p class="toggle-text" *ngIf="authMode === 'login'" (click)="setMode('signup')">
+  Don't have an account? Create one
+</p>
     </div>
   </div>
 </div>

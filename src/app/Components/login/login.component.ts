@@ -193,24 +193,38 @@ export class LoginComponent implements OnInit, AfterViewInit {
    * دالة التبديل الأساسية مع تطبيق GSAP Animations
    * stagger: 0.1 تجعل الحقول تظهر الواحد تلو الآخر بشكل جمالي
    */
-  setMode(mode: 'login' | 'signup' | 'forgot') {
-    this.authMode = mode;
+setMode(mode: 'login' | 'signup' | 'forgot') {
+  this.authMode = mode;
 
-    // أنيميشن العنوان (Welcome Back / Forgot Password)
-    gsap.fromTo('.welcome-text',
-      { opacity: 0, y: -30 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
-    );
+  // أنيميشن العنوان
+  gsap.fromTo('.welcome-text',
+    { opacity: 0, y: -30 },
+    { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+  );
 
-    // أنيميشن المدخلات (Input Groups)
-    gsap.from('.input-group', {
-      opacity: 0,
-      y: 20,
-      duration: 0.4,
-      stagger: 0.1,
-      ease: 'back.out(1.7)'
-    });
-  }
+  // أنيميشن المدخلات
+  gsap.from('.input-group', {
+    opacity: 0,
+    y: 20,
+    duration: 0.4,
+    stagger: 0.1,
+    ease: 'back.out(1.7)'
+  });
+
+  // --- الأنيميشن الجديد لزرار الرجوع ---
+  // نستخدم delay بسيط ليظهر بعد الحقول مباشرة
+  gsap.fromTo('.back-to-login-wrapper',
+    { opacity: 0, x: 20 },
+    { opacity: 1, x: 0, duration: 0.5, delay: 0.2, ease: 'power2.out' }
+  );
+
+
+  gsap.from('.toggle-text', {
+    opacity: 0,
+    duration: 0.5,
+    delay: 0.3
+  });
+}
 
   isButtonDisabled(): boolean {
     const userInvalid = this.authForm.get('username')?.invalid;
