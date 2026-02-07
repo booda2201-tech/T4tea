@@ -286,7 +286,19 @@
 }
 
 
+.error-msg {
+  color: #ff4d4d;
+  font-size: 0.7rem;
+  position: absolute;
+  bottom: -18px;
+  left: 10px;
+  font-weight: bold;
+}
 
+
+input.ng-invalid.ng-touched {
+  border: 1px solid #ff4d4d !important;
+}
 
 
 

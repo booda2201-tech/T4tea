@@ -26,7 +26,7 @@ export class TeawaresComponent implements AfterViewInit {
   ];
 
 ngAfterViewInit() {
-  // 1. إخفاء كل العناصر المستهدفة في البداية
+
   gsap.set(['.section-header', '.product-card', '.collection-banner'], {
     opacity: 0,
     y: 40
@@ -45,15 +45,15 @@ ngAfterViewInit() {
     opacity: 1,
     y: 0,
     stagger: 0.08,
-    duration: 0.6,
-    ease: 'back.out(1.2)',
+    duration: 0.3,
+    ease: 'back.out(2.5)',
     clearProps: 'all'
   }, "-=0.4")
 
   .to('.collection-banner', {
     opacity: 1,
     y: 0,
-    duration: 0.8,
+    duration: 0.5,
     ease: 'power2.out',
     clearProps: 'all'
   }, "-=1")
@@ -64,13 +64,9 @@ ngAfterViewInit() {
   scale: 1,
   stagger: 0.08,
   duration: 0.6,
-  ease: 'back.out(1.2)',
+  ease: 'back.out(2.2)',
   clearProps: 'all'
 });
 
-
 }
-
-
-
 }
