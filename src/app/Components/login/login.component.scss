@@ -216,6 +216,13 @@
   background: #fdf6e3 !important;
   color: #4a3a2a !important;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  &:disabled {
+    background: #ccc !important;
+    color: #888 !important;
+    cursor: not-allowed;
+    transform: none !important;
+    opacity: 0.6;
+  }
 }
 
 
@@ -299,6 +306,8 @@
 input.ng-invalid.ng-touched {
   border: 1px solid #ff4d4d !important;
 }
+
+
 
 
 

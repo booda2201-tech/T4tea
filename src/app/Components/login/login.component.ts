@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { gsap } from 'gsap';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +15,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   showPassword = false;
   showRePassword = false;
 
-constructor(private fb: FormBuilder) { }
+constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -24,18 +26,47 @@ constructor(private fb: FormBuilder) { }
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       repassword: ['']
+    }, {
+
+      validators: this.passwordMatchValidator
     });
   }
 
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.get('password');
+  const repassword = control.get('repassword');
 
-  onSubmit() {
-    if (this.authForm.valid) {
-      console.log('بيانات الفورم جاهزة للإرسال:', this.authForm.value);
 
-    } else {
-      this.markAllAsTouched();
-    }
+  if (password && repassword && password.value !== repassword.value) {
+    return { mismatch: true };
   }
+  return null;
+}
+
+onSubmit() {
+  if (this.authForm.valid) {
+    const data = this.authForm.value;
+
+    if (this.isLoginMode) {
+
+      this.authService.login({username: data.username, password: data.password}).subscribe({
+        next: (res) => {
+          console.log('نجح الدخول!', res);
+          this.router.navigate(['/home']);
+        },
+        error: (err) => alert('خطأ في البيانات!')
+      });
+    } else {
+
+      this.authService.signup(data).subscribe({
+        next: (res) => alert('تم إنشاء الحساب بنجاح!'),
+        error: (err) => alert('حدث خطأ أثناء التسجيل')
+      });
+    }
+  } else {
+    this.markAllAsTouched();
+  }
+}
 
   private markAllAsTouched() {
     Object.values(this.authForm.controls).forEach(control => {
