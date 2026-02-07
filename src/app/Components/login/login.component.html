@@ -216,13 +216,12 @@
   <div class="background-overlay"></div>
   <div class="auth-content">
     <div class="auth-card">
-
       <div class="logo-wrapper">
         <ng-container *ngIf="authMode !== 'reset'">
           <img src="assets/Group 7 (1).png" alt="T4TEA Logo" class="logo" routerLink="/">
         </ng-container>
         <ng-container *ngIf="authMode === 'reset'">
-          <i class="bi bi-envelope-check reset-icon"></i>
+          <i class="bi bi-envelope-check reset-icon" style="font-size: 4rem; color: #fffaf0;"></i>
         </ng-container>
       </div>
 
@@ -236,6 +235,9 @@
         <div class="input-group" *ngIf="authMode !== 'reset'">
           <input type="text" formControlName="username" id="username" placeholder=" ">
           <label for="username">{{ authMode === 'forgot' ? 'Email Address' : 'User Name' }}</label>
+          <small class="error-msg" *ngIf="authForm.get('username')?.touched && authForm.get('username')?.invalid">
+            Please enter a valid {{ authMode === 'forgot' ? 'email' : 'username' }}
+          </small>
         </div>
 
         <ng-container *ngIf="authMode !== 'forgot'">
@@ -244,14 +246,18 @@
             <label for="password">{{ authMode === 'reset' ? 'New Password' : 'Password' }}</label>
             <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('pass')"></i>
 
+            <small class="error-msg" *ngIf="authForm.get('password')?.touched && authForm.get('password')?.invalid">
+              Password must be at least 6 characters
+            </small>
+
             <div class="strength-meter-wrapper" *ngIf="authMode === 'reset'">
-                <div class="strength-meter">
-                    <div class="bar active"></div>
-                    <div class="bar active"></div>
-                    <div class="bar active"></div>
-                    <div class="bar active"></div>
-                </div>
-                <small class="strength-text">Password strength: <span>Excellent</span></small>
+              <div class="strength-meter">
+                <div class="bar active"></div>
+                <div class="bar active"></div>
+                <div class="bar active"></div>
+                <div class="bar active"></div>
+              </div>
+              <small class="strength-text">Password strength: <span>Excellent</span></small>
             </div>
           </div>
 
@@ -259,11 +265,14 @@
             <input [type]="showRePassword ? 'text' : 'password'" formControlName="repassword" id="repassword" placeholder=" ">
             <label for="repassword">{{ authMode === 'reset' ? 'Re-enter Password' : 'Re-Password' }}</label>
             <i class="bi" [ngClass]="showRePassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('repass')"></i>
+            <small class="error-msg" *ngIf="authForm.get('repassword')?.touched && authForm.hasError('mismatch')">
+              Passwords do not match
+            </small>
           </div>
         </ng-container>
 
         <div class="options-link mt-3" *ngIf="authMode === 'login'">
-          <a href="javascript:void(0)" (click)="setMode('forgot')" class="forgot-link">Forgot Password?</a>
+          <a (click)="setMode('forgot')" class="forgot-link" style="cursor: pointer;">Forgot Password?</a>
         </div>
 
         <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">
@@ -271,7 +280,7 @@
         </button>
       </form>
 
-      <div class="back-to-login-wrapper" *ngIf="authMode !== 'login'">
+      <div class="back-to-login-wrapper" *ngIf="authMode === 'forgot'">
         <a (click)="setMode('login')" class="back-link">
           <i class="bi bi-chevron-left"></i> Back to Login
         </a>

@@ -357,28 +357,16 @@ import { AuthService } from 'src/app/auth.service';
 // }
 
 
-
 export class LoginComponent implements OnInit, AfterViewInit {
   authForm!: FormGroup;
-
-  // الحالات المتاحة للنظام
   authMode: 'login' | 'signup' | 'forgot' | 'reset' = 'login';
-
   showPassword = false;
   showRePassword = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.initForm();
-  }
-
-  get isLoginMode(): boolean {
-    return this.authMode === 'login';
   }
 
   initForm() {
@@ -392,89 +380,62 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    // تفعيل التحقق من تطابق كلمة السر في حالة التسجيل أو إعادة التعيين
     if (this.authMode !== 'signup' && this.authMode !== 'reset') return null;
     const password = control.get('password');
     const repassword = control.get('repassword');
     return password && repassword && password.value !== repassword.value ? { mismatch: true } : null;
   }
 
-  /**
-   * دالة التبديل الأساسية مع الحفاظ على خصائص GSAP
-   * stagger: 0.1 لجعل العناصر تظهر تباعاً
-   */
   setMode(mode: 'login' | 'signup' | 'forgot' | 'reset') {
     this.authMode = mode;
 
-    // 1. أنيميشن العنوان (نزول من الأعلى)
-    gsap.fromTo('.welcome-text',
-      { opacity: 0, y: -30 },
-      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
-    );
+    // GSAP Animations
+    gsap.fromTo('.welcome-text', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.5 });
 
-    // 2. أنيميشن الحقول (تأثير الظهور التدريجي المميز)
     gsap.from('.input-group', {
       opacity: 0,
       y: 20,
       duration: 0.4,
-      stagger: 0.1, // خاصية جي ساب لتتابع ظهور الحقول
+      stagger: 0.1,
       ease: 'back.out(1.7)'
     });
 
-    // 3. أنيميشن زر الرجوع (انزلاق جانبي)
-    gsap.fromTo('.back-to-login-wrapper',
-      { opacity: 0, x: 20 },
-      { opacity: 1, x: 0, duration: 0.5, delay: 0.2, ease: 'power2.out' }
-    );
+    if (mode === 'forgot') {
+      gsap.fromTo('.back-to-login-wrapper', { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.5, delay: 0.2 });
+    }
 
-    // 4. أنيميشن الأيقونة الخاصة بـ Reset (توهج وظهور)
     if (mode === 'reset') {
-      gsap.from('.logo-wrapper i', {
-        scale: 0.5,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'elastic.out(1, 0.5)'
-      });
+      gsap.from('.logo-wrapper i', { scale: 0.5, opacity: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
     }
   }
 
   onSubmit() {
+    if (this.authMode === 'forgot') {
+      if (this.authForm.get('username')?.valid) {
+        // محاكاة إرسال الإيميل ثم فتح شاشة الـ Reset
+        alert('Reset link sent!');
+        this.setMode('reset');
+      } else {
+        this.authForm.get('username')?.markAsTouched();
+      }
+      return;
+    }
+
     if (this.authForm.invalid) {
       this.markAllAsTouched();
       return;
     }
 
     const data = this.authForm.value;
-
-    switch (this.authMode) {
-      case 'login':
-        this.authService.login({ username: data.username, password: data.password }).subscribe({
-          next: () => this.router.navigate(['/home']),
-          error: () => alert('Invalid credentials')
-        });
-        break;
-
-      case 'signup':
-        this.authService.signup(data).subscribe({
-          next: () => {
-            alert('Account created!');
-            this.setMode('login');
-          },
-          error: () => alert('Signup failed')
-        });
-        break;
-
-      case 'forgot':
-
-        alert('Reset link sent to your email');
-        this.setMode('reset');
-        break;
-
-      case 'reset':
-        this.authService.updatePassword(data.password);
-        alert('Password updated successfully!');
-        this.setMode('login');
-        break;
+    // تنفيذ الأوامر حسب الحالة (Login / Signup / Reset)
+    if (this.authMode === 'login') {
+      this.authService.login(data).subscribe({
+        next: () => this.router.navigate(['/home']),
+        error: () => alert('Error!')
+      });
+    } else if (this.authMode === 'reset') {
+      alert('Password Updated!');
+      this.setMode('login');
     }
   }
 
@@ -483,20 +444,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.animateCard();
-  }
-
-  /**
-   * حركة الدخول الدرامية للكرت عند فتح الصفحة لأول مرة
-   */
-  animateCard() {
-    gsap.from('.auth-card', {
-      opacity: 0,
-      x: -350,
-      duration: 1.2,
-      ease: 'power4.out',
-      delay: 0.3
-    });
+    gsap.from('.auth-card', { opacity: 0, x: -350, duration: 1.2, ease: 'power4.out', delay: 0.3 });
   }
 
   togglePasswordVisibility(type: string) {
@@ -507,11 +455,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   isButtonDisabled(): boolean {
     const userInvalid = this.authForm.get('username')?.invalid;
     const passInvalid = this.authForm.get('password')?.invalid;
-
     if (this.authMode === 'forgot') return !!userInvalid;
     if (this.authMode === 'login') return !!(userInvalid || passInvalid);
-
-    const repassInvalid = this.authForm.get('repassword')?.invalid;
-    return !!(userInvalid || passInvalid || repassInvalid || this.authForm.hasError('mismatch'));
+    return this.authForm.invalid || (this.authForm.hasError('mismatch'));
   }
 }
