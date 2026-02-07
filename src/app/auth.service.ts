@@ -4,7 +4,10 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'https://your-api.com/auth'; 
+  updatePassword(password: any) {
+    throw new Error('Method not implemented.');
+  }
+  private apiUrl = 'https://your-api.com/auth';
 
   constructor(private http: HttpClient) {}
 

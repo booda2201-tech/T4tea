@@ -42,11 +42,6 @@
 
 
 
-
-
-
-
-
 <!-- <div class="auth-container">
   <div class="background-overlay"></div>
 
@@ -88,10 +83,6 @@
     </div>
   </div>
 </div> -->
-
-
-
-
 
 
 
@@ -151,7 +142,7 @@
 
 
 
-<div class="auth-container">
+<!-- <div class="auth-container">
   <div class="background-overlay"></div>
   <div class="auth-content">
     <div class="auth-card">
@@ -216,6 +207,79 @@
 <p class="toggle-text" *ngIf="authMode === 'login'" (click)="setMode('signup')">
   Don't have an account? Create one
 </p>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="auth-container">
+  <div class="background-overlay"></div>
+  <div class="auth-content">
+    <div class="auth-card">
+
+      <div class="logo-wrapper">
+        <ng-container *ngIf="authMode !== 'reset'">
+          <img src="assets/Group 7 (1).png" alt="T4TEA Logo" class="logo" routerLink="/">
+        </ng-container>
+        <ng-container *ngIf="authMode === 'reset'">
+          <i class="bi bi-envelope-check reset-icon"></i>
+        </ng-container>
+      </div>
+
+      <h2 class="welcome-text">
+        {{ authMode === 'login' ? 'Welcome Back' : authMode === 'signup' ? 'Hello' : authMode === 'forgot' ? 'Forgot password?' : 'Reset Password' }}
+        <p class="subtext" *ngIf="authMode === 'forgot'">Enter your email to receive a password reset link.</p>
+        <p class="subtext" *ngIf="authMode === 'reset'">Please kindly set your new password</p>
+      </h2>
+
+      <form class="auth-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+        <div class="input-group" *ngIf="authMode !== 'reset'">
+          <input type="text" formControlName="username" id="username" placeholder=" ">
+          <label for="username">{{ authMode === 'forgot' ? 'Email Address' : 'User Name' }}</label>
+        </div>
+
+        <ng-container *ngIf="authMode !== 'forgot'">
+          <div class="input-group">
+            <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password" placeholder=" ">
+            <label for="password">{{ authMode === 'reset' ? 'New Password' : 'Password' }}</label>
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('pass')"></i>
+
+            <div class="strength-meter-wrapper" *ngIf="authMode === 'reset'">
+                <div class="strength-meter">
+                    <div class="bar active"></div>
+                    <div class="bar active"></div>
+                    <div class="bar active"></div>
+                    <div class="bar active"></div>
+                </div>
+                <small class="strength-text">Password strength: <span>Excellent</span></small>
+            </div>
+          </div>
+
+          <div class="input-group" *ngIf="authMode === 'signup' || authMode === 'reset'">
+            <input [type]="showRePassword ? 'text' : 'password'" formControlName="repassword" id="repassword" placeholder=" ">
+            <label for="repassword">{{ authMode === 'reset' ? 'Re-enter Password' : 'Re-Password' }}</label>
+            <i class="bi" [ngClass]="showRePassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('repass')"></i>
+          </div>
+        </ng-container>
+
+        <div class="options-link mt-3" *ngIf="authMode === 'login'">
+          <a href="javascript:void(0)" (click)="setMode('forgot')" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">
+          {{ authMode === 'login' ? 'Login' : authMode === 'signup' ? 'Signup' : authMode === 'forgot' ? 'Send Email' : 'Update Password' }}
+        </button>
+      </form>
+
+      <div class="back-to-login-wrapper" *ngIf="authMode !== 'login'">
+        <a (click)="setMode('login')" class="back-link">
+          <i class="bi bi-chevron-left"></i> Back to Login
+        </a>
+      </div>
+
+      <p class="toggle-text" *ngIf="authMode === 'login'" (click)="setMode('signup')">
+        Don't have an account? Create one
+      </p>
     </div>
   </div>
 </div>
