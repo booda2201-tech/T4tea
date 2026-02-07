@@ -359,7 +359,10 @@ import { AuthService } from 'src/app/auth.service';
 
 export class LoginComponent implements OnInit, AfterViewInit {
   authForm!: FormGroup;
-  authMode: 'login' | 'signup' | 'forgot' | 'reset' = 'login';
+
+  // 1. جعل الصفحة تبدأ بشاشة الـ Signup (Hello)
+  authMode: 'login' | 'signup' | 'forgot' | 'reset' = 'signup';
+
   showPassword = false;
   showRePassword = false;
 
@@ -400,42 +403,28 @@ export class LoginComponent implements OnInit, AfterViewInit {
       ease: 'back.out(1.7)'
     });
 
+    // إظهار زر الرجوع فقط في شاشة Forgot
     if (mode === 'forgot') {
-      gsap.fromTo('.back-to-login-wrapper', { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.5, delay: 0.2 });
-    }
-
-    if (mode === 'reset') {
-      gsap.from('.logo-wrapper i', { scale: 0.5, opacity: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+      gsap.fromTo('.back-to-login-wrapper', { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.5 });
     }
   }
 
   onSubmit() {
-    if (this.authMode === 'forgot') {
-      if (this.authForm.get('username')?.valid) {
-        // محاكاة إرسال الإيميل ثم فتح شاشة الـ Reset
-        alert('Reset link sent!');
-        this.setMode('reset');
-      } else {
-        this.authForm.get('username')?.markAsTouched();
-      }
-      return;
-    }
-
-    if (this.authForm.invalid) {
+    if (this.authForm.invalid && this.authMode !== 'forgot') {
       this.markAllAsTouched();
       return;
     }
 
     const data = this.authForm.value;
-    // تنفيذ الأوامر حسب الحالة (Login / Signup / Reset)
-    if (this.authMode === 'login') {
-      this.authService.login(data).subscribe({
-        next: () => this.router.navigate(['/home']),
-        error: () => alert('Error!')
-      });
-    } else if (this.authMode === 'reset') {
-      alert('Password Updated!');
-      this.setMode('login');
+
+    if (this.authMode === 'signup') {
+      console.log('Signing up...', data);
+      // هنا تضع منطق الـ Signup
+    } else if (this.authMode === 'login') {
+      console.log('Logging in...', data);
+      // هنا تضع منطق الـ Login
+    } else if (this.authMode === 'forgot') {
+      this.setMode('reset');
     }
   }
 
@@ -456,7 +445,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     const userInvalid = this.authForm.get('username')?.invalid;
     const passInvalid = this.authForm.get('password')?.invalid;
     if (this.authMode === 'forgot') return !!userInvalid;
-    if (this.authMode === 'login') return !!(userInvalid || passInvalid);
     return this.authForm.invalid || (this.authForm.hasError('mismatch'));
   }
 }
