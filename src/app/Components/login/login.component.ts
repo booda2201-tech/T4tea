@@ -28,6 +28,21 @@ constructor(private fb: FormBuilder) { }
   }
 
 
+  onSubmit() {
+    if (this.authForm.valid) {
+      console.log('بيانات الفورم جاهزة للإرسال:', this.authForm.value);
+
+    } else {
+      this.markAllAsTouched();
+    }
+  }
+
+  private markAllAsTouched() {
+    Object.values(this.authForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+  }
+
   ngAfterViewInit(): void {
     this.animateCard();
   }
