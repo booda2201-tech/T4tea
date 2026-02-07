@@ -160,9 +160,9 @@
             </small>
           </div>
 
-          <button type="submit" class="submit-btn" [disabled]="authForm.invalid && authForm.touched">
-            {{ isLoginMode ? 'Login' : 'Signup' }}
-          </button>
+            <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">
+              {{ isLoginMode ? 'Login' : 'Signup' }}
+            </button>
         </form>
 
           <div class="options-link mt-3" *ngIf="isLoginMode">

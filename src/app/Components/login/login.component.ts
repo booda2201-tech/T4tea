@@ -113,6 +113,19 @@ togglePasswordVisibility(type: string) {
     if (type === 'repass') this.showRePassword = !this.showRePassword;
   }
 
+  isButtonDisabled(): boolean {
+    const usernameInvalid = this.authForm.get('username')?.invalid;
+    const passwordInvalid = this.authForm.get('password')?.invalid;
+    const mismatch = this.authForm.hasError('mismatch');
 
+    if (this.isLoginMode) {
+
+      return !!(usernameInvalid || passwordInvalid);
+    } else {
+
+      const repassInvalid = this.authForm.get('repassword')?.invalid;
+      return !!(usernameInvalid || passwordInvalid || repassInvalid || mismatch);
+    }
+  }
 
 }
