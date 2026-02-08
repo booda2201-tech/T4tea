@@ -142,7 +142,7 @@
       <h2 class="welcome-text">
         {{ authMode === 'signup' ? 'Hello' : authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Forgot password?' : 'Reset Password' }}
         <p class="subtext" *ngIf="authMode === 'signup'">Create an account to get started.</p>
-        <p class="subtext" *ngIf="authMode === 'login'">Enter your dotails to get sign in to your accoun.</p>
+        <p class="subtext" *ngIf="authMode === 'login'">Enter your details to get sign in to your account.</p>
         <p class="subtext" *ngIf="authMode === 'forgot'">Enter your email to receive a password reset link.</p>
         <p class="subtext" *ngIf="authMode === 'reset'">Please kindly set your new password</p>
       </h2>

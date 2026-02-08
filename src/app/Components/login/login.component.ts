@@ -360,7 +360,7 @@ import { AuthService } from 'src/app/auth.service';
 export class LoginComponent implements OnInit, AfterViewInit {
   authForm!: FormGroup;
 
-  // 1. جعل الصفحة تبدأ بشاشة الـ Signup (Hello)
+
   authMode: 'login' | 'signup' | 'forgot' | 'reset' = 'signup';
 
   showPassword = false;
@@ -392,7 +392,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   setMode(mode: 'login' | 'signup' | 'forgot' | 'reset') {
     this.authMode = mode;
 
-    // GSAP Animations
+
     gsap.fromTo('.welcome-text', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.5 });
 
     gsap.from('.input-group', {
@@ -403,7 +403,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       ease: 'back.out(1.7)'
     });
 
-    // إظهار زر الرجوع فقط في شاشة Forgot
+
     if (mode === 'forgot') {
       gsap.fromTo('.back-to-login-wrapper', { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.5 });
     }
@@ -419,10 +419,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     if (this.authMode === 'signup') {
       console.log('Signing up...', data);
-      // هنا تضع منطق الـ Signup
+
     } else if (this.authMode === 'login') {
       console.log('Logging in...', data);
-      // هنا تضع منطق الـ Login
+
     } else if (this.authMode === 'forgot') {
       this.setMode('reset');
     }
