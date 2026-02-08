@@ -1,132 +1,5 @@
 
-
 <!-- <div class="auth-container">
-  <div class="background-overlay"></div>
-
-  <div class="auth-content">
-    <div class="auth-card">
-      <div class="logo-wrapper">
-        <img src="assets/Group 7 (1).png" alt="T4TEA Logo" class="logo" routerLink="/">
-      </div>
-
-      <h2 class="welcome-text">{{ isLoginMode ? 'Welcome Back' : 'Hello' }}</h2>
-
-        <form class="auth-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
-          <div class="input-group">
-            <input type="text" formControlName="username" id="username" placeholder=" ">
-            <label for="username">User Name</label>
-            <small class="error-msg" *ngIf="authForm.get('username')?.touched && authForm.get('username')?.invalid">
-              Username is required (min 3 chars)
-            </small>
-          </div>
-
-          <div class="input-group">
-            <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password" placeholder=" ">
-            <label for="password">Password</label>
-            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('pass')"></i>
-            <small class="error-msg" *ngIf="authForm.get('password')?.touched && authForm.get('password')?.invalid">
-              Password must be at least 6 characters
-            </small>
-          </div>
-
-          <div class="input-group" *ngIf="!isLoginMode">
-            <input [type]="showRePassword ? 'text' : 'password'" formControlName="repassword" id="repassword" placeholder=" ">
-            <label for="repassword">Re-Password</label>
-            <i class="bi" [ngClass]="showRePassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('repass')"></i>
-
-            <small class="error-msg" *ngIf="authForm.hasError('mismatch') && authForm.get('repassword')?.touched">
-              Passwords do not match!
-            </small>
-          </div>
-
-            <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">
-              {{ isLoginMode ? 'Login' : 'Signup' }}
-            </button>
-        </form>
-
-          <div class="options-link mt-3" *ngIf="isLoginMode">
-            <a href="#" class="forgot-link">Forgot Password?</a>
-          </div>
-            <p class="toggle-text" (click)="toggleMode()">
-              {{ isLoginMode ? "Don't have an account? Create one" : "Already have an account? Login" }}
-          </p>
-    </div>
-  </div>
-</div> -->
-
-
-
-<!-- <div class="auth-container">
-  <div class="background-overlay"></div>
-  <div class="auth-content">
-    <div class="auth-card">
-      <div class="logo-wrapper">
-        <img src="assets/Group 7 (1).png" alt="T4TEA Logo" class="logo" routerLink="/">
-      </div>
-
-      <h2 class="welcome-text">
-        {{ authMode === 'login' ? 'Welcome Back' : authMode === 'signup' ? 'Hello' : 'Forgot your password?' }}
-
-          <p class="subtext " *ngIf="authMode === 'forgot'">Enter your email to receive a password reset link.</p>
-      </h2>
-
-
-      <form class="auth-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
-        <div class="input-group">
-          <input type="text" formControlName="username" id="username" placeholder=" ">
-          <label for="username">{{ authMode === 'forgot' ? 'Email Address' : 'User Name' }}</label>
-          <small class="error-msg" *ngIf="authForm.get('username')?.touched && authForm.get('username')?.invalid">
-            Username/Email is required
-          </small>
-        </div>
-
-        <ng-container *ngIf="authMode !== 'forgot'">
-          <div class="input-group">
-            <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password" placeholder=" ">
-            <label for="password">Password</label>
-            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('pass')"></i>
-            <small class="error-msg" *ngIf="authForm.get('password')?.touched && authForm.get('password')?.invalid">
-              Password must be at least 6 characters
-            </small>
-          </div>
-
-          <div class="input-group" *ngIf="authMode === 'signup'">
-            <input [type]="showRePassword ? 'text' : 'password'" formControlName="repassword" id="repassword" placeholder=" ">
-            <label for="repassword">Re-Password</label>
-            <i class="bi" [ngClass]="showRePassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('repass')"></i>
-            <small class="error-msg" *ngIf="authForm.hasError('mismatch') && authForm.get('repassword')?.touched">
-              Passwords do not match!
-            </small>
-          </div>
-        </ng-container>
-
-
-      <div class="options-link mt-3" *ngIf="authMode === 'login'">
-        <a href="javascript:void(0)" (click)="setMode('forgot')" class="forgot-link">Forgot Password?</a>
-      </div>
-
-        <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">
-          {{ authMode === 'login' ? 'Login' : authMode === 'signup' ? 'Signup' : 'Send Email' }}
-        </button>
-      </form>
-
-
-
-<div class="back-to-login-wrapper" *ngIf="authMode === 'forgot' || authMode === 'signup'">
-  <a href="javascript:void(0)" (click)="setMode('login')" class="back-link">
-    <i class="bi bi-chevron-left"></i> Back to Login
-  </a>
-</div>
-
-<p class="toggle-text" *ngIf="authMode === 'login'" (click)="setMode('signup')">
-  Don't have an account? Create one
-</p>
-    </div>
-  </div>
-</div> -->
-
-
-<div class="auth-container">
   <div class="background-overlay"></div>
   <div class="auth-content">
     <div class="auth-card">
@@ -200,4 +73,45 @@
       </div>
     </div>
   </div>
+</div> -->
+
+
+<div class="form-wrapper">
+  <h2 class="welcome-text">
+    Welcome Back
+    <p class="subtext">Enter your details to get sign in to your account.</p>
+  </h2>
+
+  <form class="auth-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+    <div class="input-group">
+      <input type="text" formControlName="username" id="username" placeholder=" ">
+      <label for="username">User Name</label>
+      <small class="error-msg" *ngIf="authForm.get('username')?.touched && authForm.get('username')?.invalid">
+        Field is required
+      </small>
+    </div>
+
+    <div class="input-group">
+      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password" placeholder=" ">
+      <label for="password">Password</label>
+      <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility('pass')"></i>
+      <small class="error-msg" *ngIf="authForm.get('password')?.touched && authForm.get('password')?.invalid">
+        Min 6 characters required
+      </small>
+    </div>
+
+    <div class="options-link mt-2">
+      <a routerLink="/auth/forgot-password" class="forgot-link" style="cursor: pointer; color: white; text-decoration: none; font-size: 0.8rem; opacity: 0.8;">
+        Forgot Password?
+      </a>
+    </div>
+
+    <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">
+      Login
+    </button>
+  </form>
+
+  <p class="toggle-text" routerLink="/auth/signup" style="color: white; margin-top: 1.5rem; cursor: pointer; font-size: 0.85rem; opacity: 0.7;">
+    Don't have an account? Create one
+  </p>
 </div>

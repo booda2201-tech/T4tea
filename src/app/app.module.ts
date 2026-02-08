@@ -30,6 +30,9 @@ import { ProductDetailsComponent } from './Components/product-details/product-de
 import { LogoutComponent } from './Components/logout/logout.component';
 import { AuthenticationComponent } from './Components/layout/authentication/authentication.component';
 import { MainComponent } from './Components/layout/main/main.component';
+import { SignupComponent } from './Components/signup/signup.component';
+import { ForgotPasswordComponent } from './Components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './Components/reset-password/reset-password.component';
 
 
 
@@ -57,6 +60,9 @@ import { MainComponent } from './Components/layout/main/main.component';
     LogoutComponent,
     AuthenticationComponent,
     MainComponent,
+    SignupComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
 
   ],
   imports: [

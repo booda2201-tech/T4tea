@@ -20,33 +20,46 @@ import { ProfileComponent } from './Components/profile/profile.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { ProductDetailsComponent } from './Components/product-details/product-details.component';
 import { LogoutComponent } from './Components/logout/logout.component';
+import { SignupComponent } from './Components/signup/signup.component';
+import { ForgotPasswordComponent } from './Components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './Components/reset-password/reset-password.component';
 
 
 const routes: Routes = [
-    { path: '', component: MainComponent,children: [
-    { path: 'home', component: HomeComponent },
-    { path: '', component: HomeComponent },
-    { path: 'header', component: HeaderComponent },
-    { path: 'collections', component: CollectionsComponent },
-    { path: 'feature', component: FeatureComponent },
-    { path: 'best-seller', component: BestSellerComponent },
-    { path: 'bestseller-page', component: BestsellerPageComponent },
-    { path: 'explore-page', component: ExplorePageComponent },
-    { path: 'category', component: CategoryComponent },
-    { path: 'product-details/:id', component: ProductDetailsComponent },
-    { path: '', redirectTo: '/category', pathMatch: 'full' },
-    { path: 'teawares', component: TeawaresComponent },
-    { path: 'about-us', component: AboutUsComponent },
-    { path: 'cart', component: CartComponent },
-    { path: 'profile', component: ProfileComponent },
-    { path: 'wishlist', component: WishlistComponent },
-  ]},
 
-    { path: 'authentication', component: AuthenticationComponent,children:[
-      { path: 'login', component: LoginComponent  },
-      { path: '', redirectTo: '/login', pathMatch: 'full' },
-    ]},
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      { path: '', component: HomeComponent },
+      { path: 'home', component: HomeComponent },
+      { path: 'bestseller-page', component: BestsellerPageComponent },
+      { path: 'explore-page', component: ExplorePageComponent },
+      { path: 'category', component: CategoryComponent },
+      { path: 'product-details/:id', component: ProductDetailsComponent },
+      { path: 'teawares', component: TeawaresComponent },
+      { path: 'about-us', component: AboutUsComponent },
+      { path: 'cart', component: CartComponent },
+      { path: 'profile', component: ProfileComponent },
+      { path: 'wishlist', component: WishlistComponent },
+    ]
+  },
 
+
+  {
+    path: 'auth',
+    component: AuthenticationComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: 'signup', component: SignupComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+    ]
+  },
+
+
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

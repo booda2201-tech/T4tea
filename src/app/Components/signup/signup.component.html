@@ -1,0 +1,29 @@
+<h2 class="welcome-text">
+  Hello!
+  <p class="subtext">Create an account to get started.</p>
+</h2>
+
+<form class="auth-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+  <div class="input-group">
+    <input type="text" formControlName="username" placeholder=" ">
+    <label>User Name</label>
+    <small class="error-msg" *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">Required (min 3 chars)</small>
+  </div>
+
+  <div class="input-group">
+    <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder=" ">
+    <label>Password</label>
+    <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="showPassword = !showPassword"></i>
+  </div>
+
+  <div class="input-group">
+    <input [type]="showRePassword ? 'text' : 'password'" formControlName="repassword" placeholder=" ">
+    <label>Re-enter Password</label>
+    <i class="bi" [ngClass]="showRePassword ? 'bi-eye-slash' : 'bi-eye'" (click)="showRePassword = !showRePassword"></i>
+    <small class="error-msg" *ngIf="signupForm.hasError('mismatch') && signupForm.get('repassword')?.touched">Passwords don't match</small>
+  </div>
+
+  <button type="submit" class="submit-btn" [disabled]="signupForm.invalid || signupForm.hasError('mismatch')">Create Account</button>
+</form>
+
+<p class="toggle-text mt-3" routerLink="/auth/login">Already have an account? Login</p>
