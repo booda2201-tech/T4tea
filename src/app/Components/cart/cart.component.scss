@@ -29,6 +29,26 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 .items-column {
   flex: 2.5;
+
+  max-height: 75vh;
+  overflow-y: auto;
+  padding-top: 10px;
+
+  padding-right: 15px;
+  scrollbar-gutter: stable;
+
+
+  &::-webkit-scrollbar {
+    display: none;
+    // width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $card-bg;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 .summary-column {
@@ -144,14 +164,29 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
   }
 
-  .summary-list {
-    margin-bottom: 20px;
+.summary-list {
+  margin-bottom: 20px;
+  max-height: 250px; // طول محدد للمنتجات داخل السامري
+  overflow-y: auto;
+  padding-right: 10px;
 
-    .summary-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
+  // تخصيص شكل السكرول بار للسامري
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #fcebd1;
+    border-radius: 10px;
+  }
+
+  .summary-line {
+    // الكود القديم بتاعك كما هو
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    // ... بقية الستايل
+  }
 
       .line-info {
         display: flex;
@@ -199,7 +234,7 @@ $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       transform: translateY(-2px);
     }
   }
-}
+
 
 
 
