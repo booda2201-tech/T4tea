@@ -1,91 +1,5 @@
 
 
-
-
-<!-- <div class="auth-container">
-  <div class="background-overlay"></div>
-
-  <div class="auth-content">
-    <div class="auth-card">
-      <div class="logo-wrapper">
-        <img src="assets/Group 7 (1).png" alt="T4TEA Logo" class="logo" routerLink="">
-      </div>
-
-      <h2 class="welcome-text">Hello</h2>
-      <form class="auth-form">
-        <div class="input-group">
-          <input type="text" id="username" placeholder=" ">
-          <label for="username">User Name</label>
-        </div>
-
-        <div class="input-group">
-          <input type="password" id="password" placeholder=" ">
-          <label for="password">Password</label>
-        </div>
-
-        <div class="input-group" *ngIf="!isLoginMode">
-          <label>Re-Password</label>
-          <input type="password" placeholder="Re-Password">
-        </div>
-
-        <button type="submit" class="submit-btn">
-          {{ isLoginMode ? 'Login' : 'Signup' }}
-        </button>
-      </form>
-
-      <p class="toggle-text" (click)="toggleMode()">
-        {{ isLoginMode ? "Don't have an account? Create one" : "Already have an account? Login" }}
-      </p>
-    </div>
-  </div>
-</div> -->
-
-
-
-<!-- <div class="auth-container">
-  <div class="background-overlay"></div>
-
-  <div class="auth-content">
-    <div class="auth-card">
-      <div class="logo-wrapper">
-        <img src="assets/Group 7 (1).png" alt="T4TEA Logo" class="logo" routerLink="/">
-      </div>
-
-      <h2 class="welcome-text">{{ isLoginMode ? 'Welcome Back' : 'Hello' }}</h2>
-
-      <form class="auth-form">
-        <div class="input-group">
-          <input type="text" id="username" placeholder=" ">
-          <label for="username">User Name</label>
-        </div>
-
-        <div class="input-group">
-          <input type="password" id="password" placeholder=" ">
-          <label for="password">Password</label>
-          <div class="text-end" *ngIf="isLoginMode">
-              <a href="#" class="forgot-link">Forgot Password?</a>
-          </div>
-        </div>
-
-        <div class="input-group" *ngIf="!isLoginMode">
-          <input type="password" id="repassword" placeholder=" ">
-          <label for="repassword">Re-Password</label>
-        </div>
-
-        <button type="submit" class="submit-btn">
-          {{ isLoginMode ? 'Login' : 'Signup' }}
-        </button>
-      </form>
-
-      <p class="toggle-text" (click)="toggleMode()">
-        {{ isLoginMode ? "Don't have an account? Create one" : "Already have an account? Login" }}
-      </p>
-    </div>
-  </div>
-</div> -->
-
-
-
 <!-- <div class="auth-container">
   <div class="background-overlay"></div>
 
@@ -228,6 +142,7 @@
       <h2 class="welcome-text">
         {{ authMode === 'signup' ? 'Hello' : authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Forgot password?' : 'Reset Password' }}
         <p class="subtext" *ngIf="authMode === 'signup'">Create an account to get started.</p>
+        <p class="subtext" *ngIf="authMode === 'login'">Enter your dotails to get sign in to your accoun.</p>
         <p class="subtext" *ngIf="authMode === 'forgot'">Enter your email to receive a password reset link.</p>
         <p class="subtext" *ngIf="authMode === 'reset'">Please kindly set your new password</p>
       </h2>
