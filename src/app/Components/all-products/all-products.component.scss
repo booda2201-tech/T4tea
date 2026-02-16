@@ -1,0 +1,346 @@
+
+
+
+
+$primary-dark: #1a3a3a;
+$accent-gold: #c5a059;
+$cream-bg: #FDF5E6;
+$favorite-red: #e74c3c;
+
+
+.shop-wrapper {
+  background-color: $cream-bg;
+  min-height: 100vh;
+  padding: 50px 0;
+
+  .search-section {
+    margin-bottom: 40px;
+    text-align: center;
+
+    .search-bar {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto;
+
+      i {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $primary-dark;
+        font-size: 1.2rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 15px 15px 15px 55px;
+        border-radius: 50px;
+        border: 1px solid rgba($primary-dark, 0.15);
+        background: white;
+        font-size: 1.1rem;
+        transition: 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: $accent-gold;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+      }
+    }
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+  }
+
+  .product-item {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: 0.3s;
+    border: 1px solid transparent;
+
+    &:hover {
+      transform: translateY(-10px);
+      border-color: $accent-gold;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .img-holder {
+      height: 300px;
+      background: #f9f9f9;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 20px;
+      }
+    }
+
+    .product-info {
+      padding: 20px;
+      text-align: center;
+
+      .cat-tag {
+        font-size: 0.8rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      h3 {
+        color: $primary-dark;
+        margin: 10px 0;
+        font-family: 'Playfair Display', serif;
+      }
+
+      .price {
+        font-weight: bold;
+        color: $accent-gold;
+        font-size: 1.2rem;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+$primary-green: #1a3a3a;
+$accent-gold: #c5a059;
+$cream-bg: #FDF5E6;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.all-products-page {
+  // // background-color: $cream-bg;
+  // min-height: 100vh;
+  padding: 20px;
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 50px;
+
+    .serif-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: $primary-green;
+      margin-bottom: 25px;
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 500px;
+      margin: 0 auto;
+
+      i {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $primary-green;
+        font-size: 1.2rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 15px 15px 15px 55px;
+        border-radius: 40px;
+        border: 1px solid rgba($primary-green, 0.2);
+        background: white;
+        font-size: 1rem;
+        transition: $transition;
+
+        &:focus {
+          outline: none;
+          border-color: $accent-gold;
+          box-shadow: 0 10px 20px rgba($accent-gold, 0.1);
+        }
+      }
+    }
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+  }
+
+  .product-card {
+    background: #f7ddbb;
+    border-radius: 25px;
+    padding: 20px;
+    position: relative;
+    transition: $transition;
+    text-align: center;
+    border: 1px solid transparent;
+
+    &:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      border-color: rgba($accent-gold, 0.3);
+
+      .image-box img { transform: scale(1.05); }
+    }
+
+    .wishlist-icon {
+      position: absolute;
+      right: 13px;
+      top: 6px;
+      cursor: pointer;
+      color: #ff4d4d;
+      font-size: 1.3rem;
+      z-index: 2;
+    }
+
+    .image-box {
+      height: 220px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        max-height: 100%;
+        transition: $transition;
+      }
+    }
+
+    .category-tag {
+      font-size: 0.8rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .product-name {
+      color: $primary-green;
+      margin: 8px 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .product-price {
+      color: $accent-gold;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+    .add-to-cart {
+      width: 100%;
+      padding: 12px;
+      border-radius: 15px;
+      border: none;
+      background: $primary-green;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: $transition;
+
+      &:hover {
+        background: $accent-gold;
+      }
+    }
+  }
+
+  .empty-search {
+    text-align: center;
+    padding: 100px 0;
+    i { font-size: 4rem; color: #ccc; }
+    p { font-size: 1.2rem; color: #666; margin: 20px 0; }
+    .reset-btn {
+      background: none;
+      border: 1px solid $primary-green;
+      padding: 10px 25px;
+      border-radius: 20px;
+      color: $primary-green;
+      cursor: pointer;
+      &:hover { background: $primary-green; color: white; }
+    }
+  }
+}
+
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-10px); /* الكارت يترفع لفوق */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* ظل ناعم */
+  }
+}
+
+
+
+.wishlist-icon:hover i {
+  color: #ffb3b3;
+  transform: scale(1.1);
+}
+
+  .wishlist {
+      position: absolute;
+      top: 7px;
+      right: 12px;
+      z-index: 10;
+      cursor: pointer;
+
+      i {
+        font-size: 22px;
+        color: #ffffff;
+        transition: all 0.2s ease;
+        display: inline-block;
+
+        &.active {
+          color: $favorite-red;
+
+          animation: heartbeat 0.45s ease-in-out;
+        }
+      }
+
+      &:hover i {
+        color: #ac0000;
+      }
+    }
+
+
+
+// دي الـ Variable اللي انت مستخدمها
+$favorite-red: #e74c3c;
+
+.wishlist {
+  cursor: pointer;
+
+  i {
+    font-size: 22px;
+    color: #ccc; // اللون الافتراضي (رمادي مثلاً)
+    transition: all 0.2s ease;
+    display: inline-block;
+
+    // لما الـ Angular يضيف كلاس active
+    &.active {
+      color: $favorite-red !important;
+      animation: heartbeat 0.45s ease-in-out;
+    }
+  }
+}
+
+// الأنميشن اللي انت كتبته (ممتاز جداً)
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}

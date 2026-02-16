@@ -1,64 +1,5 @@
 
 
-<!-- <div class="contt d-flex align-items-center"> <nav class="navbar navbar-expand-lg custom-navbar w-100">
-    <div class="container d-flex justify-content-between align-items-center position-relative">
-
-      <div class="nav-side-part order-lg-1">
-        <ul class="navbar-nav flex-row gap-2">
-          <li class="nav-item">
-            <a class="nav-link custom-pill active" href="#">Category</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link custom-pill" href="#">Teawares</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link custom-pill" href="#">About us</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="logo-part order-lg-2">
-        <a class="navbar-brand m-0" href="#">
-          <img src="../../../assets/logo.png" alt="T4tea Logo" height="50">
-        </a>
-      </div>
-
-      <div class="nav-side-part d-flex justify-content-end align-items-center gap-3 order-lg-3">
-          <div class="search-bar-container" [class.active]="isSearchOpen">
-            <i class="bi bi-search search-icon" (click)="toggleSearch()"></i>
-            <input
-              type="text"
-              class="search-input"
-              placeholder=" Search..."
-              [style.opacity]="isSearchOpen ? '1' : '0'"> </div>
-
-              <div class="account-wrapper position-relative">
-                <a href="javascript:void(0)" class="nav-icon account-circle" (click)="toggleAccountMenu($event)">
-                  <i class="bi bi-person-fill fs-4"></i>
-                </a>
-
-                <div class="account-dropdown" *ngIf="isAccountMenuOpen" (click)="$event.stopPropagation()">
-                  <div class="dropdown-links">
-                    <a routerLink="/profile" (click)="isAccountMenuOpen = false">Profile</a>
-                    <a routerLink="/login" (click)="isAccountMenuOpen = false">Login</a>
-                    <a routerLink="/logout" (click)="isAccountMenuOpen = false">Logout</a>
-                  </div>
-                </div>
-              </div>
-
-        <a href="#" class="nav-icon position-relative">
-          <i class="bi bi-cart3 fs-4"></i>
-          <span class="badge-count">0</span>
-        </a>
-
-      </div>
-
-    </div>
-  </nav>
-</div> -->
-
-
-
 
 
 <!-- <div class="contt d-flex align-items-center">
@@ -157,7 +98,12 @@
       <div class="nav-side-part d-flex justify-content-end align-items-center gap-md-3 order-lg-3">
         <div class="search-bar-container" [class.active]="isSearchOpen">
           <i class="bi bi-search search-icon" (click)="toggleSearch()"></i>
-          <input type="text" class="search-input" placeholder=" Search..." [style.opacity]="isSearchOpen ? '1' : '0'">
+          <input
+                type="text"
+                class="search-input"
+                placeholder=" "
+                (input)="onSearchTyping($event)"
+                [style.opacity]="isSearchOpen ? '1' : '0'">
         </div>
         <div class="account-wrapper position-relative">
           <a href="javascript:void(0)" class="nav-icon account-circle" (click)="toggleAccountMenu($event)">
@@ -167,7 +113,7 @@
             <div class="dropdown-links">
               <a routerLink="/profile" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Profile</a>
               <a routerLink="auth/login" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Login</a>
-              <a routerLink="/logout" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Logout</a>
+              <a routerLink="/auth/logout" (click)="isAccountMenuOpen = false" routerLinkActive="active-link">Logout</a>
             </div>
           </div>
         </div>

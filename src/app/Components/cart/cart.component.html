@@ -30,6 +30,7 @@
             </button>
           </div>
       </div>
+
     <div class="summary-column">
         <div class="sticky-card" [class.is-active]="isSummaryOpen">
           <h2 class="summary-title" (click)="toggleSummary()">
@@ -54,9 +55,10 @@
             <span>Total :</span>
             <span class="total-val">{{ calculateTotal() }} EGP</span>
           </div>
-          <button class="checkout-btn">Check Out</button>
+          <button class="checkout-btn" routerLink="/check-out">Check Out</button>
         </div>
       </div>
+      
     </div>
   </div>
 </div>

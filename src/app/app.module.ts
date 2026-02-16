@@ -1,4 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,6 +35,8 @@ import { MainComponent } from './Components/layout/main/main.component';
 import { SignupComponent } from './Components/signup/signup.component';
 import { ForgotPasswordComponent } from './Components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './Components/reset-password/reset-password.component';
+import { CheckOutComponent } from './Components/check-out/check-out.component';
+import { AllProductsComponent } from './Components/all-products/all-products.component';
 
 
 
@@ -63,6 +67,8 @@ import { ResetPasswordComponent } from './Components/reset-password/reset-passwo
     SignupComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    CheckOutComponent,
+    AllProductsComponent,
 
   ],
   imports: [
@@ -73,6 +79,7 @@ import { ResetPasswordComponent } from './Components/reset-password/reset-passwo
     HttpClientModule,
     BestSellerComponent,
     ReactiveFormsModule,
+    FormsModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',

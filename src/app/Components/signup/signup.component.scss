@@ -1,0 +1,107 @@
+.form-wrapper {
+  text-align: center;
+
+  .auth-form {
+    .input-group {
+      position: relative;
+      margin-bottom: 2.2rem;
+
+      input {
+        width: 100%;
+        padding: 24px 45px 8px 45px !important;
+        text-align: start;
+        background: rgba(255, 250, 240, 0.9);
+        border-radius: 12px !important;
+        border: 2px solid transparent;
+        font-size: 1rem;
+        color: #4a3a2a;
+        transition: all 0.3s ease;
+        outline: none;
+
+        &:focus {
+          border-color: rgba(74, 58, 42, 0.3);
+          background: #fff;
+        }
+
+        &.ng-invalid.ng-touched {
+          border-color: #ff4d4d !important;
+          background: rgba(255, 230, 230, 0.9) !important;
+        }
+      }
+
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      top: 6px;
+      left: 15px;
+      transform: translateY(0);
+      font-size: 0.7rem;
+      color: #4a3a2a;
+      font-weight: 700;
+      opacity: 0.8;
+    }
+  }
+
+  label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: all 0.25s ease-out;
+    z-index: 10;
+  }
+
+      i {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 11;
+        cursor: pointer;
+        color: #4a3a2a;
+        opacity: 0.6;
+        font-size: 1.1rem;
+        transition: 0.3s;
+        &:hover { opacity: 1; }
+      }
+
+      .error-msg {
+        color: #ff4d4d;
+        font-size: 0.7rem;
+        position: absolute;
+        bottom: -18px;
+        left: 0;
+        right: 0;
+        text-align: start;
+        font-weight: bold;
+      }
+    }
+  }
+
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #fdf6e3 !important;
+  color: #4a3a2a !important;
+  border: none;
+  border-radius: 10px !important;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: 0.3s;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  &:disabled {
+    background: #ccc !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

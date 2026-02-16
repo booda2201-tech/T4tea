@@ -1,0 +1,92 @@
+
+
+
+
+<!-- <div class="shop-wrapper">
+  <div class="container">
+    <div class="search-section">
+      <div class="search-bar">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="filterProducts()"
+          placeholder="Search for your favorite tea...">
+      </div>
+      <p class="results-count" *ngIf="searchText">
+        Found {{ displayProducts.length }} results for "{{ searchText }}"
+      </p>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-item" *ngFor="let product of displayProducts">
+        <div class="product-card-inner">
+          <div class="img-holder">
+            <img [src]="product.image" [alt]="product.name">
+            <div class="overlay">
+              <button class="add-btn">Add to Cart</button>
+            </div>
+          </div>
+          <div class="product-info">
+            <span class="cat-tag">{{ product.category }}</span>
+            <h3>{{ product.name }}</h3>
+            <p class="price">{{ product.price }} EGP</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="displayProducts.length === 0">
+      <i class="bi bi-emoji-frown"></i>
+      <p>Sorry, we couldn't find any tea matching your search.</p>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+<div class="cont">
+<div class="all-products-page">
+  <div class="container">
+
+    <header class="page-header">
+      <h1 class="serif-title">Our Collection</h1>
+    </header>
+
+    <div class="products-grid" *ngIf="filteredProducts.length > 0; else noResults">
+      <div class="product-card" *ngFor="let product of filteredProducts">
+<div class="wishlist" (click)="toggleFavorite(product)">
+  <i class="bi"
+      [class.bi-heart-fill]="product.isFavorite"
+      [class.bi-heart]="!product.isFavorite"
+      [class.active]="product.isFavorite">
+  </i>
+</div>
+
+        <div class="image-box">
+          <img [src]="product.image" [alt]="product.name">
+        </div>
+
+        <div class="content-box">
+          <!-- <span class="category-tag">{{ product.category }}</span> -->
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-price">{{ product.price }}</p>
+          <button class="add-to-cart">
+            <i class="bi bi-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noResults>
+      <div class="empty-search">
+        <i class="bi bi-search-heart"></i>
+        <p>We couldn't find any products matching "{{ searchText }}"</p>
+        <button (click)="searchText = ''; onSearch()" class="reset-btn">View All Products</button>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+</div>

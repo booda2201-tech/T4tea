@@ -84,7 +84,7 @@
 
   <form class="auth-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
     <div class="input-group">
-      <input type="text" formControlName="username" id="username" placeholder=" ">
+      <input type="text , phone" formControlName="username" id="username" placeholder=" ">
       <label for="username">User Name</label>
       <small class="error-msg" *ngIf="authForm.get('username')?.touched && authForm.get('username')?.invalid">
         Field is required

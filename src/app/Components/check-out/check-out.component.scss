@@ -1,0 +1,381 @@
+
+
+
+
+// 1. المتغيرات الرسمية (نفس روح الكارت)
+$primary-bg: #FDF5E6;     // خلفية الصفحة الكريمي
+$card-bg:#f7ddbb;        // لون الكروت البيج الدافئ
+$dark-bg: #1a1a1a;        // لون الملخص الأسود
+$primary-dark: #003d37;   // تيل (T4Tea Dark)
+$accent-gold: #c5a059;    // ذهبي للتفاصيل
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+
+
+.checkout-container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px;
+
+
+  .serif-title {
+    font-family: 'Playfair Display', serif;
+    color: $primary-dark;
+    font-size: 2.8rem;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  .welcome-msg {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 40px;
+  }
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 40px;
+
+  @media (max-width: 992px) {
+    flex-direction: column-reverse ;
+    grid-template-columns: 1fr;
+  }
+}
+
+// 2. تنسيق الكروت (زي كروت منتجات الكارت)
+.checkout-card {
+  background: $card-bg;
+  border-radius: 20px;
+  padding: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: $transition;
+  border: 1px solid transparent;
+
+  &:hover {
+    transform: translateY(-5px);
+    background-color: #fcebd1; // تفتيح بسيط وقت الهوفر
+    border-color: rgba(0,0,0,0.05);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: $primary-dark;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+}
+
+// 3. ستايل اختيار العناوين (Interactive Radios)
+.address-list {
+  .address-radio {
+    display: flex;
+    align-items: center;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: $transition;
+    border: 1.5px solid transparent;
+
+    &.active {
+      background: #ffffff;
+      border-color: $primary-dark;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+
+      .custom-radio::after { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    input { display: none; }
+
+    .custom-radio {
+      width: 20px; height: 20px;
+      border: 2px solid $primary-dark;
+      border-radius: 50%;
+      margin-right: 15px;
+      position: relative;
+      flex-shrink: 0;
+
+      &::after {
+        content: ''; position: absolute; top: 50%; left: 50%;
+        width: 10px; height: 10px; background: $primary-dark;
+        border-radius: 50%; transform: translate(-50%, -50%) scale(0);
+        transition: 0.2s;
+      }
+    }
+
+    .address-text { font-weight: 500; color: #333; }
+    .badge-default {
+      margin-left: 10px;
+      font-size: 0.7rem;
+      background: $primary-dark;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+  }
+}
+
+// 4. الـ Summary Sticky (نسخة الكارت الأسود)
+.summary-sticky-card {
+  position: sticky;
+  top: 30px;
+  background: $dark-bg;
+  border-radius: 30px;
+  padding: 22px !important;
+  color: #fcebd1; // لون ذهبي فاتح للنصوص
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+
+  .white-text {
+    color: #fcebd1 !important;
+    font-size: 1.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+
+  .item-row-premium {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .item-name { display: block; font-weight: 500; }
+    .item-details { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+    .product-price { font-weight: 600; }
+  }
+
+  .price-breakdown {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .total-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffffff; // الإجمالي أبيض زي الكارت
+    }
+  }
+
+
+  .btn-confirm {
+    width: 100%;
+    background: #fdfaf5; // اللون الكريمي الفاتح جداً
+    color: #1a1a1a;
+    border: none;
+    padding: 16px;
+    border-radius: 15px; // شكل كبسولة
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: $transition;
+
+    &:hover:not(:disabled) {
+      background: #ffffff;
+      transform: scale(1.03);
+    }
+
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+
+  .secure-checkout {
+    text-align: center;
+    font-size: 0.7rem;
+    margin-top: 15px;
+    opacity: 0.4;
+  }
+}
+
+// 5. عناصر الإدخال (Inputs & Buttons)
+.custom-select select, .discount-wrapper input {
+  width: 100%;
+  padding: 12px 18px;
+  background: rgba(255,255,255,0.4);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 12px;
+  outline: none;
+  font-weight: 500;
+  color: $primary-dark;
+  margin-top: 20px;
+  &:focus { background: #fff; border-color: $accent-gold; }
+}
+
+.discount-wrapper {
+  display: flex; gap: 10px;
+  .btn-apply {
+    background: $primary-dark;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    gap: 5px;
+    height: 50px;
+    border: none;
+    padding: 10px 5px !important;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover {
+      background: lighten($primary-dark, 5%);
+      transform: scale(1.02);
+    }
+  }
+}
+
+.btn-text-gold {
+  background: transparent;
+  border: none;
+  color: $accent-gold;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
+}
+
+
+
+
+
+
+@media (max-width: 992px) {
+  .checkout-grid {
+    flex-direction: column-reverse ;
+    align-items: stretch;
+  }
+
+  .summary-column {
+    position: relative;
+    top: 0;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px !important;
+  }
+
+  .items-column {
+    width: 100%;
+  }
+
+  .product-card {
+    padding: 15px;
+
+    .controls-box {
+      gap: 20px;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+// الـ Grid لترتيب العناصر
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr; // العرض (Summary ثم Info)
+  gap: 40px;
+
+  @media (max-width: 992px) {
+    display: flex;
+    flex-direction: column-reverse; // سيظهر الـ Summary فوق لأن ترتيبه أولاً في الـ HTML
+  }
+}
+
+// ستايل كارت الملخص (Sticky Card)
+.summary-sticky-card {
+  background: $dark-bg;
+  border-radius: 30px;
+  padding: 30px;
+  color: #fcebd1;
+  position: sticky;
+  top: 20px;
+
+  .summary-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+
+    i {
+      display: none; // مخفي في الشاشات الكبيرة
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-width: 992px) {
+    position: relative;
+    top: 0;
+    margin-bottom: 30px;
+
+    .summary-title {
+      cursor: pointer;
+      margin-bottom: 0; // زيرو مارجن لما يكون مقفول
+      i { display: block; } // يظهر السهم في الموبايل فقط
+    }
+
+    &.is-active .summary-title {
+      margin-bottom: 20px; // يرجع المارجن لما يفتح
+    }
+  }
+}
+
+// محتوى الطي (Collapsible Content)
+.collapsible-content {
+  @media (max-width: 992px) {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 0;
+
+    &.show {
+      max-height: 1000px; // رقم كبير كفاية للمحتوى
+      opacity: 1;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+// كلاسات مساعدة للتناسق مع الـ Cart
+.total-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 15px 0;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}

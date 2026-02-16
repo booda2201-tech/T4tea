@@ -5,7 +5,7 @@
 
 <form class="auth-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
   <div class="input-group">
-    <input type="text" formControlName="username" placeholder=" ">
+    <input type="text " formControlName="username" placeholder="">
     <label>User Name</label>
     <small class="error-msg" *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">Required (min 3 chars)</small>
   </div>

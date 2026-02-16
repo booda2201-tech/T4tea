@@ -1,0 +1,289 @@
+
+
+
+<!-- <div class="cont">
+  <div class="checkout-container">
+    <header class="checkout-header">
+      <h1 class="serif-title">Checkout</h1>
+      <p class="welcome-msg">Welcome back, {{ userData.name }}</p>
+    </header>
+
+    <div class="checkout-grid">
+
+      <div class="info-column">
+
+        <div class="checkout-card">
+          <div class="card-header">
+            <h3>Delivery Address</h3>
+            <button class="btn-text-gold" (click)="openNewAddressModal()">+ Add New Address</button>
+          </div>
+
+          <div class="address-list">
+            <label class="address-radio" *ngFor="let addr of addresses" [class.active]="selectedAddressId === addr.id">
+              <input type="radio" name="address" [value]="addr.id" [(ngModel)]="selectedAddressId">
+              <span class="custom-radio"></span>
+              <div class="address-info">
+                <span class="address-text">{{ addr.label }}</span>
+                <span class="badge-default" *ngIf="addr.isDefault">Default</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="checkout-card">
+          <h3>Payment Method</h3>
+          <div class="input-box custom-select">
+            <select [(ngModel)]="paymentMethod" name="payment">
+              <option value="cod">Cash On Delivery (COD)</option>
+              <option value="card">Credit / Debit Card</option>
+              <option value="instapay">InstaPay</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="checkout-card">
+          <h3>Promo Code</h3>
+          <div class="discount-wrapper">
+            <input type="text" [(ngModel)]="discountCode" placeholder="Enter code (e.g. BODA20)">
+            <button class="btn-apply" (click)="applyDiscount()">Apply</button>
+          </div>
+        </div>
+      </div>
+
+<div class="summary-section">
+  <div class="summary-sticky-card">
+    <h2 class="serif-title white-text">Order Summary</h2>
+
+    <div class="items-list">
+      <div class="item-row-premium" *ngFor="let item of orderSummary.items">
+        <div class="product-info">
+          <span class="item-name">{{ item.name }}</span>
+          <span class="item-details">{{ item.category }} x {{ item.quantity }}</span>
+        </div>
+        <div class="product-price">
+          {{ item.price * item.quantity }} EGP
+        </div>
+      </div>
+    </div>
+
+    <div class="price-breakdown">
+      <div class="breakdown-row">
+        <span>Subtotal</span>
+        <span>{{ subtotal }} EGP</span>
+      </div>
+      <div class="breakdown-row">
+        <span>Delivery Fee</span>
+        <span>{{ orderSummary.deliveryFee }} EGP</span>
+      </div>
+
+      <div class="total-divider"></div>
+
+      <div class="total-row">
+        <span>Total Amount</span>
+        <span class="total-amount-gold">{{ orderSummary.total }} EGP</span>
+      </div>
+    </div>
+
+    <button class="btn-confirm" [disabled]="isOrderProcessing" (click)="confirmOrder()">
+      <span *ngIf="!isOrderProcessing">Place Order</span>
+      <span *ngIf="isOrderProcessing">Processing...</span>
+    </button>
+
+  </div>
+</div>
+
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+<!-- <div class="cart-page-wrapper"> <div class="container">
+    <header class="checkout-header text-center">
+      <h1 class="serif-title" style="font-size: 3rem; color: #1a3a3a; margin-bottom: 5px;">Checkout</h1>
+      <p class="welcome-msg">Welcome back, {{ userData.name }}</p>
+    </header>
+
+    <div class="cart-layout"> <div class="items-column">
+
+        <div class="product-card checkout-step">
+          <div class="info-box w-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3>Delivery Address</h3>
+              <button class="btn-text-gold" (click)="openNewAddressModal()">+ Add New Address</button>
+            </div>
+
+            <div class="address-list">
+              <label class="address-radio-v2" *ngFor="let addr of addresses" [class.active]="selectedAddressId === addr.id">
+                <input type="radio" name="address" [value]="addr.id" [(ngModel)]="selectedAddressId">
+                <span class="custom-radio-v2"></span>
+                <div class="address-content">
+                  <span class="address-text">{{ addr.label }}</span>
+                  <span class="badge-type" *ngIf="addr.isDefault">Default</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card checkout-step">
+          <div class="info-box w-100">
+            <h3>Payment Method</h3>
+            <div class="qty-selector mt-3 w-100" style="background: rgba(255,255,255,0.5)">
+              <select [(ngModel)]="paymentMethod" class="clean-select">
+                <option value="cod">Cash On Delivery (COD)</option>
+                <option value="card">Credit / Debit Card</option>
+                <option value="instapay">InstaPay</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card checkout-step">
+          <div class="info-box w-100">
+            <h3>Promo Code</h3>
+            <div class="d-flex gap-3 mt-3">
+              <input type="text" [(ngModel)]="discountCode" class="clean-input" placeholder="Enter code (e.g. BODA20)">
+              <button class="qty-btn" style="width: auto; padding: 0 25px; border-radius: 30px;" (click)="applyDiscount()">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-column">
+        <div class="sticky-card">
+          <h2 class="summary-title">Order Summary</h2>
+
+          <div class="summary-list">
+            <div class="summary-line" *ngFor="let item of orderSummary.items">
+              <div class="line-info">
+                <span>{{ item.name }}</span>
+                <small>{{ item.category }} x {{ item.quantity }}</small>
+              </div>
+              <span class="line-qty">{{ item.price * item.quantity }} EGP</span>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <div class="price-breakdown mb-4" style="font-size: 0.9rem; opacity: 0.8">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Subtotal</span>
+              <span>{{ subtotal }} EGP</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span>Delivery Fee</span>
+              <span>{{ orderSummary.deliveryFee }} EGP</span>
+            </div>
+          </div>
+
+          <div class="total-row">
+            <span>Total Amount</span>
+            <span>{{ orderSummary.total }} EGP</span>
+          </div>
+
+          <button class="checkout-btn" [disabled]="isOrderProcessing" (click)="confirmOrder()">
+            <span *ngIf="!isOrderProcessing">PLACE ORDER</span>
+            <span *ngIf="isOrderProcessing">PROCESSING...</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+<div class="cont">
+  <div class="checkout-container">
+    <header class="checkout-header">
+      <h1 class="serif-title">Checkout</h1>
+      <p class="welcome-msg">Welcome back, {{ userData.name }}</p>
+    </header>
+
+    <div class="checkout-grid">
+      <div class="info-column">
+
+        <div class="checkout-card">
+          <div class="card-header">
+            <h3>Delivery Address</h3>
+            <button class="btn-text-gold" routerLink="/profile">+ Add New Address</button>
+          </div>
+
+          <div class="address-list">
+            <label class="address-radio" *ngFor="let addr of addresses" [class.active]="selectedAddressId === addr.id">
+              <input type="radio" name="address" [value]="addr.id" [(ngModel)]="selectedAddressId">
+              <span class="custom-radio"></span>
+              <div class="address-info">
+                <span class="address-text">{{ addr.label }}</span>
+                <span class="badge-default" *ngIf="addr.isDefault">Default</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="checkout-card">
+          <h3>Payment Method</h3>
+          <div class="input-box custom-select">
+            <select [(ngModel)]="paymentMethod" name="payment">
+              <option value="cod">Cash On Delivery (COD)</option>
+              <option value="card">Credit / Debit Card</option>
+              <option value="instapay">InstaPay</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="summary-section">
+        <div class="summary-sticky-card" [class.is-active]="isSummaryOpen">
+          <h2 class="summary-title" (click)="toggleSummary()">
+            Order Summary
+            <i class="bi" [ngClass]="isSummaryOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </h2>
+
+          <div class="collapsible-content" [class.show]="isSummaryOpen">
+            <div class="items-list">
+              <div class="item-row-premium" *ngFor="let item of orderSummary.items">
+                <div class="product-info">
+                  <span class="item-name">{{ item.name }}</span>
+                  <span class="item-details">{{ item.category }} x {{ item.quantity }}</span>
+                </div>
+                <div class="product-price">{{ item.price * item.quantity }} EGP</div>
+              </div>
+            </div>
+
+            <div class="price-breakdown">
+              <div class="breakdown-row">
+                <span>Subtotal</span>
+                <span>{{ subtotal }} EGP</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Delivery Fee</span>
+                <span>{{ orderSummary.deliveryFee }} EGP</span>
+              </div>
+            </div>
+          </div> <div class="total-divider"></div>
+          <div class="total-row">
+            <span>Total Amount</span>
+            <span class="total-amount-white">{{ orderSummary.total }} EGP</span>
+          </div>
+
+          <button class="btn-confirm" [disabled]="isOrderProcessing" (click)="confirmOrder()">
+            <span *ngIf="!isOrderProcessing">Place Order</span>
+            <span *ngIf="isOrderProcessing">Processing...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

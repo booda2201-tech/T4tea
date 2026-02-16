@@ -23,7 +23,8 @@ import { LogoutComponent } from './Components/logout/logout.component';
 import { SignupComponent } from './Components/signup/signup.component';
 import { ForgotPasswordComponent } from './Components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './Components/reset-password/reset-password.component';
-
+import { CheckOutComponent } from './Components/check-out/check-out.component';
+import { AllProductsComponent } from './Components/all-products/all-products.component';
 
 const routes: Routes = [
 
@@ -42,6 +43,9 @@ const routes: Routes = [
       { path: 'cart', component: CartComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'wishlist', component: WishlistComponent },
+      { path: 'logout', component: LogoutComponent },
+      { path: 'check-out', component: CheckOutComponent },
+      { path: 'all-products', component: AllProductsComponent },
     ]
   },
 
