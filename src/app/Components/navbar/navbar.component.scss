@@ -482,4 +482,63 @@
 
 
 
+/* --- ستايل الديسك توب (كما هو) --- */
+.logo-part {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -65%);
+  z-index: 10;
+}
+
+/* --- تعديلات الشاشات الصغيرة (أصغر من 992px) --- */
+@media (max-width: 991px) {
+
+  /* 1. تحويل اللوجو لمكانه الطبيعي (يسار) */
+  .logo-part {
+    position: static;     /* إلغاء الـ absolute */
+    transform: none;      /* إلغاء التوسيط */
+    margin: 0;
+    order: 1;             /* يضمن ظهوره أول واحد عالشمال */
+  }
+
+  .logo-part img {
+    height: 70px !important; /* تصغير حجمه ليتناسب مع الموبايل */
+  }
+
+  /* 2. ضبط الحاوية اليمنى لتأخذ الترتيب الثاني */
+  .nav-side-part.order-lg-3 {
+    order: 2;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  /* 3. تعديل مكان المنيو اللي بتفتح عشان متغطيش عاللوجو */
+  .mobile-menu {
+    top: 80px;
+  }
+
+  /* 4. تعديل شريط البحث في الموبايل عشان ميزقش العناصر */
+  .search-bar-container.active {
+    width: 200px;
+    position: absolute;
+    right: 190px;
+    z-index: 101;
+  }
+}
+
+/* تعديل إضافي للشاشات الصغيرة جداً */
+@media (max-width: 575px) {
+  .logo-part img {
+    height: 65px !important;
+  }
+
+  .nav-side-part {
+    gap: 8px !important; /* تقليل المسافات بين الأيقونات */
+  }
+}
+
+
 
