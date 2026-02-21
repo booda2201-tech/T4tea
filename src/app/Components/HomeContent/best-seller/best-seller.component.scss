@@ -182,16 +182,31 @@
 }
 
 
-@media (max-width: 475px) {
+@media (max-width: 775px) {
 
   .product-item .hover-decor.leaves-left {
-    left: 110px;
+    left: 115px;
     bottom: 0px;
     width: 40px;
   }
 
   .product-item .hover-decor.leaves-right {
-    right: 106px;
+    right: 116px;
+    bottom: -30px;
+    width: 40px;
+  }
+
+}
+@media (max-width: 414px) {
+
+  .product-item .hover-decor.leaves-left {
+    left: 90px !important;
+    bottom: 0px;
+    width: 40px;
+  }
+
+  .product-item .hover-decor.leaves-right {
+    right: 90px !important;
     bottom: -30px;
     width: 40px;
   }

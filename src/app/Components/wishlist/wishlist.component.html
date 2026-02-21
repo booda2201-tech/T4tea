@@ -91,6 +91,35 @@
       </div>
     </div>
 
+<!-- <div class="layout-luxury-wide" *ngIf="wishlistItems.length <= 2">
+  <div class="wide-card" *ngFor="let item of wishlistItems; trackBy: trackByFn" [id]="'item-' + item.id">
+
+    <div class="product-content">
+      <div class="image-box">
+        <img [src]="item.image" [alt]="item.name">
+      </div>
+      <div class="info-box">
+        <h2 class="title">{{ item.name }}</h2>
+        <p class="desc">{{ item.description }}</p>
+        <div class="price">{{ item.price }} EGP</div>
+      </div>
+    </div>
+
+    <div class="side-actions">
+      <button class="action-btn delete" (click)="onDelete(item.id)">
+        <div class="icon-circle red"><i class="bi bi-trash"></i></div>
+        <span>Delete</span>
+      </button>
+
+      <button class="action-btn add-to-cart" (click)="onAddToCart(item)">
+        <div class="icon-circle dark"><i class="bi bi-cart"></i></div>
+        <span>Add To Cart</span>
+      </button>
+    </div>
+
+  </div>
+</div> -->
+
     <div class="layout-swiper-wrapper" *ngIf="wishlistItems.length > 2">
       <button class="nav-arrow left custom-prev"><i class="bi bi-chevron-left"></i></button>
       <button class="nav-arrow right custom-next"><i class="bi bi-chevron-right"></i></button>
