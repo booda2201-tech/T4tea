@@ -1,0 +1,18 @@
+<div class="filter-group">
+  <button type="button" class="filter-group__head" (click)="toggleOpen()">
+    <span class="filter-group__title">{{ title }}</span>
+    <i class="bi bi-chevron-down filter-group__icon" [class.is-open]="isOpen"></i>
+  </button>
+
+  <div class="filter-group__options" *ngIf="isOpen">
+    <button
+      type="button"
+      *ngFor="let option of options"
+      class="filter-chip"
+      [class.filter-chip--active]="isSelected(option)"
+      (click)="onToggle(option, $event)"
+    >
+      {{ option }}
+    </button>
+  </div>
+</div>

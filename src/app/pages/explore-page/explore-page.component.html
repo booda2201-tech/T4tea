@@ -1,0 +1,96 @@
+<div class="explore-page">
+  <app-navbar [lightOnTop]="true"></app-navbar>
+
+  <section class="explore-hero">
+    <img
+      class="explore-hero__image"
+      src="assets/imges/g2.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <div class="explore-hero__overlay" aria-hidden="true"></div>
+    <div class="explore-hero__content">
+      <span class="explore-hero__eyebrow">Discover T4 Tea</span>
+      <h1 class="explore-hero__title">Explore Our World</h1>
+      <p class="explore-hero__desc">
+        Wander through curated collections, find your mood, and uncover the blend that feels like home.
+      </p>
+    </div>
+  </section>
+
+  <section class="explore-collections">
+    <div class="explore-collections__inner">
+      <header class="explore-section-header" appGsapAnimate="fade-up">
+        <span class="explore-section-header__label">Curated Selection</span>
+        <h2 class="explore-section-header__title">Our Collections</h2>
+        <p class="explore-section-header__desc">
+          Each collection is thoughtfully blended to suit a different moment of your day.
+        </p>
+      </header>
+
+      <div class="explore-collections__grid">
+        <a
+          *ngFor="let collection of collections; let i = index"
+          [routerLink]="shopLink(collection.type)"
+          [queryParams]="shopQueryParams(collection.type)"
+          class="explore-card"
+          [class.explore-card--featured]="i === 0"
+          appGsapAnimate="fade-up"
+          [gsapDelay]="i * 0.1"
+        >
+          <img [src]="collection.image" [alt]="collection.title" class="explore-card__image" />
+          <div class="explore-card__overlay"></div>
+          <div class="explore-card__content">
+            <h3 class="explore-card__title">{{ collection.title }}</h3>
+            <p class="explore-card__subtitle">{{ collection.subtitle }}</p>
+            <span class="explore-card__cta">
+              Explore Collection
+              <i class="bi bi-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="explore-moods">
+    <div class="explore-moods__inner">
+      <header class="explore-section-header explore-section-header--light" appGsapAnimate="fade-up">
+        <span class="explore-section-header__label">Shop by Feeling</span>
+        <h2 class="explore-section-header__title">Find Your Mood</h2>
+        <p class="explore-section-header__desc explore-section-header__desc--light">
+          Choose the feeling you want your next cup to bring.
+        </p>
+      </header>
+
+      <div class="explore-moods__grid">
+        <a
+          *ngFor="let mood of moods; let i = index"
+          routerLink="/shop"
+          [queryParams]="{ mood: mood.label }"
+          class="explore-mood-card"
+          appGsapAnimate="fade-up"
+          [gsapDelay]="i * 0.08"
+        >
+          <i class="bi" [ngClass]="mood.icon"></i>
+          <span>{{ mood.label }}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="explore-cta">
+    <div class="explore-cta__inner" appGsapAnimate="fade-up">
+      <h2 class="explore-cta__title">Not Sure Where to Start?</h2>
+      <p class="explore-cta__desc">
+        Browse our best-selling blends loved by tea enthusiasts across Egypt.
+      </p>
+      <a routerLink="/best-sellers" class="explore-cta__btn">
+        View Best Sellers
+        <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,181 @@
+<div class="min-h-screen bg-cream font-sans text-ink selection:bg-gold/30 selection:text-emerald overflow-x-hidden">
+  <app-navbar #heroNavbar [lightOnTop]="true" [useHeroScrollControl]="true"></app-navbar>
+
+  <main>
+    <!-- Hero -->
+    <section #heroSection class="hero-section">
+      <div #heroPin class="hero-section__pin">
+        <img #heroImage class="hero-section__image" alt="" aria-hidden="true" decoding="sync" />
+
+        <div class="hero-section__overlay"></div>
+
+        <div #heroContent class="hero-section__content relative z-20 h-full flex flex-col items-start justify-center text-left">
+          <div class="hero-section__inner flex flex-col items-start text-white">
+            <div class="hero-section__copy">
+              <span class="hero-fade-item hero-section__eyebrow font-medium">
+                The Egyptian Tea Ritual
+              </span>
+              <h1 class="hero-fade-item hero-section__title font-serif">
+                <span class="hero-section__title-line">From Rare Leaves</span>
+                <span class="hero-section__title-line">
+                  to <span class="hero-section__title-line--accent">Remarkable Moments</span>
+                </span>
+              </h1>
+            </div>
+
+            <div class="hero-fade-item hero-section__actions flex flex-col sm:flex-row items-stretch sm:items-start gap-3 sm:gap-8">
+              <a
+                routerLink="/best-sellers"
+                class="hero-section__cta-primary inline-flex items-center justify-center hover:bg-emerald-soft transition-colors font-medium no-underline group"
+              >
+                <span>Explore Best Sellers</span>
+                <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
+              </a>
+              <a
+                routerLink="/about"
+                class="hero-section__cta-secondary inline-flex items-center justify-center hover:text-white transition-colors no-underline sm:self-center"
+              >
+                Our Story
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div #heroHint class="hero-section__hint">
+          <span class="hero-section__hint-text">Scroll to pour</span>
+          <i class="bi bi-chevron-down hero-section__hint-icon"></i>
+        </div>
+
+        <div class="hero-section__progress">
+          <div class="hero-section__progress-track">
+            <div #heroProgressFill class="hero-section__progress-fill"></div>
+          </div>
+          <span #heroProgressLabel class="hero-section__progress-label">{{ heroScrollProgress }}%</span>
+        </div>
+
+        <div class="hero-section__loader" *ngIf="heroSequenceLoading">
+          <div class="hero-section__loader-ring"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-philosophy py-16 md:py-24 lg:py-32 bg-sand relative overflow-hidden">
+      <div class="page-container">
+        <div class="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+          <div appGsapAnimate="fade-left" class="relative h-[280px] sm:h-[360px] md:h-[500px] lg:h-[600px]">
+            <img
+              src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?q=80&w=1500&auto=format&fit=crop"
+              alt="Tea preparation ritual"
+              class="w-full h-full object-cover rounded-t-full"
+            />
+            <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-cream rounded-full flex items-center justify-center p-8 text-center shadow-xl hidden md:flex">
+              <p class="font-serif text-emerald italic text-xl mb-0">
+                Slow down.<br />Breathe.<br />Sip.
+              </p>
+            </div>
+          </div>
+          <div appGsapAnimate="fade-right" [gsapDelay]="0.2" class="home-philosophy__copy">
+            <span class="text-xs uppercase tracking-luxe text-terracotta mb-3 md:mb-4 block">Our Philosophy</span>
+            <h3 class="font-serif text-3xl sm:text-4xl md:text-5xl text-emerald mb-5 md:mb-8">The Art of Slow Living</h3>
+            <p class="text-ink/80 text-base md:text-lg mb-4 md:mb-6 font-light leading-relaxed">
+              In a world that never stops, T4 Tea is an invitation to pause. We believe that preparing and enjoying tea is not just a habit, but a grounding ritual.
+            </p>
+            <p class="text-ink/80 text-base md:text-lg mb-8 md:mb-10 font-light leading-relaxed">
+              Sourced from the finest estates and blended with Egyptian warmth, our teas offer a symphony of aroma, balance, and sophistication.
+            </p>
+            <a routerLink="/about" class="inline-flex items-center text-emerald border-b border-emerald pb-1 hover:text-terracotta hover:border-terracotta transition-colors tracking-wide text-sm group no-underline">
+              Read Our Story
+              <i class="bi bi-arrow-right ms-2 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <app-best-seller></app-best-seller>
+
+    <section class="home-collections py-16 md:py-24 lg:py-32 bg-sand relative overflow-hidden">
+      <div class="page-container">
+        <div class="text-center mb-10 md:mb-16" appGsapAnimate="fade-up">
+          <span class="text-xs uppercase tracking-luxe text-mocha mb-3 md:mb-4 block">Curated Selection</span>
+          <h3 class="font-serif text-3xl sm:text-4xl md:text-5xl text-emerald mb-3 md:mb-4">Our Collections</h3>
+          <p class="text-ink/70 max-w-2xl mx-auto text-base md:text-lg font-light leading-relaxed px-1">
+            Discover our thoughtfully curated blends, designed to suit every mood and moment of your day.
+          </p>
+        </div>
+        <div class="collections-grid grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+          <a routerLink="/shop" [queryParams]="{ type: 'Black Tea' }" appGsapAnimate="fade-up" class="md:col-span-8 collections-card collections-card--tall relative group overflow-hidden cursor-pointer no-underline">
+            <img [src]="collections.blackTea" alt="Signature Black Teas" class="collections-img group-hover:scale-105 transition-transform duration-700" />
+            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300"></div>
+            <div class="collections-card__content collections-card__content--tall">
+              <h4 class="font-serif text-2xl sm:text-3xl mb-1 sm:mb-2">Signature Black Teas</h4>
+              <p class="text-white/80 mb-2 sm:mb-4 font-light text-sm sm:text-base hidden sm:block">Bold, robust, and awakening.</p>
+              <span class="text-xs sm:text-sm tracking-wide border-b border-white pb-1 inline-block">Explore Collection</span>
+            </div>
+          </a>
+          <div class="md:col-span-4 flex flex-col gap-4 md:gap-6 collections-side">
+            <a routerLink="/shop" [queryParams]="{ type: 'Green Tea' }" appGsapAnimate="fade-up" [gsapDelay]="0.1" class="collections-card collections-card--half relative group overflow-hidden cursor-pointer flex-1 no-underline">
+              <img [src]="collections.greenTea" alt="Green Teas" class="collections-img group-hover:scale-105 transition-transform duration-700" />
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300"></div>
+              <div class="collections-card__content collections-card__content--half">
+                <h4 class="font-serif text-xl sm:text-2xl mb-1">Green Teas</h4>
+                <span class="text-xs tracking-wide border-b border-white pb-1 inline-block">Explore</span>
+              </div>
+            </a>
+            <a routerLink="/shop" [queryParams]="{ type: 'Herbal Tea' }" appGsapAnimate="fade-up" [gsapDelay]="0.2" class="collections-card collections-card--half relative group overflow-hidden cursor-pointer flex-1 no-underline">
+              <img [src]="collections.herbalTea" alt="Herbal Infusions" class="collections-img group-hover:scale-105 transition-transform duration-700" />
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300"></div>
+              <div class="collections-card__content collections-card__content--half">
+                <h4 class="font-serif text-xl sm:text-2xl mb-1">Herbal Infusions</h4>
+                <span class="text-xs tracking-wide border-b border-white pb-1 inline-block">Explore</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="teaware-promo py-14 md:py-20 lg:py-24 bg-emerald text-cream overflow-hidden relative">
+      <img src="assets/imges/Vector (3).png" alt="" class="teaware-promo__decor" aria-hidden="true" />
+
+      <div class="page-container grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center relative z-10">
+        <div appGsapAnimate="fade-left" class="teaware-promo__copy">
+          <h3 class="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] leading-tight mb-6 md:mb-10 max-w-xl">
+            Designed for Those Who Taste the Difference.
+          </h3>
+          <a
+            routerLink="/teawares"
+            class="teaware-promo__btn inline-block bg-cream text-emerald px-8 sm:px-10 py-3 hover:bg-sand transition-colors tracking-wide text-sm font-medium no-underline mx-auto md:mx-0"
+          >
+            Shop Now
+          </a>
+        </div>
+
+        <div appGsapAnimate="fade-scale" class="teaware-promo__image-wrap order-first md:order-none">
+          <img
+            [src]="teawarePromoImg"
+            alt="T4 Tea collection"
+            class="teaware-promo__image"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="home-quiz py-20 md:py-28 lg:py-32 bg-cream relative">
+      <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png')"></div>
+      <div class="max-w-3xl mx-auto px-5 sm:px-6 text-center relative z-10">
+        <div appGsapAnimate="fade-up">
+          <h3 class="font-serif text-3xl sm:text-4xl md:text-5xl text-emerald mb-4 md:mb-6">Find Your Perfect Blend</h3>
+          <p class="text-ink/70 text-base md:text-lg mb-8 md:mb-10 font-light max-w-xl mx-auto">
+            Not sure where to start? Take our short sensory quiz to discover the teas that perfectly match your palate and lifestyle.
+          </p>
+          <button type="button" class="quiz-cta-btn">
+            Take the Quiz
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <app-footer></app-footer>
+</div>

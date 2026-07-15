@@ -1,0 +1,459 @@
+<div *ngIf="user" class="profile-shell min-h-screen bg-cream font-sans text-ink selection:bg-emerald/20">
+  <app-navbar></app-navbar>
+
+  <section class="profile-hero">
+    <div class="profile-hero__glow" aria-hidden="true"></div>
+    <div class="profile-hero__inner">
+      <div class="profile-hero__identity">
+        <div class="profile-hero__avatar" aria-hidden="true">{{ userInitials }}</div>
+        <div>
+          <span class="profile-hero__eyebrow">Your Ritual Space</span>
+          <h1 class="profile-hero__title">Hello, {{ user.name }}</h1>
+          <p class="profile-hero__email">{{ displayContact }}</p>
+        </div>
+      </div>
+
+      <div class="profile-hero__actions">
+        <a routerLink="/shop" class="profile-btn profile-btn--primary">Continue Shopping</a>
+        <button type="button" class="profile-btn profile-btn--ghost" (click)="logout()">Sign Out</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="profile-layout">
+    <aside class="profile-sidebar">
+      <p class="profile-sidebar__label">Account Menu</p>
+      <nav class="profile-sidebar__nav" aria-label="Profile sections">
+        <button
+          *ngFor="let item of navItems"
+          type="button"
+          class="profile-sidebar__link"
+          [class.profile-sidebar__link--active]="activeTab === item.id"
+          (click)="setActiveTab(item.id)"
+        >
+          <i class="bi" [ngClass]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </button>
+      </nav>
+
+      <div class="profile-sidebar__promo">
+        <span class="profile-sidebar__promo-tag">T4 Rewards</span>
+        <p>Earn points with every pour and unlock exclusive blends.</p>
+        <a routerLink="/shop" class="profile-sidebar__promo-link">Explore Collection</a>
+      </div>
+    </aside>
+
+    <main class="profile-main">
+      <p *ngIf="isLoadingProfile" class="profile-status">Loading your profile…</p>
+
+      <ng-container *ngIf="activeTab === 'overview'">
+        <div class="profile-stats">
+          <article class="profile-stat">
+            <div class="profile-stat__icon"><i class="bi bi-bag"></i></div>
+            <div>
+              <strong>{{ ordersCount$ | async }}</strong>
+              <span>Total Orders</span>
+            </div>
+          </article>
+          <article class="profile-stat">
+            <div class="profile-stat__icon"><i class="bi bi-heart"></i></div>
+            <div>
+              <strong>{{ wishlistCount$ | async }}</strong>
+              <span>Saved Items</span>
+            </div>
+          </article>
+          <article class="profile-stat">
+            <div class="profile-stat__icon"><i class="bi bi-geo-alt"></i></div>
+            <div>
+              <strong>{{ addressCount }}</strong>
+              <span>Addresses</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="profile-panels">
+          <section class="profile-panel profile-panel--account">
+            <div class="profile-panel__head">
+              <h2>Account Details</h2>
+              <span class="profile-panel__badge">{{ isSavingProfile ? 'Saving…' : 'Editable' }}</span>
+            </div>
+
+            <form class="profile-form" [formGroup]="profileForm" (ngSubmit)="saveProfile()" novalidate>
+              <div class="profile-form__field">
+                <label for="profile-name">Full Name</label>
+                <input
+                  id="profile-name"
+                  type="text"
+                  formControlName="name"
+                  autocomplete="name"
+                  [class.profile-form__input--invalid]="isInvalid(profileForm, 'name')"
+                />
+              </div>
+
+              <div class="profile-form__field">
+                <label for="profile-phone">Phone Number</label>
+                <input
+                  id="profile-phone"
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="01XXXXXXXXX"
+                  autocomplete="tel"
+                  [class.profile-form__input--invalid]="isInvalid(profileForm, 'phone')"
+                />
+              </div>
+
+              <p *ngIf="profileError" class="profile-form__error">{{ profileError }}</p>
+              <p *ngIf="profileMessage" class="profile-form__success">{{ profileMessage }}</p>
+
+              <button type="submit" class="profile-btn profile-btn--primary" [disabled]="isSavingProfile">
+                {{ isSavingProfile ? 'Saving…' : 'Save Changes' }}
+              </button>
+            </form>
+          </section>
+
+          <section class="profile-panel profile-panel--quick">
+            <div class="profile-panel__head">
+              <h2>Quick Access</h2>
+            </div>
+            <a *ngFor="let link of quickLinks" [routerLink]="link.route" class="profile-quick-link">
+              <span class="profile-quick-link__icon"><i class="bi" [ngClass]="link.icon"></i></span>
+              <span class="profile-quick-link__text">{{ link.label }}</span>
+              <i class="bi bi-arrow-right profile-quick-link__arrow"></i>
+            </a>
+            <button type="button" class="profile-quick-link profile-quick-link--btn" (click)="setActiveTab('addresses')">
+              <span class="profile-quick-link__icon"><i class="bi bi-geo-alt"></i></span>
+              <span class="profile-quick-link__text">Manage Addresses</span>
+              <i class="bi bi-arrow-right profile-quick-link__arrow"></i>
+            </button>
+          </section>
+        </div>
+
+        <section class="profile-panel profile-panel--wide">
+          <div class="profile-panel__head">
+            <h2>Recent Activity</h2>
+            <button
+              *ngIf="(ordersCount$ | async)"
+              type="button"
+              class="profile-panel__link"
+              (click)="setActiveTab('orders')"
+            >
+              View all orders
+            </button>
+          </div>
+
+          <ng-container *ngIf="orders$ | async as orders">
+            <div *ngIf="orders.length === 0" class="profile-empty">
+              <div class="profile-empty__icon"><i class="bi bi-cup-straw"></i></div>
+              <h3>No orders yet</h3>
+              <p>Your tea journey starts here. Discover blends curated for calm, focus, and everyday ritual.</p>
+              <a routerLink="/shop" class="profile-btn profile-btn--primary">Start Shopping</a>
+            </div>
+
+            <div *ngIf="orders.length > 0" class="profile-activity">
+              <button
+                *ngFor="let order of orders.slice(0, 3)"
+                type="button"
+                class="profile-activity__row"
+                (click)="setActiveTab('orders')"
+              >
+                <span class="profile-activity__icon"><i class="bi bi-bag-check"></i></span>
+                <span class="profile-activity__info">
+                  <strong>Order {{ order.id }}</strong>
+                  <small>
+                    {{ order.createdAt | date: 'mediumDate' }} ·
+                    {{ order.items.length }} {{ order.items.length === 1 ? 'item' : 'items' }}
+                  </small>
+                </span>
+                <span class="profile-order__status" [ngClass]="'profile-order__status--' + order.status">
+                  {{ order.status }}
+                </span>
+                <span class="profile-activity__total">{{ order.total }} EGP</span>
+              </button>
+            </div>
+          </ng-container>
+        </section>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab === 'addresses'">
+        <section class="profile-panel profile-panel--wide">
+          <div class="profile-panel__head">
+            <h2>Saved Addresses</h2>
+            <button type="button" class="profile-btn profile-btn--primary profile-btn--sm profile-btn--add" (click)="openAddAddress()">
+              <i class="bi bi-plus-lg"></i>
+              <span class="profile-btn__label">Add Address</span>
+            </button>
+          </div>
+
+          <p *ngIf="isLoadingAddresses" class="profile-status">Loading addresses…</p>
+          <p *ngIf="addressError" class="profile-form__error">{{ addressError }}</p>
+          <p *ngIf="addressMessage" class="profile-form__success">{{ addressMessage }}</p>
+
+          <form
+            *ngIf="showAddressForm"
+            class="profile-form profile-form--address"
+            [formGroup]="addressForm"
+            (ngSubmit)="saveAddress()"
+            novalidate
+          >
+            <div class="profile-form__grid">
+              <div class="profile-form__field">
+                <label for="addr-label">Label</label>
+                <input
+                  id="addr-label"
+                  type="text"
+                  formControlName="label"
+                  placeholder="Home, Work…"
+                  [class.profile-form__input--invalid]="isInvalid(addressForm, 'label')"
+                />
+              </div>
+              <div class="profile-form__field">
+                <label for="addr-postal">Postal Code <span class="profile-form__optional">(optional)</span></label>
+                <input id="addr-postal" type="text" formControlName="postalCode" />
+              </div>
+              <div class="profile-form__field">
+                <label>Governorate</label>
+                <div
+                  #governorateDropdown
+                  class="profile-dropdown"
+                  [class.profile-dropdown--open]="isGovernorateOpen"
+                  [class.profile-dropdown--invalid]="isInvalid(addressForm, 'governorate')"
+                >
+                  <button
+                    type="button"
+                    class="profile-dropdown__trigger"
+                    (click)="toggleGovernorateDropdown()"
+                    [attr.aria-expanded]="isGovernorateOpen"
+                    aria-haspopup="listbox"
+                  >
+                    <span
+                      class="profile-dropdown__value"
+                      [class.profile-dropdown__value--placeholder]="!selectedGovernorate"
+                    >
+                      {{ selectedGovernorate || 'Select governorate' }}
+                    </span>
+                    <i class="bi bi-chevron-down profile-dropdown__chevron" aria-hidden="true"></i>
+                  </button>
+
+                  <div *ngIf="isGovernorateOpen" class="profile-dropdown__panel">
+                    <div class="profile-dropdown__search-wrap">
+                      <i class="bi bi-search profile-dropdown__search-icon" aria-hidden="true"></i>
+                      <input
+                        type="text"
+                        class="profile-dropdown__search"
+                        placeholder="Search governorate..."
+                        [(ngModel)]="governorateSearch"
+                        [ngModelOptions]="{ standalone: true }"
+                        (click)="$event.stopPropagation()"
+                      />
+                    </div>
+
+                    <ul class="profile-dropdown__menu" role="listbox" aria-label="Governorates">
+                      <li *ngIf="filteredGovernorates.length === 0" class="profile-dropdown__empty">
+                        No matches found
+                      </li>
+                      <li *ngFor="let governorate of filteredGovernorates" role="presentation">
+                        <button
+                          type="button"
+                          class="profile-dropdown__option"
+                          role="option"
+                          [attr.aria-selected]="selectedGovernorate === governorate"
+                          [class.profile-dropdown__option--active]="selectedGovernorate === governorate"
+                          (click)="selectGovernorate(governorate)"
+                        >
+                          <span>{{ governorate }}</span>
+                          <i
+                            *ngIf="selectedGovernorate === governorate"
+                            class="bi bi-check2 profile-dropdown__check"
+                            aria-hidden="true"
+                          ></i>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="profile-form__field">
+                <label for="addr-city">City</label>
+                <input id="addr-city" type="text" formControlName="city" [class.profile-form__input--invalid]="isInvalid(addressForm, 'city')" />
+              </div>
+              <div class="profile-form__field profile-form__field--full">
+                <label for="addr-street">Street</label>
+                <input
+                  id="addr-street"
+                  type="text"
+                  formControlName="street"
+                  placeholder="Street, building, apartment"
+                  [class.profile-form__input--invalid]="isInvalid(addressForm, 'street')"
+                />
+              </div>
+              <div class="profile-form__field profile-form__field--full">
+                <label for="addr-notes">Notes <span class="profile-form__optional">(optional)</span></label>
+                <input id="addr-notes" type="text" formControlName="notes" />
+              </div>
+            </div>
+
+            <div class="profile-form__actions">
+              <button type="submit" class="profile-btn profile-btn--primary" [disabled]="isSavingAddress">
+                {{ isSavingAddress ? 'Saving…' : editingAddressId != null ? 'Update Address' : 'Save Address' }}
+              </button>
+              <button type="button" class="profile-btn profile-btn--ghost" (click)="cancelAddressForm()">Cancel</button>
+            </div>
+          </form>
+
+          <div *ngIf="!isLoadingAddresses && addresses.length === 0 && !showAddressForm" class="profile-empty">
+            <div class="profile-empty__icon"><i class="bi bi-geo-alt"></i></div>
+            <h3>No addresses yet</h3>
+            <p>Add a delivery address to speed up checkout next time.</p>
+            <button type="button" class="profile-btn profile-btn--primary" (click)="openAddAddress()">Add Address</button>
+          </div>
+
+          <div *ngIf="addresses.length > 0" class="profile-addresses">
+            <article *ngFor="let item of addresses" class="profile-address">
+              <div class="profile-address__icon" aria-hidden="true">
+                <i class="bi bi-geo-alt"></i>
+              </div>
+              <div class="profile-address__body">
+                <h3 class="profile-address__label">{{ item.label || 'Address' }}</h3>
+                <p class="profile-address__line">{{ item.street }}</p>
+                <p class="profile-address__line profile-address__line--muted">
+                  {{ item.city }}{{ item.governorate ? ', ' + item.governorate : '' }}
+                  <ng-container *ngIf="item.postalCode"> · {{ item.postalCode }}</ng-container>
+                </p>
+                <p *ngIf="item.notes" class="profile-address__notes">{{ item.notes }}</p>
+              </div>
+              <div class="profile-address__actions">
+                <button type="button" class="profile-address__btn" (click)="openEditAddress(item)" aria-label="Edit address">
+                  <i class="bi bi-pencil"></i>
+                  <span class="profile-address__btn-label">Edit</span>
+                </button>
+                <button
+                  type="button"
+                  class="profile-address__btn profile-address__btn--danger"
+                  (click)="deleteAddress(item)"
+                  aria-label="Delete address"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab === 'orders'">
+        <section class="profile-panel profile-panel--wide">
+          <div class="profile-panel__head">
+            <h2>Your Orders</h2>
+            <span *ngIf="ordersCount$ | async as count" class="profile-panel__badge">
+              {{ count }} {{ count === 1 ? 'order' : 'orders' }}
+            </span>
+          </div>
+
+          <ng-container *ngIf="orders$ | async as orders">
+            <div *ngIf="orders.length === 0" class="profile-empty">
+              <div class="profile-empty__icon"><i class="bi bi-box-seam"></i></div>
+              <h3>No orders to show</h3>
+              <p>Once you place an order, it will appear here with tracking and delivery details.</p>
+              <a routerLink="/shop" class="profile-btn profile-btn--primary">Browse Tea</a>
+            </div>
+
+            <div *ngIf="orders.length > 0" class="profile-orders">
+              <article *ngFor="let order of orders" class="profile-order">
+                <div class="profile-order__head">
+                  <div>
+                    <h3 class="profile-order__id">{{ order.id }}</h3>
+                    <p class="profile-order__date">
+                      {{ order.createdAt | date: 'mediumDate' }} ·
+                      {{ order.paymentMethod === 'card' ? 'Card' : 'Cash on Delivery' }}
+                    </p>
+                  </div>
+                  <span class="profile-order__status" [ngClass]="'profile-order__status--' + order.status">
+                    {{ order.status }}
+                  </span>
+                </div>
+
+                <ul class="profile-order__items">
+                  <li *ngFor="let item of order.items">
+                    <img [src]="item.image" [alt]="item.name" />
+                    <span class="profile-order__item-name">{{ item.name }}</span>
+                    <span class="profile-order__item-qty">× {{ item.quantity }}</span>
+                    <span class="profile-order__item-price">{{ item.price * item.quantity }} EGP</span>
+                  </li>
+                </ul>
+
+                <div class="profile-order__foot">
+                  <p class="profile-order__address">
+                    <i class="bi bi-geo-alt"></i>
+                    {{ order.address.street }}, {{ order.address.city }}, {{ order.address.governorate }}
+                  </p>
+                  <p class="profile-order__total">
+                    Total <strong>{{ order.total }} EGP</strong>
+                  </p>
+                </div>
+              </article>
+            </div>
+          </ng-container>
+        </section>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab === 'wishlist'">
+        <section class="profile-panel profile-panel--wide">
+          <div class="profile-panel__head">
+            <h2>Your Wishlist</h2>
+            <span *ngIf="(wishlistCount$ | async) as count" class="profile-panel__badge">{{ count }} saved</span>
+          </div>
+
+          <div *ngIf="(wishlistItems$ | async) as items">
+            <div *ngIf="items.length === 0" class="profile-empty">
+              <div class="profile-empty__icon"><i class="bi bi-heart"></i></div>
+              <h3>Nothing saved yet</h3>
+              <p>Tap the heart on any blend or teaware to build your personal collection.</p>
+              <a routerLink="/teawares" class="profile-btn profile-btn--primary">Discover Teawares</a>
+            </div>
+
+            <div *ngIf="items.length > 0" class="profile-wishlist">
+              <article *ngFor="let item of items" class="profile-wishlist__item">
+                <a [routerLink]="['/product', item.id]" class="profile-wishlist__media">
+                  <img [src]="item.image" [alt]="item.name" />
+                </a>
+                <div class="profile-wishlist__body">
+                  <a [routerLink]="['/product', item.id]" class="profile-wishlist__title">{{ item.name }}</a>
+                  <p class="profile-wishlist__type">{{ item.type }}</p>
+                  <span class="profile-wishlist__price">{{ item.price }} EGP</span>
+                </div>
+                <div class="profile-wishlist__actions">
+                  <button type="button" class="profile-wishlist__btn profile-wishlist__btn--primary" (click)="addToCart(item)">
+                    Add to Cart
+                  </button>
+                  <button type="button" class="profile-wishlist__btn profile-wishlist__btn--ghost" (click)="removeFromWishlist(item.id)" aria-label="Remove from wishlist">
+                    <i class="bi bi-heart-fill"></i>
+                  </button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </ng-container>
+    </main>
+  </div>
+
+  <div *ngIf="showPhoneChangeConfirm" class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="phone-confirm-title">
+    <div class="profile-modal__backdrop" (click)="cancelPhoneChange()"></div>
+    <div class="profile-modal__card">
+      <div class="profile-modal__icon"><i class="bi bi-telephone"></i></div>
+      <h3 id="phone-confirm-title">Change your phone number?</h3>
+      <p>
+        You sign in to T4 Tea with your phone number. If you save this change,
+        you'll need to use the <strong>new number</strong> to log in from now on.
+      </p>
+      <div class="profile-modal__actions">
+        <button type="button" class="profile-btn profile-btn--primary" (click)="confirmPhoneChange()">
+          Yes, update it
+        </button>
+        <button type="button" class="profile-btn profile-btn--ghost" (click)="cancelPhoneChange()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,154 @@
+<div class="teawares-page min-h-screen bg-cream font-sans text-ink selection:bg-emerald/20">
+  <app-navbar></app-navbar>
+
+  <section class="teawares-hero">
+    <div class="teawares-hero__inner">
+      <div class="teawares-hero__copy">
+        <span class="teawares-hero__eyebrow">The Perfect Pour</span>
+        <h1 class="teawares-hero__title font-serif">
+          Elegant<br />
+          <span class="teawares-hero__title-accent">Teawares</span>
+        </h1>
+        <p class="teawares-hero__desc">
+          Finely crafted teapots, cups, and accessories — designed for beauty, function, and the quiet ritual of every pour.
+        </p>
+      </div>
+
+      <div class="teawares-hero__visual" aria-hidden="true">
+        <div class="teawares-hero__glow"></div>
+        <img [src]="featuredImage" alt="" class="teawares-hero__image" />
+      </div>
+    </div>
+  </section>
+
+  <section class="teawares-catalog">
+    <div class="teawares-catalog__inner">
+      <header class="teawares-catalog__header" appGsapAnimate="fade-up">
+        <div class="teawares-catalog__intro">
+          <span class="teawares-catalog__label">Curated Selection</span>
+          <h2 class="teawares-catalog__title font-serif">The Collection</h2>
+        </div>
+        <p class="teawares-catalog__count">{{ filteredProducts.length }} Pieces</p>
+      </header>
+
+      <div class="teawares-filters" appGsapAnimate="fade-up" [gsapDelay]="0.05">
+        <button
+          *ngFor="let filter of typeFilters"
+          type="button"
+          class="teawares-filters__btn"
+          [class.teawares-filters__btn--active]="isFilterActive(filter.value)"
+          (click)="setFilter(filter.value)"
+        >
+          {{ filter.label }}
+        </button>
+      </div>
+
+      <div *ngIf="filteredProducts.length === 0" class="teawares-empty">
+        <p class="teawares-empty__title font-serif">No pieces in this category yet</p>
+        <button type="button" class="teawares-empty__btn" (click)="setFilter(null)">View All</button>
+      </div>
+
+      <div *ngIf="filteredProducts.length > 0" class="teawares-grid">
+        <ng-container *ngFor="let item of firstRowProducts; let i = index">
+          <ng-container *ngTemplateOutlet="productCard; context: { item: item, index: i }"></ng-container>
+        </ng-container>
+
+        <article *ngIf="showCollectionBanner" class="collection-banner" appGsapAnimate="fade-up">
+          <div class="collection-banner__media">
+            <img src="assets/imges/tea hold 1 (1).png" alt="T4Tea Collection" />
+          </div>
+          <div class="collection-banner__copy">
+            <span class="collection-banner__label">Featured Collection</span>
+            <h2 class="collection-banner__title font-serif">Crafted for the Ritual</h2>
+            <p class="collection-banner__text">
+              Soft ceramic, warm gold accents, and forms shaped by patience — every vessel invites a slower, more intentional pour.
+            </p>
+          </div>
+        </article>
+
+        <ng-container *ngFor="let item of secondRowProducts; let i = index">
+          <ng-container *ngTemplateOutlet="productCard; context: { item: item, index: i + 3 }"></ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+
+  <section class="teawares-ritual">
+    <div class="teawares-ritual__inner">
+      <div class="teawares-ritual__media" appGsapAnimate="fade-left">
+        <img [src]="ritualImage" alt="T4 Tea teaware ritual" />
+      </div>
+      <div class="teawares-ritual__copy" appGsapAnimate="fade-right" [gsapDelay]="0.12">
+        <span class="teawares-ritual__label">Our Philosophy</span>
+        <h2 class="teawares-ritual__title font-serif">Craftsmanship &amp; Ritual</h2>
+        <p class="teawares-ritual__desc">
+          Every piece is chosen to elevate the sensory experience — from the warmth of the vessel in your hands to the perfect pour.
+        </p>
+        <div class="teawares-ritual__steps">
+          <div class="teawares-ritual__step">
+            <span class="teawares-ritual__step-num font-serif">01</span>
+            <div>
+              <h3 class="teawares-ritual__step-title font-serif">Form</h3>
+              <p>Sculpted silhouettes that feel as considered as they look.</p>
+            </div>
+          </div>
+          <div class="teawares-ritual__step">
+            <span class="teawares-ritual__step-num font-serif">02</span>
+            <div>
+              <h3 class="teawares-ritual__step-title font-serif">Function</h3>
+              <p>Balanced weight, gentle pours, and comfort in every grip.</p>
+            </div>
+          </div>
+          <div class="teawares-ritual__step">
+            <span class="teawares-ritual__step-num font-serif">03</span>
+            <div>
+              <h3 class="teawares-ritual__step-title font-serif">Ritual</h3>
+              <p>Objects that turn everyday tea into a moment of calm.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+</div>
+
+<ng-template #productCard let-item="item" let-index="index">
+  <article class="teaware-card" appGsapAnimate="fade-up" [gsapDelay]="index * 0.06">
+    <a [routerLink]="['/product', item.id]" class="teaware-card__link no-underline">
+      <div class="teaware-card__stage">
+        <div class="teaware-card__visual">
+          <div class="teaware-card__halo" aria-hidden="true"></div>
+          <img [src]="item.image" [alt]="item.title" class="teaware-card__image" />
+          <div class="teaware-card__actions">
+            <button
+              type="button"
+              class="teaware-card__action teaware-card__action--wishlist wishlist-toggle"
+              [class.wishlist-toggle--active]="isWishlisted(item.id)"
+              (click)="toggleWishlist($event, item)"
+              aria-label="Add to wishlist"
+            >
+              <i class="bi" [class.bi-heart-fill]="isWishlisted(item.id)" [class.bi-heart]="!isWishlisted(item.id)"></i>
+            </button>
+            <button
+              type="button"
+              class="teaware-card__action teaware-card__action--cart"
+              (click)="quickAdd(item, $event)"
+              aria-label="Quick add to cart"
+            >
+              <i class="bi bi-bag-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="teaware-card__meta">
+        <div class="teaware-card__info">
+          <h3 class="teaware-card__name font-serif">{{ item.title }}</h3>
+          <span class="teaware-card__price">{{ item.price }} EGP</span>
+        </div>
+        <p class="teaware-card__type">{{ item.type }}</p>
+      </div>
+    </a>
+  </article>
+</ng-template>

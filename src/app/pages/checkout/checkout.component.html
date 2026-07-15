@@ -1,0 +1,434 @@
+<div class="checkout-page min-h-screen font-sans text-ink selection:bg-emerald/20">
+  <app-navbar></app-navbar>
+
+  <div class="checkout-page__body">
+    <div class="checkout-page__container">
+      <a routerLink="/shop" class="checkout-back">
+        <i class="bi bi-arrow-left"></i>
+        Return to Shop
+      </a>
+
+      <div *ngIf="orderPlaced" class="checkout-success">
+        <div class="checkout-success__icon"><i class="bi bi-check2-circle"></i></div>
+        <h2>Order Placed Successfully</h2>
+        <p>Thank you for your order. We'll call you on {{ checkoutForm.get('phone')?.value }} to confirm delivery.</p>
+        <a routerLink="/shop" class="checkout-btn checkout-btn--primary">Continue Shopping</a>
+      </div>
+
+      <div *ngIf="!orderPlaced && isCartEmpty" class="checkout-empty">
+        <div class="checkout-success__icon"><i class="bi bi-cart3"></i></div>
+        <h2>Your cart is empty</h2>
+        <p>Add a few blends or teawares before checking out.</p>
+        <a routerLink="/shop" class="checkout-btn checkout-btn--primary">Browse Tea</a>
+      </div>
+
+      <div *ngIf="!orderPlaced && !isCartEmpty" class="checkout-main">
+        <header class="checkout-hero">
+          <span class="checkout-hero__eyebrow">Secure Checkout</span>
+          <h1 class="checkout-hero__title">Complete Your Order</h1>
+          <p class="checkout-hero__desc">A few details and your tea ritual is on its way.</p>
+        </header>
+
+        <div class="checkout-layout">
+        <form class="checkout-form" [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" novalidate>
+
+          <section class="checkout-section">
+            <div class="checkout-section__head">
+              <span class="checkout-section__icon"><i class="bi bi-envelope"></i></span>
+              <div>
+                <h2 class="checkout-section__title">Contact Information</h2>
+                <p class="checkout-section__subtitle">How can we reach you about your order?</p>
+              </div>
+            </div>
+
+            <div class="checkout-section__body">
+              <div class="checkout-grid">
+                <div class="checkout-field">
+                  <label class="checkout-label" for="checkout-name">Full Name</label>
+                  <input
+                    id="checkout-name"
+                    type="text"
+                    formControlName="fullName"
+                    placeholder="Your full name"
+                    autocomplete="name"
+                    class="checkout-input"
+                    [class.checkout-input--invalid]="isInvalid('fullName')"
+                  />
+                  <p class="checkout-field__error" *ngIf="isInvalid('fullName')">Full name is required</p>
+                </div>
+
+                <div class="checkout-field">
+                  <label class="checkout-label" for="checkout-phone">Phone</label>
+                  <input
+                    id="checkout-phone"
+                    type="tel"
+                    formControlName="phone"
+                    placeholder="01xxxxxxxxx"
+                    autocomplete="tel"
+                    class="checkout-input"
+                    [class.checkout-input--invalid]="isInvalid('phone')"
+                  />
+                  <p class="checkout-field__error" *ngIf="isInvalid('phone')">
+                    <span *ngIf="checkoutForm.get('phone')?.errors?.['required']">Phone number is required</span>
+                    <span *ngIf="checkoutForm.get('phone')?.errors?.['pattern']">Enter a valid Egyptian mobile number</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="checkout-section">
+            <div class="checkout-section__head">
+              <span class="checkout-section__icon"><i class="bi bi-geo-alt"></i></span>
+              <div>
+                <h2 class="checkout-section__title">Shipping Address</h2>
+                <p class="checkout-section__subtitle">Where should we deliver your order?</p>
+              </div>
+            </div>
+
+            <div class="checkout-section__body">
+              <div *ngIf="savedAddresses.length > 0" class="checkout-saved">
+                <p class="checkout-saved__label">Delivery address</p>
+                <div class="checkout-saved__list">
+                  <button
+                    *ngFor="let item of savedAddresses"
+                    type="button"
+                    class="checkout-saved__card"
+                    [class.checkout-saved__card--active]="selectedAddressId === item.id"
+                    (click)="selectSavedAddress(item)"
+                  >
+                    <span class="checkout-saved__icon"><i class="bi bi-geo-alt"></i></span>
+                    <span class="checkout-saved__info">
+                      <strong>{{ item.label || 'Address' }}</strong>
+                      <small>{{ formatAddressPreview(item) }}</small>
+                    </span>
+                    <i
+                      class="bi checkout-saved__check"
+                      [ngClass]="selectedAddressId === item.id ? 'bi-check-circle-fill' : 'bi-circle'"
+                    ></i>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="checkout-saved__card checkout-saved__card--new"
+                    [class.checkout-saved__card--active]="isAddingNewAddress"
+                    (click)="startNewAddress()"
+                  >
+                    <span class="checkout-saved__icon"><i class="bi bi-plus-lg"></i></span>
+                    <span class="checkout-saved__info">
+                      <strong>Add New Address</strong>
+                      <small>Deliver somewhere else</small>
+                    </span>
+                    <i
+                      class="bi checkout-saved__check"
+                      [ngClass]="isAddingNewAddress ? 'bi-check-circle-fill' : 'bi-circle'"
+                    ></i>
+                  </button>
+                </div>
+                <p
+                  class="checkout-field__error"
+                  *ngIf="!showAddressFields && !selectedAddressId && isInvalid('address')"
+                >
+                  Please choose a saved address or add a new one
+                </p>
+              </div>
+
+              <ng-container *ngIf="showAddressFields">
+              <div class="checkout-field">
+                <label class="checkout-label" for="checkout-address">Address</label>
+                <input
+                  id="checkout-address"
+                  type="text"
+                  formControlName="address"
+                  placeholder="Street, building, apartment"
+                  autocomplete="street-address"
+                  class="checkout-input"
+                  [class.checkout-input--invalid]="isInvalid('address')"
+                />
+                <p class="checkout-field__error" *ngIf="isInvalid('address')">Address is required</p>
+              </div>
+
+              <div class="checkout-grid">
+                <div class="checkout-field">
+                  <label class="checkout-label" for="checkout-city">City</label>
+                  <input
+                    id="checkout-city"
+                    type="text"
+                    formControlName="city"
+                    placeholder="City"
+                    autocomplete="address-level2"
+                    class="checkout-input"
+                    [class.checkout-input--invalid]="isInvalid('city')"
+                  />
+                  <p class="checkout-field__error" *ngIf="isInvalid('city')">City is required</p>
+                </div>
+
+                <div class="checkout-field">
+                  <label class="checkout-label">Governorate</label>
+                  <div
+                    #governorateDropdown
+                    class="checkout-dropdown"
+                    [class.checkout-dropdown--open]="isGovernorateOpen"
+                    [class.checkout-dropdown--invalid]="isInvalid('governorate')"
+                  >
+                    <button
+                      type="button"
+                      class="checkout-dropdown__trigger"
+                      (click)="toggleGovernorateDropdown()"
+                      [attr.aria-expanded]="isGovernorateOpen"
+                      aria-haspopup="listbox"
+                    >
+                      <span
+                        class="checkout-dropdown__value"
+                        [class.checkout-dropdown__value--placeholder]="!selectedGovernorate"
+                      >
+                        {{ selectedGovernorate || 'Select Governorate' }}
+                      </span>
+                      <i class="bi bi-chevron-down checkout-dropdown__chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div *ngIf="isGovernorateOpen" class="checkout-dropdown__panel">
+                      <div class="checkout-dropdown__search-wrap">
+                        <i class="bi bi-search checkout-dropdown__search-icon" aria-hidden="true"></i>
+                        <input
+                          type="text"
+                          class="checkout-dropdown__search"
+                          placeholder="Search governorate..."
+                          [(ngModel)]="governorateSearch"
+                          [ngModelOptions]="{ standalone: true }"
+                          (click)="$event.stopPropagation()"
+                        />
+                      </div>
+
+                      <ul class="checkout-dropdown__menu" role="listbox" aria-label="Governorates">
+                        <li *ngIf="filteredGovernorates.length === 0" class="checkout-dropdown__empty">
+                          No matches found
+                        </li>
+                        <li *ngFor="let governorate of filteredGovernorates" role="presentation">
+                          <button
+                            type="button"
+                            class="checkout-dropdown__option"
+                            role="option"
+                            [attr.aria-selected]="selectedGovernorate === governorate"
+                            [class.checkout-dropdown__option--active]="selectedGovernorate === governorate"
+                            (click)="selectGovernorate(governorate)"
+                          >
+                            <span>{{ governorate }}</span>
+                            <i
+                              *ngIf="selectedGovernorate === governorate"
+                              class="bi bi-check2 checkout-dropdown__check"
+                              aria-hidden="true"
+                            ></i>
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <p class="checkout-field__error" *ngIf="isInvalid('governorate')">Governorate is required</p>
+                </div>
+              </div>
+              </ng-container>
+
+              <div *ngIf="canOfferSaveAddress" class="checkout-save-address">
+                <label class="checkout-checkbox">
+                  <input type="checkbox" formControlName="saveAddress" />
+                  <span class="checkout-checkbox__box"></span>
+                  <span>Save this address to my profile for next time</span>
+                </label>
+
+                <div *ngIf="wantsToSaveAddress" class="checkout-save-address__label">
+                  <input
+                    type="text"
+                    formControlName="saveAddressLabel"
+                    placeholder="Label (Home, Work…)"
+                    class="checkout-input checkout-input--sm"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="checkout-section">
+            <div class="checkout-section__head">
+              <span class="checkout-section__icon"><i class="bi bi-credit-card"></i></span>
+              <div>
+                <h2 class="checkout-section__title">Payment</h2>
+                <p class="checkout-section__subtitle">All transactions are secure and encrypted</p>
+              </div>
+            </div>
+
+            <div class="checkout-section__body">
+              <div class="checkout-payment">
+                <label
+                  class="checkout-payment__option"
+                  [class.checkout-payment__option--active]="paymentMethod === 'card'"
+                >
+                  <input type="radio" formControlName="paymentMethod" value="card" />
+                  <span class="checkout-payment__content">
+                    <i class="bi bi-credit-card-2-front"></i>
+                    <span>Credit / Debit Card</span>
+                  </span>
+                </label>
+                <label
+                  class="checkout-payment__option"
+                  [class.checkout-payment__option--active]="paymentMethod === 'cod'"
+                >
+                  <input type="radio" formControlName="paymentMethod" value="cod" />
+                  <span class="checkout-payment__content">
+                    <i class="bi bi-cash-coin"></i>
+                    <span>Cash on Delivery</span>
+                  </span>
+                </label>
+              </div>
+
+              <div *ngIf="paymentMethod === 'card'" class="checkout-card-fields">
+                <div class="checkout-field">
+                  <label class="checkout-label" for="checkout-card-number">Card Number</label>
+                  <input
+                    id="checkout-card-number"
+                    type="text"
+                    formControlName="cardNumber"
+                    placeholder="1234 5678 9012 3456"
+                    inputmode="numeric"
+                    autocomplete="cc-number"
+                    class="checkout-input"
+                    [class.checkout-input--invalid]="isInvalid('cardNumber')"
+                  />
+                  <p class="checkout-field__error" *ngIf="isInvalid('cardNumber')">Enter a valid card number</p>
+                </div>
+
+                <div class="checkout-grid">
+                  <div class="checkout-field">
+                    <label class="checkout-label" for="checkout-expiry">Expiry</label>
+                    <input
+                      id="checkout-expiry"
+                      type="text"
+                      formControlName="cardExpiry"
+                      placeholder="MM / YY"
+                      autocomplete="cc-exp"
+                      class="checkout-input"
+                      [class.checkout-input--invalid]="isInvalid('cardExpiry')"
+                    />
+                    <p class="checkout-field__error" *ngIf="isInvalid('cardExpiry')">Use MM / YY format</p>
+                  </div>
+
+                  <div class="checkout-field">
+                    <label class="checkout-label" for="checkout-cvc">CVC</label>
+                    <input
+                      id="checkout-cvc"
+                      type="text"
+                      formControlName="cardCvc"
+                      placeholder="123"
+                      inputmode="numeric"
+                      autocomplete="cc-csc"
+                      class="checkout-input"
+                      [class.checkout-input--invalid]="isInvalid('cardCvc')"
+                    />
+                    <p class="checkout-field__error" *ngIf="isInvalid('cardCvc')">Enter a valid CVC</p>
+                  </div>
+                </div>
+
+                <div class="checkout-field">
+                  <label class="checkout-label" for="checkout-card-name">Name on Card</label>
+                  <input
+                    id="checkout-card-name"
+                    type="text"
+                    formControlName="cardName"
+                    placeholder="As shown on card"
+                    autocomplete="cc-name"
+                    class="checkout-input"
+                    [class.checkout-input--invalid]="isInvalid('cardName')"
+                  />
+                  <p class="checkout-field__error" *ngIf="isInvalid('cardName')">Name on card is required</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <button type="submit" class="checkout-btn checkout-btn--submit" [disabled]="isSubmitting">
+            <i class="bi bi-bag-check"></i>
+            {{ isSubmitting ? 'Processing...' : 'Place Order' }}
+          </button>
+
+          <div class="checkout-trust">
+            <span><i class="bi bi-shield-check"></i> Secure Checkout</span>
+            <span><i class="bi bi-truck"></i> Fast Delivery</span>
+          </div>
+        </form>
+
+        <aside class="checkout-summary">
+          <div class="checkout-summary__head">
+            <h2>Order Summary</h2>
+            <span *ngIf="cartItems$ | async as items">{{ items.length }} {{ items.length === 1 ? 'item' : 'items' }}</span>
+          </div>
+
+          <div class="checkout-summary__items">
+            <article *ngFor="let item of cartItems$ | async" class="checkout-summary__item">
+              <div class="checkout-summary__thumb">
+                <img [src]="item.image" [alt]="item.name" />
+              </div>
+              <div class="checkout-summary__details">
+                <h4>{{ item.name }}</h4>
+                <p>{{ item.type }} · Qty {{ item.quantity }}</p>
+              </div>
+              <div class="price-amount-wrap checkout-summary__price">
+                <span class="price-amount-sizer" aria-hidden="true">
+                  {{ item.price * item.quantity }} EGP
+                </span>
+                <div class="price-amount-track">
+                  <span
+                    *ngFor="let price of [item.price * item.quantity]; trackBy: trackByPrice"
+                    class="price-amount"
+                    [@priceChange]
+                  >
+                    {{ price }} EGP
+                  </span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="checkout-summary__totals">
+            <div class="checkout-summary__row">
+              <span>Subtotal</span>
+              <div class="price-amount-wrap" *ngIf="cartTotal$ | async as subtotal">
+                <span class="price-amount-sizer" aria-hidden="true">{{ subtotal }} EGP</span>
+                <div class="price-amount-track">
+                  <span
+                    *ngFor="let price of [subtotal]; trackBy: trackByPrice"
+                    class="price-amount"
+                    [@priceChange]
+                  >
+                    {{ price }} EGP
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="checkout-summary__row">
+              <span>Shipping</span>
+              <span>{{ shipping }} EGP</span>
+            </div>
+            <div class="checkout-summary__row checkout-summary__row--total">
+              <span>Total</span>
+              <div class="price-amount-wrap" *ngIf="total$ | async as total">
+                <span class="price-amount-sizer" aria-hidden="true">{{ total }} EGP</span>
+                <div class="price-amount-track">
+                  <span
+                    *ngFor="let price of [total]; trackBy: trackByPrice"
+                    class="price-amount"
+                    [@priceChange]
+                  >
+                    {{ price }} EGP
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

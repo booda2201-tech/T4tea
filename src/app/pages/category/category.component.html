@@ -1,0 +1,178 @@
+<div class="shop-page">
+  <app-navbar [lightOnTop]="true"></app-navbar>
+
+  <section class="shop-hero">
+    <video
+      #categoryHeroVideo
+      class="shop-hero__video"
+      src="assets/videos/tea vid 2.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      aria-hidden="true"
+    ></video>
+    <div class="shop-hero__overlay" aria-hidden="true"></div>
+
+    <div class="shop-hero__content category-hero">
+      <span class="shop-hero__eyebrow">Explore Our Blends</span>
+      <h1 class="shop-hero__title">The Tea Collection</h1>
+      <p class="shop-hero__desc">
+        Premium teas sourced from the finest estates, blended with Egyptian warmth.
+      </p>
+    </div>
+  </section>
+
+  <section class="shop-catalog">
+    <div class="shop-catalog__inner">
+      <header class="shop-header">
+        <div class="shop-header__intro">
+          <span class="shop-header__label">Curated Selection</span>
+          <h2 class="shop-header__title">
+            {{ filteredProducts.length }}
+            <span>{{ filteredProducts.length === 1 ? 'Blend' : 'Blends' }}</span>
+          </h2>
+        </div>
+
+        <div class="shop-header__actions">
+          <div #sortDropdown class="shop-sort">
+            <button
+              type="button"
+              class="shop-action-btn"
+              (click)="toggleSortDropdown()"
+              [attr.aria-expanded]="isSortOpen"
+              aria-haspopup="listbox"
+            >
+              <i class="bi bi-sort-down-alt"></i>
+              <span class="shop-action-btn__text">{{ selectedSortLabel }}</span>
+            </button>
+            <ul *ngIf="isSortOpen" class="shop-sort__menu" role="listbox" aria-label="Sort products">
+              <li *ngFor="let option of sortOptions" role="presentation">
+                <button
+                  type="button"
+                  class="shop-sort__option"
+                  role="option"
+                  [class.shop-sort__option--active]="selectedSort === option.value"
+                  (click)="selectSort(option.value)"
+                >
+                  {{ option.label }}
+                  <i *ngIf="selectedSort === option.value" class="bi bi-check2"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div #refineDropdown class="shop-refine">
+            <button type="button" class="shop-action-btn" (click)="toggleRefine()">
+              <i class="bi bi-sliders2"></i>
+              <span class="shop-action-btn__text">Refine</span>
+              <span *ngIf="refineFilterCount" class="shop-action-btn__badge">{{ refineFilterCount }}</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div #typePills class="shop-type-pills" role="tablist" aria-label="Tea type">
+        <button
+          type="button"
+          class="shop-type-pill"
+          [class.shop-type-pill--active]="!activeTypeFilter"
+          (click)="clearTypeFilters($event)"
+        >
+          All
+        </button>
+        <button
+          type="button"
+          *ngFor="let type of typeOptions"
+          class="shop-type-pill"
+          [class.shop-type-pill--active]="isTypeActive(type)"
+          (click)="toggleTypeFilter(type, $event)"
+        >
+          {{ type }}
+        </button>
+      </div>
+
+      <div *ngIf="selectedFilters.length" class="shop-active-tags">
+        <button
+          *ngFor="let filter of selectedFilters"
+          type="button"
+          class="shop-active-tags__tag"
+          (click)="toggleFilter(filter)"
+        >
+          {{ filter }}
+          <i class="bi bi-x"></i>
+        </button>
+        <button type="button" class="shop-active-tags__clear" (click)="selectedFilters = []">Clear all</button>
+      </div>
+
+      <div *ngIf="sortedProducts.length === 0" class="shop-empty">
+        <p class="shop-empty__title">No teas match your selection</p>
+        <p class="shop-empty__desc">Try a different blend or reset your filters.</p>
+        <button type="button" class="shop-empty__btn" (click)="selectedFilters = []">Reset Filters</button>
+      </div>
+
+      <div class="shop-grid" *ngIf="sortedProducts.length > 0">
+        <article
+          *ngFor="let product of sortedProducts; let i = index"
+          appGsapAnimate="fade-up"
+          [gsapDelay]="i * 0.06"
+          class="shop-card"
+        >
+          <a [routerLink]="['/product', product.id]" class="shop-card__visual">
+            <img [src]="product.image" [alt]="product.title" class="shop-card__image" />
+            <span class="shop-card__accent" aria-hidden="true"></span>
+            <button
+              type="button"
+              class="shop-card__wishlist wishlist-toggle"
+              [class.wishlist-toggle--active]="isWishlisted(product.id)"
+              (click)="toggleWishlist($event, product)"
+              [attr.aria-label]="isWishlisted(product.id) ? 'Remove from wishlist' : 'Add to wishlist'"
+            >
+              <i class="bi" [class.bi-heart-fill]="isWishlisted(product.id)" [class.bi-heart]="!isWishlisted(product.id)"></i>
+            </button>
+          </a>
+          <div class="shop-card__body">
+            <a [routerLink]="['/product', product.id]" class="shop-card__name">{{ product.title }}</a>
+            <div class="shop-card__meta">
+              <span class="shop-card__type">{{ product.type }}</span>
+              <span class="shop-card__dot" aria-hidden="true"></span>
+              <span class="shop-card__price">{{ product.price }} EGP</span>
+            </div>
+            <button type="button" class="shop-card__add" (click)="quickAdd(product, $event)">
+              <i class="bi bi-bag-plus" aria-hidden="true"></i>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div *ngIf="isRefineOpen" class="shop-refine-backdrop" (click)="closeRefine()" aria-hidden="true"></div>
+
+  <aside class="shop-refine-panel" [class.shop-refine-panel--open]="isRefineOpen">
+    <div class="shop-refine-panel__head">
+      <h3 class="shop-refine-panel__title">Refine</h3>
+      <button type="button" class="shop-refine-panel__close" (click)="closeRefine()" aria-label="Close refine panel">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="shop-refine-panel__body">
+      <app-filter-section title="Flavor Profile" [options]="flavorOptions" [selected]="selectedFilters" (filterToggle)="toggleFilter($event)"></app-filter-section>
+      <app-filter-section title="Mood" [options]="moodOptions" [selected]="selectedFilters" (filterToggle)="toggleFilter($event)"></app-filter-section>
+      <app-filter-section title="Caffeine Level" [options]="caffeineOptions" [selected]="selectedFilters" (filterToggle)="toggleFilter($event)"></app-filter-section>
+    </div>
+
+    <div class="shop-refine-panel__foot">
+      <button type="button" class="shop-refine-panel__apply" (click)="closeRefine()">
+        Show {{ filteredProducts.length }} {{ filteredProducts.length === 1 ? 'result' : 'results' }}
+      </button>
+      <button *ngIf="refineFilterCount" type="button" class="shop-refine-panel__reset" (click)="clearRefineFilters()">
+        Clear refine filters
+      </button>
+    </div>
+  </aside>
+
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,37 @@
+.price-amount-wrap {
+  display: inline-grid;
+  vertical-align: baseline;
+  justify-items: end;
+}
+
+.price-amount-sizer,
+.price-amount {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+.price-amount-sizer {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.price-amount-track {
+  position: relative;
+  grid-area: 1 / 1;
+  overflow: hidden;
+  min-width: 100%;
+}
+
+.price-amount {
+  display: block;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .price-amount-track {
+    overflow: visible;
+  }
+}

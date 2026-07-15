@@ -1,0 +1,36 @@
+.social-icons {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(247, 239, 223, 0.7);
+  text-decoration: none;
+  line-height: 1;
+  transition: color 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.fb:hover {
+    color: #1877f2;
+  }
+
+  &.ig:hover {
+    color: #e4405f;
+  }
+
+  &.wa:hover {
+    color: #25d366;
+  }
+
+  &.tk:hover {
+    color: #fe2c55;
+  }
+}

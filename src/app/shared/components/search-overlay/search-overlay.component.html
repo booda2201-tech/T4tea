@@ -1,0 +1,69 @@
+<ng-container *ngIf="isRendered">
+  <div #backdrop class="search-overlay__backdrop" (click)="closeSearch()" aria-hidden="true"></div>
+
+  <div
+    #panel
+    class="search-overlay__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Search products"
+    (keydown)="onKeydown($event)"
+  >
+    <div class="search-overlay__header">
+      <div class="search-overlay__input-wrap">
+        <i class="bi bi-search search-overlay__icon" aria-hidden="true"></i>
+        <input
+          #searchInput
+          type="text"
+          class="search-overlay__input"
+          placeholder="Search teas, teawares, flavors..."
+          [(ngModel)]="query"
+          (ngModelChange)="onQueryChange()"
+          autocomplete="off"
+          aria-label="Search"
+        />
+        <button
+          *ngIf="query"
+          type="button"
+          class="search-overlay__clear"
+          (click)="query = ''; onQueryChange()"
+          aria-label="Clear search"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <button type="button" class="search-overlay__close" (click)="closeSearch()" aria-label="Close search">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="search-overlay__body">
+      <div *ngIf="!query" class="search-overlay__hint">
+        <p>Try searching for <strong>Mint</strong>, <strong>Green Tea</strong>, or <strong>Teapot</strong>.</p>
+      </div>
+
+      <div *ngIf="query && results.length === 0" class="search-overlay__empty">
+        <div class="search-overlay__empty-icon"><i class="bi bi-search"></i></div>
+        <h3>No results found</h3>
+        <p>We couldn't find anything matching "{{ query }}".</p>
+        <button type="button" class="search-overlay__btn" (click)="goToShop()">Browse All Tea</button>
+      </div>
+
+      <ul *ngIf="results.length > 0" class="search-overlay__results">
+        <li *ngFor="let result of results">
+          <button type="button" class="search-overlay__result" (click)="openResult(result)">
+            <div class="search-overlay__thumb">
+              <img [src]="result.image" [alt]="result.title" />
+            </div>
+            <div class="search-overlay__details">
+              <span class="search-overlay__category">{{ result.category === 'tea' ? 'Tea' : 'Teaware' }}</span>
+              <h4>{{ result.title }}</h4>
+              <p>{{ result.type }}</p>
+            </div>
+            <span class="search-overlay__price">{{ result.price }} EGP</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ng-container>

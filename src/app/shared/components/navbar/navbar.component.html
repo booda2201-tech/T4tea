@@ -1,0 +1,298 @@
+<nav
+  #navEl
+  class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300"
+  [style.background-color]="isScrolled ? 'rgba(247, 239, 223, 0.9)' : 'transparent'"
+  [class.bg-cream]="isScrolled"
+  [class.bg-transparent]="!isScrolled"
+  [class.backdrop-blur-md]="isScrolled"
+  [class.shadow-sm]="isScrolled"
+  [class.py-2]="isScrolled"
+  [class.py-3]="!isScrolled"
+  [class.navbar--menu-hidden]="isMobileMenuOpen"
+>
+  <div class="relative page-container navbar-shell flex items-center justify-between min-h-[3.25rem] md:min-h-[3.75rem]">
+    <div class="navbar-shell__spacer flex-1 md:hidden" aria-hidden="true"></div>
+
+    <div class="hidden md:flex items-center space-x-8 flex-1">
+      <a
+        routerLink="/shop"
+        class="text-sm font-medium tracking-wide transition-colors no-underline"
+        [class.text-white]="lightOnTop && !isScrolled"
+        [class.hover:text-white]="lightOnTop && !isScrolled"
+        [class.text-ink]="!lightOnTop || isScrolled"
+        [class.hover:text-mocha]="!lightOnTop || isScrolled"
+      >Shop Tea</a>
+      <a
+        routerLink="/explore"
+        class="text-sm font-medium tracking-wide transition-colors no-underline"
+        [class.text-white]="lightOnTop && !isScrolled"
+        [class.hover:text-white]="lightOnTop && !isScrolled"
+        [class.text-ink]="!lightOnTop || isScrolled"
+        [class.hover:text-mocha]="!lightOnTop || isScrolled"
+      >Explore</a>
+      <a
+        routerLink="/teawares"
+        class="text-sm font-medium tracking-wide transition-colors no-underline"
+        [class.text-white]="lightOnTop && !isScrolled"
+        [class.hover:text-white]="lightOnTop && !isScrolled"
+        [class.text-ink]="!lightOnTop || isScrolled"
+        [class.hover:text-mocha]="!lightOnTop || isScrolled"
+      >Teawares</a>
+      <a
+        routerLink="/about"
+        class="text-sm font-medium tracking-wide transition-colors no-underline"
+        [class.text-white]="lightOnTop && !isScrolled"
+        [class.hover:text-white]="lightOnTop && !isScrolled"
+        [class.text-ink]="!lightOnTop || isScrolled"
+        [class.hover:text-mocha]="!lightOnTop || isScrolled"
+      >About Us</a>
+    </div>
+
+    <div class="navbar-actions flex items-center flex-1 justify-end">
+      <div class="navbar-actions__tools" [class.navbar-actions__tools--hidden]="isMobileMenuOpen">
+      <button
+        type="button"
+        class="navbar-icon-btn"
+        [class.navbar-icon-btn--light]="lightOnTop && !isScrolled && !isMobileMenuOpen"
+        (click)="openSearch()"
+        aria-label="Search"
+      >
+        <i class="bi bi-search"></i>
+      </button>
+      <div
+        class="navbar-profile d-none d-md-block"
+        (mouseenter)="openProfileMenu()"
+        (mouseleave)="closeProfileMenu()"
+      >
+        <button
+          type="button"
+          class="navbar-profile__trigger"
+          [class.navbar-profile__trigger--active]="isProfileMenuOpen"
+          [class.navbar-profile__trigger--light]="lightOnTop && !isScrolled"
+          aria-haspopup="true"
+          [attr.aria-expanded]="isProfileMenuOpen"
+        >
+          <i class="bi bi-person text-lg"></i>
+        </button>
+
+        <div class="navbar-profile__dropdown" [class.navbar-profile__dropdown--open]="isProfileMenuOpen">
+          <div class="navbar-profile__menu">
+            <a routerLink="/profile" class="navbar-profile__item" (click)="closeProfileMenu()">Profile</a>
+            <a *ngIf="!(isLoggedIn$ | async)" routerLink="/login" class="navbar-profile__item" (click)="closeProfileMenu()">Login</a>
+            <button *ngIf="isLoggedIn$ | async" type="button" class="navbar-profile__item navbar-profile__item--button" (click)="logout()">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="wishlistCount$ | async as wishlistCount">
+        <a
+          routerLink="/wishlist"
+          class="navbar-wishlist navbar-icon-btn d-none d-md-grid no-underline"
+          [class.navbar-wishlist--active]="wishlistCount > 0"
+          [class.navbar-wishlist--light]="lightOnTop && !isScrolled"
+          [class.navbar-icon-btn--light]="lightOnTop && !isScrolled"
+          aria-label="Wishlist"
+        >
+          <i
+            class="bi"
+            [class.bi-heart-fill]="wishlistCount > 0"
+            [class.bi-heart]="wishlistCount === 0"
+          ></i>
+          <span
+            *ngIf="wishlistCount > 0"
+            class="navbar-icon-btn__badge navbar-wishlist__badge"
+          >{{ wishlistCount }}</span>
+        </a>
+      </ng-container>
+      <button
+        type="button"
+        class="navbar-icon-btn navbar-icon-btn--cart"
+        [class.navbar-icon-btn--light]="lightOnTop && !isScrolled && !isMobileMenuOpen"
+        (click)="toggleCart()"
+        aria-label="Cart"
+      >
+        <i class="bi bi-cart3"></i>
+        <span
+          *ngIf="cartCount$ | async as count"
+          class="navbar-icon-btn__badge"
+          [class.d-none]="count === 0"
+        >{{ count }}</span>
+      </button>
+      </div>
+      <button
+        type="button"
+        class="navbar-icon-btn d-md-none navbar-actions__toggle"
+        [class.navbar-icon-btn--light]="lightOnTop && !isScrolled && !isMobileMenuOpen"
+        [class.navbar-icon-btn--menu-open]="isMobileMenuOpen"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-controls="navbar-mobile-menu"
+        [attr.aria-label]="isMobileMenuOpen ? 'Close menu' : 'Open menu'"
+      >
+        <i class="bi" [class.bi-x-lg]="isMobileMenuOpen" [class.bi-list]="!isMobileMenuOpen"></i>
+      </button>
+    </div>
+  </div>
+
+  <a
+    routerLink="/home"
+    class="navbar-logo absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex-shrink-0 cursor-pointer block no-underline z-10 pointer-events-auto"
+    (click)="closeMobileMenu()"
+  >
+    <img
+      src="assets/imges/logo.png"
+      alt="T4 TEA"
+      class="h-16 md:h-[4.25rem] w-auto object-contain transition-[filter] duration-300"
+      [class.brightness-0]="lightOnTop && !isScrolled"
+      [class.invert]="lightOnTop && !isScrolled"
+    />
+  </a>
+</nav>
+
+<div
+  *ngIf="isMobileMenuOpen"
+  id="navbar-mobile-menu"
+  class="navbar-mobile-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Mobile navigation"
+>
+  <aside class="navbar-mobile-menu__panel">
+    <header class="navbar-mobile-menu__topbar">
+      <a routerLink="/home" class="navbar-mobile-menu__brand" (click)="closeMobileMenu()">
+        <img src="assets/imges/logo.png" alt="T4 TEA" />
+      </a>
+
+      <button type="button" class="navbar-mobile-menu__close" (click)="closeMobileMenu()" aria-label="Close menu">
+        <span class="navbar-mobile-menu__close-label">Close</span>
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="navbar-mobile-menu__hero">
+      <img
+        src="assets/imges/6Q1A2201 1.png"
+        alt=""
+        class="navbar-mobile-menu__hero-image"
+        aria-hidden="true"
+      />
+      <div class="navbar-mobile-menu__hero-overlay"></div>
+      <div class="navbar-mobile-menu__hero-copy">
+        <span class="navbar-mobile-menu__eyebrow">The Egyptian Tea Ritual</span>
+        <p class="navbar-mobile-menu__hero-text">Slow down. Breathe. Sip.</p>
+      </div>
+    </div>
+
+    <div class="navbar-mobile-menu__body">
+      <p class="navbar-mobile-menu__section-label">Menu</p>
+
+      <nav class="navbar-mobile-menu__nav" aria-label="Collections">
+        <a
+          routerLink="/shop"
+          routerLinkActive="navbar-mobile-menu__nav-link--active"
+          class="navbar-mobile-menu__nav-link"
+          (click)="closeMobileMenu()"
+        >
+          <span class="navbar-mobile-menu__nav-index">01</span>
+          <span class="navbar-mobile-menu__nav-copy">
+            <span class="navbar-mobile-menu__nav-label">Shop Tea</span>
+            <span class="navbar-mobile-menu__nav-meta">Signature blends &amp; infusions</span>
+          </span>
+          <span class="navbar-mobile-menu__nav-go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
+        </a>
+
+        <a
+          routerLink="/explore"
+          routerLinkActive="navbar-mobile-menu__nav-link--active"
+          class="navbar-mobile-menu__nav-link"
+          (click)="closeMobileMenu()"
+        >
+          <span class="navbar-mobile-menu__nav-index">02</span>
+          <span class="navbar-mobile-menu__nav-copy">
+            <span class="navbar-mobile-menu__nav-label">Explore</span>
+            <span class="navbar-mobile-menu__nav-meta">Collections &amp; moods</span>
+          </span>
+          <span class="navbar-mobile-menu__nav-go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
+        </a>
+
+        <a
+          routerLink="/teawares"
+          routerLinkActive="navbar-mobile-menu__nav-link--active"
+          class="navbar-mobile-menu__nav-link"
+          (click)="closeMobileMenu()"
+        >
+          <span class="navbar-mobile-menu__nav-index">03</span>
+          <span class="navbar-mobile-menu__nav-copy">
+            <span class="navbar-mobile-menu__nav-label">Teawares</span>
+            <span class="navbar-mobile-menu__nav-meta">Cups, pots &amp; rituals</span>
+          </span>
+          <span class="navbar-mobile-menu__nav-go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
+        </a>
+
+        <a
+          routerLink="/about"
+          routerLinkActive="navbar-mobile-menu__nav-link--active"
+          class="navbar-mobile-menu__nav-link"
+          (click)="closeMobileMenu()"
+        >
+          <span class="navbar-mobile-menu__nav-index">04</span>
+          <span class="navbar-mobile-menu__nav-copy">
+            <span class="navbar-mobile-menu__nav-label">About Us</span>
+            <span class="navbar-mobile-menu__nav-meta">Our story &amp; philosophy</span>
+          </span>
+          <span class="navbar-mobile-menu__nav-go" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
+        </a>
+      </nav>
+
+      <div class="navbar-mobile-menu__account">
+        <a
+          *ngIf="isLoggedIn$ | async"
+          routerLink="/profile"
+          routerLinkActive="navbar-mobile-menu__account-chip--active"
+          class="navbar-mobile-menu__account-chip"
+          (click)="closeMobileMenu()"
+        >
+          Profile
+        </a>
+
+        <a
+          routerLink="/wishlist"
+          routerLinkActive="navbar-mobile-menu__account-chip--active"
+          class="navbar-mobile-menu__account-chip"
+          (click)="closeMobileMenu()"
+        >
+          Wishlist
+          <span *ngIf="wishlistCount$ | async as wishlistCount" class="navbar-mobile-menu__badge" [hidden]="wishlistCount === 0">{{ wishlistCount }}</span>
+        </a>
+
+        <a
+          *ngIf="!(isLoggedIn$ | async)"
+          routerLink="/login"
+          routerLinkActive="navbar-mobile-menu__account-chip--active"
+          class="navbar-mobile-menu__account-chip"
+          (click)="closeMobileMenu()"
+        >
+          Login
+        </a>
+      </div>
+    </div>
+
+    <footer class="navbar-mobile-menu__footer">
+      <a routerLink="/best-sellers" class="navbar-mobile-menu__cta" (click)="closeMobileMenu()">
+        <span>Explore Best Sellers</span>
+        <i class="bi bi-arrow-right"></i>
+      </a>
+
+      <button
+        *ngIf="isLoggedIn$ | async"
+        type="button"
+        class="navbar-mobile-menu__logout"
+        (click)="logout()"
+      >
+        <span class="navbar-mobile-menu__logout-text">Logout</span>
+        <i class="bi bi-box-arrow-right navbar-mobile-menu__logout-icon" aria-hidden="true"></i>
+      </button>
+    </footer>
+  </aside>
+</div>

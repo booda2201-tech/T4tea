@@ -1,0 +1,244 @@
+@import '../../../styles/layout';
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.login-page__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+.login-page__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 61, 46, 0.55) 0%,
+    rgba(45, 36, 28, 0.65) 50%,
+    rgba(15, 61, 46, 0.7) 100%
+  );
+  pointer-events: none;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2rem, 28rem);
+  padding: clamp(1.75rem, 4vw, 2.25rem);
+  border-radius: 1.35rem;
+  background: rgba(247, 239, 223, 0.12);
+  border: 1px solid rgba(247, 239, 223, 0.24);
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 24px 50px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  @include large-desktop {
+    width: min(100% - 2rem, 32rem);
+    padding: clamp(2rem, 3vw, 2.75rem);
+  }
+}
+
+.login-card__logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.35rem;
+  text-decoration: none;
+
+  img {
+    height: clamp(4rem, 10vw, 5rem);
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+}
+
+.form-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  text-align: center;
+
+  .welcome-text {
+    margin: 0 0 1.75rem;
+
+    h2 {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .subtext {
+      margin: 0.75rem 0 0;
+      font-size: 0.85rem;
+      font-weight: 400;
+      opacity: 0.85;
+      color: rgba(255, 255, 255, 0.88);
+    }
+  }
+
+  .auth-form {
+    .input-group {
+      position: relative;
+      margin-bottom: 2.2rem;
+
+      input {
+        width: 100%;
+        padding: 24px 45px 8px 45px !important;
+        text-align: start;
+        background: rgba(255, 250, 240, 0.9);
+        border-radius: 12px;
+        border: 2px solid transparent;
+        font-size: 1rem;
+        color: #4a3a2a;
+        transition: all 0.3s ease;
+        outline: none;
+
+        &:focus {
+          border-color: rgba(74, 58, 42, 0.3);
+          background: #fff;
+        }
+
+        &.ng-invalid.ng-touched {
+          border-color: #ff4d4d !important;
+          background: rgba(255, 230, 230, 0.9) !important;
+        }
+
+        &:focus + label,
+        &:not(:placeholder-shown) + label {
+          top: 6px;
+          left: 15px;
+          transform: translateY(0);
+          font-size: 0.7rem;
+          color: #4a3a2a;
+          font-weight: 700;
+          opacity: 0.8;
+        }
+      }
+
+      label {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 0.95rem;
+        pointer-events: none;
+        transition: all 0.25s ease-out;
+        z-index: 10;
+      }
+
+      i {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 11;
+        cursor: pointer;
+        color: #4a3a2a;
+        opacity: 0.6;
+        font-size: 1.1rem;
+        transition: 0.3s;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .error-msg {
+        color: #ff4d4d;
+        font-size: 0.7rem;
+        position: absolute;
+        bottom: -18px;
+        left: 0;
+        right: 0;
+        text-align: start;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .options-link {
+    text-align: end;
+  }
+
+  .forgot-link {
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+    font-size: 0.8rem;
+    opacity: 0.8;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .toggle-text {
+    color: white;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .status-msg {
+    margin: 0 0 1rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+
+    &--error {
+      background: rgba(255, 77, 77, 0.2);
+      color: #ffd6d6;
+    }
+  }
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #fdf6e3 !important;
+  color: #4a3a2a !important;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  &:disabled {
+    background: #ccc !important;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

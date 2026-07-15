@@ -1,0 +1,155 @@
+<ng-container *ngIf="isRendered">
+  <div
+    #backdrop
+    class="cart-drawer-backdrop"
+    (click)="closeCart()"
+    aria-hidden="true"
+  ></div>
+
+  <aside
+    #panel
+    class="cart-drawer-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Your Cart"
+  >
+    <header class="cart-drawer__header">
+      <div>
+        <span class="cart-drawer__eyebrow">Your Selection</span>
+        <h2 class="cart-drawer__title">Your Cart</h2>
+      </div>
+      <button type="button" class="cart-drawer__close" (click)="closeCart()" aria-label="Close cart">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <div class="cart-drawer__body">
+      <ng-container *ngIf="cartItems$ | async as items">
+        <div *ngIf="items.length === 0" class="cart-drawer__empty">
+          <div class="cart-drawer__empty-icon"><i class="bi bi-bag"></i></div>
+          <h3>Your cart is empty</h3>
+          <p>Discover our remarkable blends and teawares.</p>
+        </div>
+
+        <div *ngIf="items.length > 0" class="cart-drawer__items">
+          <article *ngFor="let item of items" class="cart-drawer__item">
+            <div class="cart-drawer__thumb">
+              <img [src]="item.image" [alt]="item.name" />
+            </div>
+
+            <div class="cart-drawer__details">
+              <div class="cart-drawer__item-top">
+                <div>
+                  <h4>{{ item.name }}</h4>
+                  <p>{{ item.type }}</p>
+                </div>
+                <button
+                  type="button"
+                  class="cart-drawer__remove"
+                  (click)="removeFromCart(item.id)"
+                  aria-label="Remove item"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+
+              <div class="cart-drawer__item-bottom">
+                <div class="cart-drawer__qty">
+                  <button
+                    type="button"
+                    class="cart-drawer__qty-btn"
+                    (click)="updateQuantity(item.id, item.quantity - 1)"
+                    aria-label="Decrease quantity"
+                  >
+                    <i class="bi bi-dash"></i>
+                  </button>
+                  <span class="cart-drawer__qty-value">{{ item.quantity }}</span>
+                  <button
+                    type="button"
+                    class="cart-drawer__qty-btn"
+                    (click)="updateQuantity(item.id, item.quantity + 1)"
+                    aria-label="Increase quantity"
+                  >
+                    <i class="bi bi-plus"></i>
+                  </button>
+                </div>
+                <div class="price-amount-wrap cart-drawer__price">
+                  <span class="price-amount-sizer" aria-hidden="true">
+                    {{ item.price * item.quantity }} EGP
+                  </span>
+                  <div class="price-amount-track">
+                    <span
+                      *ngFor="let price of [item.price * item.quantity]; trackBy: trackByPrice"
+                      class="price-amount"
+                      [@priceChange]
+                    >
+                      {{ price }} EGP
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </ng-container>
+    </div>
+
+    <ng-container *ngIf="cartItems$ | async as items">
+      <footer *ngIf="items.length === 0" class="cart-drawer__footer cart-drawer__footer--empty">
+        <div *ngIf="(isLoggedIn$ | async) === false" class="cart-drawer__signin">
+          <i class="bi bi-person-circle"></i>
+          <p>Sign in first, then order at your ease.</p>
+          <button type="button" class="cart-drawer__signin-btn" (click)="goToLogin()">Sign In</button>
+        </div>
+
+        <button type="button" class="cart-drawer__btn cart-drawer__btn--primary" (click)="goToShop()">
+          Shop Tea
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </footer>
+
+      <footer *ngIf="items.length > 0" class="cart-drawer__footer">
+        <div class="cart-drawer__promo">
+          <i class="bi bi-tag"></i>
+          <input type="text" placeholder="Promo code" aria-label="Promo code" />
+        </div>
+
+        <div class="cart-drawer__subtotal">
+          <span>Subtotal</span>
+          <div class="price-amount-wrap cart-drawer__subtotal-value" *ngIf="cartTotal$ | async as total">
+            <span class="price-amount-sizer" aria-hidden="true">{{ total }} EGP</span>
+            <div class="price-amount-track">
+              <span
+                *ngFor="let price of [total]; trackBy: trackByPrice"
+                class="price-amount"
+                [@priceChange]
+              >
+                {{ price }} EGP
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p class="cart-drawer__note">Shipping and taxes calculated at checkout.</p>
+
+        <ng-container *ngIf="isLoggedIn$ | async; else signInToOrder">
+          <button type="button" class="cart-drawer__btn cart-drawer__btn--primary" (click)="handleCheckout()">
+            <i class="bi bi-bag-check"></i>
+            Proceed to Checkout
+          </button>
+        </ng-container>
+
+        <ng-template #signInToOrder>
+          <div class="cart-drawer__signin">
+            <i class="bi bi-person-circle"></i>
+            <p>Sign in first, then order at your ease.</p>
+          </div>
+          <button type="button" class="cart-drawer__btn cart-drawer__btn--primary" (click)="goToLogin()">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Sign In to Order
+          </button>
+        </ng-template>
+      </footer>
+    </ng-container>
+  </aside>
+</ng-container>

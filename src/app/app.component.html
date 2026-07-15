@@ -1,0 +1,7 @@
+<app-splash *ngIf="showSplash" (completed)="onSplashComplete()"></app-splash>
+
+<ng-container *ngIf="!showSplash">
+  <app-cart-drawer></app-cart-drawer>
+  <app-search-overlay></app-search-overlay>
+  <router-outlet></router-outlet>
+</ng-container>

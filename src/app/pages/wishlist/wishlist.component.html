@@ -1,0 +1,84 @@
+<div class="wishlist-page min-h-screen bg-cream font-sans text-ink selection:bg-emerald/20">
+  <app-navbar></app-navbar>
+
+  <section class="wishlist-hero">
+    <div class="wishlist-hero__content">
+      <span class="wishlist-hero__eyebrow">Saved for Later</span>
+      <h1 class="wishlist-hero__title font-serif">Your Wishlist</h1>
+      <p class="wishlist-hero__desc">
+        Blends and teawares you've marked with a heart — ready whenever you are.
+      </p>
+    </div>
+  </section>
+
+  <section class="wishlist-main">
+    <div class="page-container">
+      <div *ngIf="wishlistItems$ | async as items">
+        <div *ngIf="items.length === 0" class="wishlist-empty">
+          <div class="wishlist-empty__icon"><i class="bi bi-heart"></i></div>
+          <h2 class="font-serif">Nothing saved yet</h2>
+          <p>Tap the heart on any blend or teaware to build your personal collection.</p>
+          <div class="wishlist-empty__actions">
+            <a routerLink="/shop" class="wishlist-btn wishlist-btn--primary">Shop Tea</a>
+            <a routerLink="/teawares" class="wishlist-btn wishlist-btn--ghost">Browse Teawares</a>
+          </div>
+        </div>
+
+        <div *ngIf="items.length > 0">
+          <div class="wishlist-toolbar">
+            <div class="wishlist-toolbar__left">
+              <h2 class="wishlist-toolbar__title font-serif">Saved Items</h2>
+              <p class="wishlist-toolbar__count">
+                {{ items.length }} {{ items.length === 1 ? 'piece' : 'pieces' }} in your list
+              </p>
+            </div>
+            <a routerLink="/shop" class="wishlist-toolbar__link">
+              Continue Shopping
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="wishlist-grid">
+            <article
+              *ngFor="let item of items; let i = index"
+              appGsapAnimate="fade-up"
+              [gsapDelay]="i * 0.06"
+              class="wishlist-card"
+            >
+              <div class="wishlist-card__visual">
+                <a [routerLink]="['/product', item.id]" class="wishlist-card__image-link no-underline">
+                  <img [src]="item.image" [alt]="item.name" class="wishlist-card__image" />
+                </a>
+                <button
+                  type="button"
+                  class="wishlist-card__remove wishlist-toggle wishlist-toggle--active"
+                  (click)="removeFromWishlist($event, item.id)"
+                  aria-label="Remove from wishlist"
+                >
+                  <i class="bi bi-heart-fill"></i>
+                </button>
+              </div>
+
+              <div class="wishlist-card__body">
+                <a [routerLink]="['/product', item.id]" class="wishlist-card__name font-serif no-underline">
+                  {{ item.name }}
+                </a>
+                <div class="wishlist-card__meta">
+                  <span class="wishlist-card__type">{{ item.type }}</span>
+                  <span class="wishlist-card__dot" aria-hidden="true"></span>
+                  <span class="wishlist-card__price">{{ item.price }} EGP</span>
+                </div>
+                <button type="button" class="wishlist-card__add" (click)="addToCart($event, item)">
+                  <i class="bi bi-bag-plus" aria-hidden="true"></i>
+                  <span>Add to Cart</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+</div>

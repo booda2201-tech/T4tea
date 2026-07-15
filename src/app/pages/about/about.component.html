@@ -1,0 +1,68 @@
+<div class="min-h-screen bg-cream font-sans text-ink selection:bg-emerald/20">
+  <app-navbar></app-navbar>
+
+  <section class="pt-28 pb-24 relative overflow-hidden about-hero">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <span class="text-xs uppercase tracking-luxe text-mocha mb-4 block">Our Story</span>
+      <h1 class="font-serif text-5xl md:text-6xl text-emerald mb-8 about-hero__title">
+        Crafting the<br />
+        <span class="italic text-mocha">Egyptian Tea Ritual</span>
+      </h1>
+      <p class="text-ink/80 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto">
+        T4 Tea was born from a desire to elevate the everyday act of drinking tea into a moment of profound connection and quiet luxury.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-24 bg-sand">
+    <div class="page-container grid md:grid-cols-2 gap-16 items-center about-section-grid">
+      <div appGsapAnimate="fade-left">
+        <span class="text-xs uppercase tracking-luxe text-terracotta mb-4 block">Our Philosophy</span>
+        <h2 class="font-serif text-4xl text-emerald mb-8 about-section-title">Slow Living in Every Sip</h2>
+        <p class="text-ink/80 text-lg mb-6 font-light leading-relaxed">
+          In a fast-paced world, we believe in the power of the pause. The Egyptian tea ritual is not just about the beverage; it is about the time taken to prepare it, the aroma that fills the room, and the warmth of the cup in your hands.
+        </p>
+        <p class="text-ink/80 text-lg font-light leading-relaxed">
+          We source only the finest leaves from sustainable estates, blending them with care to create symphonies of flavor that honor both tradition and modern refinement.
+        </p>
+      </div>
+      <div appGsapAnimate="fade-right" [gsapDelay]="0.2">
+        <img
+          src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?q=80&w=1500&auto=format&fit=crop"
+          alt="Tea ritual"
+          class="w-full h-[500px] object-cover rounded-sm"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-cream">
+    <div class="page-container">
+      <div class="grid md:grid-cols-3 gap-12 about-values-grid">
+        <div appGsapAnimate="fade-up" class="text-center">
+          <span class="font-serif text-5xl text-gold mb-4 block">01</span>
+          <h3 class="font-serif text-2xl text-emerald mb-4">Aroma</h3>
+          <p class="text-ink/70 font-light leading-relaxed">
+            The first encounter. We meticulously preserve the essential oils of our leaves to ensure a captivating fragrance.
+          </p>
+        </div>
+        <div appGsapAnimate="fade-up" [gsapDelay]="0.1" class="text-center">
+          <span class="font-serif text-5xl text-gold mb-4 block">02</span>
+          <h3 class="font-serif text-2xl text-emerald mb-4">Balance</h3>
+          <p class="text-ink/70 font-light leading-relaxed">
+            The perfect harmony of flavor notes. Neither too astringent nor too mild, crafted for a smooth, lingering finish.
+          </p>
+        </div>
+        <div appGsapAnimate="fade-up" [gsapDelay]="0.2" class="text-center">
+          <span class="font-serif text-5xl text-gold mb-4 block">03</span>
+          <h3 class="font-serif text-2xl text-emerald mb-4">Artistry</h3>
+          <p class="text-ink/70 font-light leading-relaxed">
+            From the hand-plucked leaves to the elegant teawares, every element is chosen with an eye for beauty and craft.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+</div>

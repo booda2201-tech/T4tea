@@ -1,0 +1,40 @@
+<section class="best-seller-section">
+  <div class="connecting-line"></div>
+  <div class="decor-item tea-bag-decor">
+    <img src="assets/imges/Vector (1).png" alt="">
+  </div>
+
+  <div class="best-seller-container position-relative" style="z-index: 5;">
+    <div class="section-header">
+      <h2 class="section-title">Best Seller</h2>
+      <p class="section-subtitle">Savor the Art of Fine Tea.</p>
+      <a routerLink="/best-sellers" class="section-view-all">
+        View All
+        <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="carousel-wrapper">
+      <swiper-container #swiperRef init="false" class="best-seller-swiper">
+        <swiper-slide *ngFor="let product of teaProducts">
+          <a [routerLink]="['/product', product.id]" class="product-item no-underline">
+            <div class="hover-decor leaves-left">
+              <img src="assets/imges/warda.png" alt="">
+            </div>
+
+            <img [src]="product.image" [alt]="product.title" class="main-can">
+
+            <div class="hover-decor leaves-right">
+              <img src="assets/imges/warda1.png" alt="">
+            </div>
+            <div class="hover-line"></div>
+          </a>
+        </swiper-slide>
+      </swiper-container>
+    </div>
+  </div>
+
+  <div class="decor-item press-decor">
+    <img src="assets/imges/Tea Press.png" alt="">
+  </div>
+</section>

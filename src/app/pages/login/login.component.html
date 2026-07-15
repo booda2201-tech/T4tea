@@ -1,0 +1,97 @@
+<div class="login-page">
+  <video
+    #loginVideo
+    class="login-page__video"
+    src="assets/videos/tea 3.mp4"
+    autoplay
+    muted
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  ></video>
+  <div class="login-page__overlay" aria-hidden="true"></div>
+
+  <div class="login-card">
+    <a routerLink="/home" class="login-card__logo">
+      <img src="assets/imges/Group 7.png" alt="T4 TEA" />
+    </a>
+
+    <div class="form-wrapper">
+      <div class="welcome-text">
+        <h2>{{ config.title }}</h2>
+        <p class="subtext">{{ config.subtitle }}</p>
+      </div>
+
+      <p *ngIf="statusMessage" class="status-msg" [class.status-msg--error]="isError">
+        {{ statusMessage }}
+      </p>
+
+      <form class="auth-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+        <div class="input-group" *ngIf="isSignupMode">
+          <input type="text" formControlName="name" id="name" placeholder=" " autocomplete="name" />
+          <label for="name">Full Name</label>
+          <small class="error-msg" *ngIf="authForm.get('name')?.touched && authForm.get('name')?.invalid">
+            Field is required
+          </small>
+        </div>
+
+        <div class="input-group" *ngIf="!isResetMode">
+          <input
+            type="tel"
+            formControlName="phone"
+            id="phone"
+            placeholder=" "
+            autocomplete="tel"
+          />
+          <label for="phone">Phone Number</label>
+          <small class="error-msg" *ngIf="authForm.get('phone')?.touched && authForm.get('phone')?.invalid">
+            Valid Egyptian mobile required
+          </small>
+        </div>
+
+        <div class="input-group" *ngIf="isLoginMode || isSignupMode || isResetMode">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            id="password"
+            placeholder=" "
+            [attr.autocomplete]="isSignupMode || isResetMode ? 'new-password' : 'current-password'"
+          />
+          <label for="password">{{ isResetMode ? 'New Password' : 'Password' }}</label>
+          <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="togglePasswordVisibility()"></i>
+          <small class="error-msg" *ngIf="authForm.get('password')?.touched && authForm.get('password')?.invalid">
+            Min 6 characters required
+          </small>
+        </div>
+
+        <div class="input-group" *ngIf="isSignupMode || isResetMode">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            id="confirmPassword"
+            placeholder=" "
+            autocomplete="new-password"
+          />
+          <label for="confirmPassword">Confirm Password</label>
+          <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'" (click)="toggleConfirmPasswordVisibility()"></i>
+          <small
+            class="error-msg"
+            *ngIf="authForm.get('confirmPassword')?.touched && (authForm.get('confirmPassword')?.invalid || authForm.hasError('mismatch'))"
+          >
+            Passwords must match
+          </small>
+        </div>
+
+        <div class="options-link mt-2" *ngIf="isLoginMode">
+          <button type="button" class="forgot-link" (click)="switchMode('forgot')">Forgot Password?</button>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="isButtonDisabled()">{{ config.submitLabel }}</button>
+      </form>
+
+      <p *ngIf="config.toggleMode" class="toggle-text" (click)="switchMode(config.toggleMode!)">
+        {{ config.toggleText }}
+      </p>
+    </div>
+  </div>
+</div>

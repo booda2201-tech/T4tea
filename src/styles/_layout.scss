@@ -1,0 +1,36 @@
+$bp-desktop: 768px;
+$bp-desktop-wide: 900px;
+$bp-desktop-lg: 1500px;
+
+$container-sm: 68rem;
+$container-lg: 92rem;
+
+@mixin small-desktop {
+  @media (min-width: #{$bp-desktop-wide}) and (max-width: 1499px) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: #{$bp-desktop-lg}) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: #{$bp-desktop-wide}) {
+    @content;
+  }
+}
+
+@mixin page-container {
+  width: 100%;
+  max-width: $container-sm;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 3vw, 2rem);
+
+  @include large-desktop {
+    max-width: $container-lg;
+    padding-inline: clamp(2rem, 3vw, 3rem);
+  }
+}

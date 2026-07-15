@@ -1,0 +1,9 @@
+{
+  "/api": {
+    "target": "https://alhendalcompany-001-site9.atempurl.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "followRedirects": false
+  }
+}

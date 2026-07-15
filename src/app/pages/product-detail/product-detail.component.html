@@ -1,0 +1,242 @@
+<div *ngIf="product" class="product-detail">
+  <app-navbar></app-navbar>
+
+  <div class="product-detail__body">
+    <div class="product-detail__container">
+      <nav class="product-detail__breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/home">Home</a>
+        <span>/</span>
+        <a routerLink="/shop">Shop</a>
+        <span>/</span>
+        <span>{{ product.title }}</span>
+      </nav>
+
+      <div class="product-detail__hero">
+        <div class="product-detail__gallery product-image">
+          <div class="product-detail__main-image">
+            <div class="product-detail__main-glow" aria-hidden="true"></div>
+            <img [src]="product.image" [alt]="product.title" />
+          </div>
+          <div class="product-detail__thumbs">
+            <button
+              *ngFor="let i of [1, 2, 3, 4]"
+              type="button"
+              class="product-detail__thumb"
+              [class.product-detail__thumb--active]="i === 1"
+            >
+              <img [src]="product.image" [alt]="product.title" />
+            </button>
+          </div>
+        </div>
+
+        <div class="product-detail__info product-info">
+          <div class="product-detail__meta">
+            <span class="product-detail__type">{{ product.type }}</span>
+            <div class="product-detail__rating">
+              <i *ngFor="let s of [1, 2, 3, 4, 5]" class="bi bi-star-fill"></i>
+              <span>(128)</span>
+            </div>
+          </div>
+
+          <h1 class="product-detail__title">{{ product.title }}</h1>
+          <p class="product-detail__price">{{ product.price }} EGP</p>
+          <p class="product-detail__desc">{{ product.description }}</p>
+
+          <div *ngIf="!isTeaware" class="product-detail__tags">
+            <span *ngIf="teaProduct?.flavorProfile" class="product-detail__tag">
+              <span class="product-detail__tag-dot product-detail__tag-dot--terracotta"></span>
+              {{ teaProduct?.flavorProfile }}
+            </span>
+            <span *ngIf="teaProduct?.mood" class="product-detail__tag">
+              <span class="product-detail__tag-dot product-detail__tag-dot--gold"></span>
+              {{ teaProduct?.mood }}
+            </span>
+            <span *ngIf="teaProduct?.caffeine" class="product-detail__tag">
+              <span class="product-detail__tag-dot product-detail__tag-dot--emerald"></span>
+              {{ teaProduct?.caffeine }} Caffeine
+            </span>
+          </div>
+
+          <div class="product-detail__actions product-detail__actions--mobile">
+            <div class="product-detail__qty">
+              <button type="button" (click)="decreaseQuantity()" aria-label="Decrease quantity">
+                <i class="bi bi-dash"></i>
+              </button>
+              <span>{{ quantity }}</span>
+              <button type="button" (click)="increaseQuantity()" aria-label="Increase quantity">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="product-detail__actions">
+            <div class="product-detail__qty">
+              <button type="button" (click)="decreaseQuantity()" aria-label="Decrease quantity">
+                <i class="bi bi-dash"></i>
+              </button>
+              <span>{{ quantity }}</span>
+              <button type="button" (click)="increaseQuantity()" aria-label="Increase quantity">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+            <button type="button" class="product-detail__add-btn" (click)="addToCart()">
+              Add to Cart
+            </button>
+            <button
+              type="button"
+              class="product-detail__wish-btn wishlist-toggle"
+              [class.wishlist-toggle--active]="isWishlisted"
+              (click)="toggleWishlist($event)"
+              aria-label="Add to wishlist"
+            >
+              <i class="bi" [class.bi-heart-fill]="isWishlisted" [class.bi-heart]="!isWishlisted"></i>
+            </button>
+          </div>
+
+          <div class="product-detail__tabs">
+            <button
+              type="button"
+              [class.product-detail__tab--active]="activeTab === 'description'"
+              (click)="setActiveTab('description')"
+            >
+              {{ isTeaware ? 'Details' : 'Sensory Notes' }}
+            </button>
+            <button
+              *ngIf="!isTeaware"
+              type="button"
+              [class.product-detail__tab--active]="activeTab === 'brewing'"
+              (click)="setActiveTab('brewing')"
+            >
+              Brewing Guide
+            </button>
+          </div>
+
+          <div class="product-detail__tab-panel">
+            <div *ngIf="activeTab === 'description'">
+              <div *ngIf="!isTeaware" class="product-detail__notes">
+                <div>
+                  <span>Aroma</span>
+                  <p>{{ teaProduct?.aroma }}</p>
+                </div>
+                <div>
+                  <span>Taste Notes</span>
+                  <p>{{ teaProduct?.tasteNotes }}</p>
+                </div>
+              </div>
+              <p *ngIf="isTeaware" class="product-detail__teaware-copy">{{ product.description }}</p>
+            </div>
+
+            <div *ngIf="activeTab === 'brewing' && !isTeaware" class="product-detail__brew-grid">
+              <div *ngIf="teaProduct?.brewingGuide; else defaultBrewing" class="product-detail__brew-guide">
+                <i class="bi bi-book"></i>
+                <span>Guide</span>
+                <p>{{ teaProduct?.brewingGuide }}</p>
+              </div>
+              <ng-template #defaultBrewing>
+                <div>
+                  <i class="bi bi-thermometer-half"></i>
+                  <span>Temp</span>
+                  <p>90°C / 195°F</p>
+                </div>
+                <div>
+                  <i class="bi bi-droplet"></i>
+                  <span>Amount</span>
+                  <p>2.5g / 1 tsp</p>
+                </div>
+                <div>
+                  <i class="bi bi-clock"></i>
+                  <span>Time</span>
+                  <p>3-4 mins</p>
+                </div>
+                <div>
+                  <i class="bi bi-cup-hot"></i>
+                  <span>Servings</span>
+                  <p>Multiple infusions</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section *ngIf="!isTeaware && bundleTeaware" class="product-detail__bundle">
+        <div class="product-detail__bundle-copy">
+          <span>Perfect Pairing</span>
+          <h3>The Ritual Bundle</h3>
+          <p>Pair {{ product.title }} with our {{ bundleTeaware.title }} for the complete tea experience.</p>
+          <button type="button" class="product-detail__bundle-btn">
+            Add Bundle - {{ bundlePrice }} EGP
+          </button>
+        </div>
+        <div class="product-detail__bundle-media">
+          <div><img [src]="product.image" [alt]="product.title" /></div>
+          <i class="bi bi-plus"></i>
+          <div><img [src]="bundleTeaware.image" [alt]="bundleTeaware.title" /></div>
+        </div>
+      </section>
+
+      <section class="product-detail__related">
+        <div class="product-detail__section-head">
+          <h3>You May Also Like</h3>
+          <a routerLink="/shop">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="product-detail__related-grid">
+          <article *ngFor="let related of relatedProducts; let i = index" appGsapAnimate="fade-up" [gsapDelay]="i * 0.08">
+            <a [routerLink]="['/product', related.id]" class="product-detail__related-media">
+              <span class="product-detail__related-glow" aria-hidden="true"></span>
+              <img [src]="related.image" [alt]="related.title" />
+              <button type="button" (click)="quickAdd(related, $event)">Quick Add</button>
+            </a>
+            <div class="product-detail__related-meta">
+              <a [routerLink]="['/product', related.id]" class="product-detail__related-name">{{ related.title }}</a>
+              <div class="product-detail__related-info">
+                <span class="product-detail__related-type">{{ related.type }}</span>
+                <span class="product-detail__related-dot" aria-hidden="true"></span>
+                <span class="product-detail__related-price">{{ related.price }} EGP</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="product-detail__reviews">
+        <div class="product-detail__reviews-head">
+          <h3>Customer Reviews</h3>
+          <div class="product-detail__reviews-stars">
+            <i *ngFor="let s of [1, 2, 3, 4, 5]" class="bi bi-star-fill"></i>
+          </div>
+          <p>Based on 128 reviews</p>
+        </div>
+        <article class="product-detail__review-card">
+          <div class="product-detail__review-top">
+            <div class="product-detail__review-user">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" alt="Sarah M." />
+              <div>
+                <p>Sarah M.</p>
+                <span>Verified Buyer</span>
+              </div>
+            </div>
+            <div class="product-detail__review-rating">
+              <i *ngFor="let s of [1, 2, 3, 4, 5]" class="bi bi-star-fill"></i>
+            </div>
+          </div>
+          <h4>Absolutely wonderful</h4>
+          <p>
+            This tea has become a staple in my morning routine. The aroma is incredible and the taste is perfectly balanced.
+          </p>
+        </article>
+        <button type="button" class="product-detail__load-more">Load More Reviews</button>
+      </section>
+    </div>
+  </div>
+
+  <div class="product-detail__mobile-bar">
+    <div>
+      <span class="product-detail__mobile-label">Total</span>
+      <strong>{{ product.price * quantity }} EGP</strong>
+    </div>
+    <button type="button" (click)="addToCart()">Add to Cart</button>
+  </div>
+
+  <app-footer></app-footer>
+</div>

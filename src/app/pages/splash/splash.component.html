@@ -1,0 +1,31 @@
+<section class="splash" [class.splash--exiting]="isExiting">
+  <div class="splash__viewport" #pinViewport>
+    <video
+      #splashVideo
+      class="splash__video"
+      src="assets/videos/tea vid 1.mp4"
+      autoplay
+      muted
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    ></video>
+
+    <div class="splash__vignette" aria-hidden="true"></div>
+
+    <div class="splash__ui">
+      <div class="splash__logo-wrap" #logoWrap>
+        <img src="assets/imges/Group 7.png" alt="T4 TEA" class="splash__logo" />
+      </div>
+
+      <div class="splash__progress">
+        <div class="splash__progress-track">
+          <div class="splash__progress-fill" #progressFill></div>
+        </div>
+        <span class="splash__progress-label" #progressLabel>{{ playProgress }}%</span>
+      </div>
+    </div>
+
+    <button type="button" class="splash__skip" (click)="skipSplash()">Skip</button>
+  </div>
+</section>
