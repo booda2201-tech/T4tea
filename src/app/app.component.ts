@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppDataService } from './core/services/app-data.service';
+import { SeoService } from './core/services/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,12 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private appData: AppDataService
+    private appData: AppDataService,
+    private seo: SeoService
   ) {}
 
   ngOnInit(): void {
+    this.seo.initFromBrowser();
     this.appData.init();
   }
 
