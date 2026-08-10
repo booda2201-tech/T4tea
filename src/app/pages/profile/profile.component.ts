@@ -109,15 +109,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     { id: 'all', label: 'All' },
     { id: 'processing', label: 'Processing' },
     { id: 'confirmed', label: 'Confirmed' },
-    { id: 'shipped', label: 'Shipped' },
-    { id: 'delivered', label: 'Delivered' },
     { id: 'cancelled', label: 'Cancelled' },
   ];
   readonly orderProgressSteps: { id: OrderStatus; label: string }[] = [
-    { id: 'processing', label: 'Placed' },
+    { id: 'processing', label: 'Processing' },
     { id: 'confirmed', label: 'Confirmed' },
-    { id: 'shipped', label: 'Shipped' },
-    { id: 'delivered', label: 'Delivered' },
   ];
 
   private userSub?: Subscription;
@@ -538,17 +534,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   orderStatusLabel(status: OrderStatus): string {
     switch (status) {
-      case 'delivered':
-        return 'Delivered';
-      case 'shipped':
-        return 'Shipped';
       case 'confirmed':
+      case 'shipped':
+      case 'delivered':
         return 'Confirmed';
       case 'cancelled':
         return 'Cancelled';
       default:
         return 'Processing';
     }
+  }
+
+  /** CSS status class — collapse shipping statuses into confirmed. */
+  orderStatusClass(status: OrderStatus): OrderStatus {
+    if (status === 'shipped' || status === 'delivered') {
+      return 'confirmed';
+    }
+    return status;
   }
 
   formatOrderAddress(order: Order): string {
@@ -583,11 +585,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return step === 'processing';
     }
 
+    // No shipping/delivery flow — treat shipped/delivered as confirmed+.
     const rank: Record<OrderStatus, number> = {
       processing: 1,
       confirmed: 2,
-      shipped: 3,
-      delivered: 4,
+      shipped: 2,
+      delivered: 2,
       cancelled: 0,
     };
 
@@ -599,7 +602,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    return status === step;
+    const effective: OrderStatus =
+      status === 'shipped' || status === 'delivered' ? 'confirmed' : status;
+
+    return effective === step;
   }
 
   isInvalid(form: FormGroup, controlName: string): boolean {

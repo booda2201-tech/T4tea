@@ -429,15 +429,15 @@ export class OrdersService {
         obj['productsTotal'] ??
         obj['ProductsTotal']
     );
-    const shipping = this.readNumber(
+    // Only use shipping when the API sends it — never invent a default fee.
+    const shippingRaw =
       obj['shipping'] ??
-        obj['Shipping'] ??
-        obj['shippingFee'] ??
-        obj['ShippingFee'] ??
-        obj['deliveryFee'] ??
-        obj['DeliveryFee'] ??
-        50
-    );
+      obj['Shipping'] ??
+      obj['shippingFee'] ??
+      obj['ShippingFee'] ??
+      obj['deliveryFee'] ??
+      obj['DeliveryFee'];
+    const shipping = shippingRaw == null || shippingRaw === '' ? 0 : this.readNumber(shippingRaw);
     const total = this.readNumber(
       obj['total'] ??
         obj['Total'] ??
@@ -793,21 +793,28 @@ export class OrdersService {
   }
 
   private normalizeStatus(value: unknown): OrderStatus {
-    const raw = String(value ?? 'processing').toLowerCase();
+    const raw = String(value ?? 'processing').trim().toLowerCase();
 
-    if (raw.includes('cancel')) {
+    // Backend statuses: مؤكد / قيد التجهيز / ملغي (+ English aliases)
+    if (
+      raw.includes('cancel') ||
+      raw.includes('ملغي') ||
+      raw.includes('الغاء') ||
+      raw.includes('إلغاء')
+    ) {
       return 'cancelled';
     }
-    if (raw.includes('deliver')) {
-      return 'delivered';
-    }
-    if (raw.includes('ship')) {
-      return 'shipped';
-    }
-    if (raw.includes('confirm')) {
+
+    if (
+      raw.includes('confirm') ||
+      raw.includes('مؤكد') ||
+      raw.includes('ship') ||
+      raw.includes('deliver')
+    ) {
       return 'confirmed';
     }
 
+    // قيد التجهيز / pending / processing / placed
     return 'processing';
   }
 
@@ -830,7 +837,7 @@ export class OrdersService {
     const itemsSubtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     let subtotal = order.subtotal;
     let total = order.total;
-    const shipping = order.shipping > 0 ? order.shipping : 50;
+    const shipping = order.shipping > 0 ? order.shipping : 0;
 
     if (itemsSubtotal > 0 && (subtotal <= 0 || total <= shipping)) {
       subtotal = itemsSubtotal;

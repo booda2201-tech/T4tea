@@ -107,15 +107,12 @@
         transition: all 0.3s ease;
         outline: none;
 
-        // Password bullets need a larger size so typing is obvious
-        &[type='password'],
-        &#password,
-        &#confirmPassword {
-          font-size: 1.45rem;
-          letter-spacing: 0.22em;
-          font-weight: 600;
+        // Slightly larger bullets only while masked — not when shown as text
+        &[type='password'] {
+          font-size: 1.15rem;
+          letter-spacing: 0.12em;
+          font-weight: 500;
           color: #2d241c;
-          line-height: 1.2;
         }
 
         &:focus {

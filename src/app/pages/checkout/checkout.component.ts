@@ -54,7 +54,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   checkoutForm: FormGroup;
   paymentMethod = 'card';
-  shipping = 50;
+  shipping = 0;
   orderPlaced = false;
   isSubmitting = false;
   isGovernorateOpen = false;

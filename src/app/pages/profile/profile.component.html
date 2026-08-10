@@ -167,7 +167,7 @@
                   </small>
                 </span>
                 <span class="profile-activity__meta">
-                  <span class="profile-order__status" [ngClass]="'profile-order__status--' + order.status">
+                  <span class="profile-order__status" [ngClass]="'profile-order__status--' + orderStatusClass(order.status)">
                     {{ orderStatusLabel(order.status) }}
                   </span>
                   <span class="profile-activity__total">{{ order.total }} EGP</span>
@@ -411,7 +411,7 @@
                       {{ order.items.length }} {{ order.items.length === 1 ? 'item' : 'items' }}
                     </p>
                   </div>
-                  <span class="profile-order__status" [ngClass]="'profile-order__status--' + order.status">
+                  <span class="profile-order__status" [ngClass]="'profile-order__status--' + orderStatusClass(order.status)">
                     {{ orderStatusLabel(order.status) }}
                   </span>
                   <span class="profile-order__summary-total">{{ order.total }} EGP</span>
@@ -440,7 +440,7 @@
                       <span>Subtotal</span>
                       <span>{{ order.subtotal }} EGP</span>
                     </div>
-                    <div class="profile-order__totals-row">
+                    <div class="profile-order__totals-row" *ngIf="order.shipping > 0">
                       <span>Shipping</span>
                       <span>{{ order.shipping }} EGP</span>
                     </div>

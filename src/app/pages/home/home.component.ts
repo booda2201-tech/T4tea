@@ -35,12 +35,12 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   heroSequenceLoading = true;
 
   collections = {
-    blackTea: 'assets/imges/6Q1A2201 1.png',
-    greenTea: 'assets/imges/green tea 1.png',
-    herbalTea: 'assets/imges/herbal tea 1.png',
+    blackTea: 'assets/imges/our collectons/6Q1A2223.webp',
+    greenTea: 'assets/imges/our collectons/6Q1A2220.webp',
+    herbalTea: 'assets/imges/our collectons/6Q1A3357.webp',
   };
 
-  teawarePromoImg = 'assets/imges/about.png';
+  teawarePromoImg = 'assets/imges/our collectons/6Q1A2366.webp';
 
   private gsapCtx?: gsap.Context;
   private frames: HTMLImageElement[] = [];

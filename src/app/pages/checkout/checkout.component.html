@@ -414,7 +414,7 @@
                 </div>
               </div>
             </div>
-            <div class="checkout-summary__row">
+            <div class="checkout-summary__row" *ngIf="shipping > 0">
               <span>Shipping</span>
               <span>{{ shipping }} EGP</span>
             </div>
