@@ -13,7 +13,19 @@
 
   <section class="wishlist-main">
     <div class="page-container">
-      <div *ngIf="wishlistItems$ | async as items">
+      <div *ngIf="!(isLoggedIn$ | async)" class="wishlist-empty">
+        <div class="wishlist-empty__icon"><i class="bi bi-heart"></i></div>
+        <h2 class="font-serif">Sign in to save favorites</h2>
+        <p>Your wishlist is tied to your account — sign in to heart blends and find them later.</p>
+        <div class="wishlist-empty__actions">
+          <a routerLink="/login" [queryParams]="{ returnUrl: '/wishlist' }" class="wishlist-btn wishlist-btn--primary">
+            Sign In
+          </a>
+          <a routerLink="/shop" class="wishlist-btn wishlist-btn--ghost">Shop Tea</a>
+        </div>
+      </div>
+
+      <div *ngIf="(isLoggedIn$ | async) && (wishlistItems$ | async) as items">
         <div *ngIf="items.length === 0" class="wishlist-empty">
           <div class="wishlist-empty__icon"><i class="bi bi-heart"></i></div>
           <h2 class="font-serif">Nothing saved yet</h2>
@@ -46,7 +58,7 @@
               class="wishlist-card"
             >
               <div class="wishlist-card__visual">
-                <a [routerLink]="['/product', item.id]" class="wishlist-card__image-link no-underline">
+                <a [routerLink]="['/product', item.id]" [queryParams]="{ kind: productKind(item) }" class="wishlist-card__image-link no-underline">
                   <img [src]="item.image" [alt]="item.name" class="wishlist-card__image" />
                 </a>
                 <button
@@ -60,7 +72,7 @@
               </div>
 
               <div class="wishlist-card__body">
-                <a [routerLink]="['/product', item.id]" class="wishlist-card__name font-serif no-underline">
+                <a [routerLink]="['/product', item.id]" [queryParams]="{ kind: productKind(item) }" class="wishlist-card__name font-serif no-underline">
                   {{ item.name }}
                 </a>
                 <div class="wishlist-card__meta">

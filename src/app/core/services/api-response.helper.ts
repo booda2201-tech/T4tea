@@ -11,7 +11,22 @@ export class ApiResponseHelper {
 
     if (payload && typeof payload === 'object') {
       const obj = payload as Record<string, unknown>;
-      for (const key of ['data', 'items', 'result', 'results', 'value']) {
+      for (const key of [
+        'data',
+        'Data',
+        'items',
+        'Items',
+        'orders',
+        'Orders',
+        'result',
+        'Result',
+        'results',
+        'Results',
+        'value',
+        'Value',
+        'myOrders',
+        'MyOrders',
+      ]) {
         if (Array.isArray(obj[key])) {
           return obj[key] as T[];
         }
@@ -26,11 +41,23 @@ export class ApiResponseHelper {
       return [];
     }
 
+    // Prefer the Postman contract field first: imageUrls: string[]
+    const preferred = item['imageUrls'] ?? item['ImageUrls'];
+    if (Array.isArray(preferred) && preferred.length) {
+      return this.collectImageUrls(preferred);
+    }
+
     const candidates = [
-      item['imageUrls'],
-      item['ImageUrls'],
       item['images'],
       item['Images'],
+      item['productImages'],
+      item['ProductImages'],
+      item['teawareImages'],
+      item['TeawareImages'],
+      item['gallery'],
+      item['Gallery'],
+      item['files'],
+      item['Files'],
       item['imageUrl'],
       item['ImageUrl'],
       item['image'],
@@ -39,28 +66,46 @@ export class ApiResponseHelper {
 
     const urls: string[] = [];
     for (const candidate of candidates) {
-      if (Array.isArray(candidate)) {
-        for (const entry of candidate) {
-          const url = this.normalizeImageUrl(entry);
-          if (url) {
-            urls.push(url);
-          }
-        }
-      } else {
-        const url = this.normalizeImageUrl(candidate);
-        if (url) {
-          urls.push(url);
-        }
-      }
+      urls.push(...this.collectImageUrls(candidate));
     }
 
     return [...new Set(urls)];
   }
 
+  private collectImageUrls(value: unknown): string[] {
+    if (value == null) {
+      return [];
+    }
+
+    if (Array.isArray(value)) {
+      const urls: string[] = [];
+      for (const entry of value) {
+        const url = this.normalizeImageUrl(entry);
+        if (url) {
+          urls.push(url);
+        }
+      }
+      return [...new Set(urls)];
+    }
+
+    const single = this.normalizeImageUrl(value);
+    return single ? [single] : [];
+  }
+
   normalizeImageUrl(value: unknown): string | null {
     if (value && typeof value === 'object') {
       const obj = value as Record<string, unknown>;
-      const nested = obj['url'] ?? obj['Url'] ?? obj['imageUrl'] ?? obj['ImageUrl'];
+      const nested =
+        obj['url'] ??
+        obj['Url'] ??
+        obj['imageUrl'] ??
+        obj['ImageUrl'] ??
+        obj['path'] ??
+        obj['Path'] ??
+        obj['filePath'] ??
+        obj['FilePath'] ??
+        obj['src'] ??
+        obj['Src'];
       return this.normalizeImageUrl(nested);
     }
 

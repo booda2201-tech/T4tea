@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
-import { catchError, distinctUntilChanged, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, Subscription, of, throwError } from 'rxjs';
+import {
+  catchError,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { CartItem, CartProductInput } from '../../models/cart-item.model';
 import { products, teawares } from '../../data/products';
@@ -10,12 +18,15 @@ import { ApiResponseHelper } from './api-response.helper';
 import { AuthService } from './auth.service';
 import { CatalogService } from './catalog.service';
 
-const STORAGE_KEY = 't4tea_cart';
+/** Legacy key — purged on startup; cart is never persisted locally. */
+const LEGACY_STORAGE_KEY = 't4tea_cart';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   private isCartOpenSubject = new BehaviorSubject<boolean>(false);
+  private pendingMutationsSubject = new BehaviorSubject<number>(0);
+  private pendingRemovalIds = new Set<string>();
 
   private readonly base = environment.apiBaseUrl;
   private readonly ep = environment.apiEndpoints.cart;
@@ -30,6 +41,10 @@ export class CartService {
   );
 
   private hadUser = false;
+  private syncInFlight: Subscription | null = null;
+  private syncRetryTimer: ReturnType<typeof setTimeout> | null = null;
+  private cartSyncGeneration = 0;
+  private holdEmptyUntil = 0;
 
   constructor(
     private http: HttpClient,
@@ -37,34 +52,26 @@ export class CartService {
     private apiHelper: ApiResponseHelper,
     private catalog: CatalogService
   ) {
-    // localStorage only backs the guest cart; a signed-in user's cart
-    // lives on the server and is fetched on login / app start.
-    if (!this.auth.isLoggedIn()) {
-      this.cartItemsSubject.next(this.readStoredCart());
-    }
+    this.purgeLegacyStorage();
 
-    // Items synced before the catalog finished loading may miss images —
-    // re-enrich them once the API catalog is available.
-    this.catalog.ensureLoaded();
     this.catalog.products$.subscribe(() => {
       if (this.cartItemsSubject.value.length) {
         this.cartItemsSubject.next(this.cartItemsSubject.value.map(item => this.enrich(item)));
       }
     });
 
-    // distinctUntilChanged: silent re-logins re-emit the same user;
-    // syncing again on each one caused an infinite 401 → relogin → sync loop
+    // AppDataService owns sync-on-login — here we only clear on logout.
     this.auth.user$
       .pipe(distinctUntilChanged((a, b) => (a?.id ?? a?.phone ?? null) === (b?.id ?? b?.phone ?? null)))
       .subscribe(user => {
         if (user) {
           this.hadUser = true;
-          this.syncFromApi();
+          this.purgeLegacyStorage();
         } else if (this.hadUser) {
-          // Signed out → drop the account's cart locally (server copy stays)
           this.hadUser = false;
-          this.cartItemsSubject.next([]);
-          localStorage.removeItem(STORAGE_KEY);
+          this.cancelSyncInFlight();
+          this.clearSyncRetry();
+          this.setItems([]);
           this.isCartOpenSubject.next(false);
         }
       });
@@ -88,83 +95,155 @@ export class CartService {
 
   addToCart(item: CartProductInput, quantity = 1): void {
     const current = this.cartItemsSubject.value;
-    const existing = current.find(i => i.id === item.id);
+    const existing = current.find(i => this.isSameItem(i, item.id, item.kind));
     let next: CartItem[];
 
     if (existing) {
       next = current.map(i =>
-        i.id === item.id ? { ...i, quantity: i.quantity + quantity } : i
+        this.isSameItem(i, item.id, item.kind)
+          ? { ...i, quantity: i.quantity + quantity }
+          : i
       );
     } else {
       next = [...current, { ...item, quantity }];
     }
 
+    this.holdEmptyUntil = 0;
     this.setItems(next);
     this.isCartOpenSubject.next(true);
     this.pushAddToApi(item, quantity);
   }
 
-  /** POST /api/Cart/items/AddToCart — body: { productId, quantity } */
   private pushAddToApi(item: CartProductInput, quantity: number): void {
     if (!this.auth.isLoggedIn()) {
       return;
     }
 
+    const body =
+      item.kind === 'teaware'
+        ? { teawareId: Number(item.id) || item.id, quantity }
+        : { productId: Number(item.id) || item.id, quantity };
+
+    this.beginMutation();
     this.http
-      .post(`${this.base}${this.ep.add}`, {
-        productId: Number(item.id) || item.id,
-        quantity,
-      })
-      .pipe(catchError(err => {
-        console.error('[Cart] AddToCart failed', err);
-        return of(null);
-      }))
+      .post(`${this.base}${this.ep.add}`, body)
+      .pipe(
+        catchError(err => {
+          console.error('[Cart] AddToCart failed', err);
+          return of(null);
+        }),
+        finalize(() => this.endMutation())
+      )
       .subscribe();
   }
 
-  /** DELETE /api/Cart/items/RemoveItem/{productId} — productId is a path variable */
-  private pushRemoveToApi(id: string): void {
+  private pushRemoveToApi(id: string, kind: CartItem['kind']): void {
     if (!this.auth.isLoggedIn()) {
       return;
     }
 
+    const normalizedId = String(id);
+    const itemKey = this.itemKey(normalizedId, kind);
+    this.pendingRemovalIds.add(itemKey);
+
+    // Postman: DELETE /api/Cart/items/RemoveItem?productId=&teawareId=
+    const params = new HttpParams().set(
+      kind === 'teaware' ? 'teawareId' : 'productId',
+      normalizedId
+    );
+
+    this.beginMutation();
     this.http
-      .delete(`${this.base}${this.ep.remove}/${encodeURIComponent(String(id))}`)
-      .pipe(catchError(err => {
-        console.error('[Cart] RemoveItem failed', err);
-        return of(null);
-      }))
+      .delete(`${this.base}${this.ep.remove}`, { params })
+      .pipe(
+        catchError(err => {
+          console.error('[Cart] RemoveItem failed', err);
+          return of(null);
+        }),
+        finalize(() => {
+          this.pendingRemovalIds.delete(itemKey);
+          this.endMutation();
+        })
+      )
       .subscribe();
   }
 
-  removeFromCart(id: string): void {
-    this.setItems(this.cartItemsSubject.value.filter(i => i.id !== id));
-    this.pushRemoveToApi(id);
+  removeFromCart(id: string, kind: CartItem['kind']): void {
+    this.setItems(
+      this.cartItemsSubject.value.filter(i => !this.isSameItem(i, id, kind))
+    );
+    this.pushRemoveToApi(id, kind);
   }
 
-  /** PUT /api/Cart/items/UpdateItem — body: { productId, quantity } */
-  updateQuantity(id: string, quantity: number): void {
+  updateQuantity(id: string, kind: CartItem['kind'], quantity: number): void {
     if (quantity < 1) {
-      this.removeFromCart(id);
+      this.removeFromCart(id, kind);
       return;
     }
 
     this.setItems(
-      this.cartItemsSubject.value.map(i => (i.id === id ? { ...i, quantity } : i))
+      this.cartItemsSubject.value.map(i =>
+        this.isSameItem(i, id, kind) ? { ...i, quantity } : i
+      )
     );
 
     if (this.auth.isLoggedIn()) {
+      const body =
+        kind === 'teaware'
+          ? { teawareId: Number(id) || id, quantity }
+          : { productId: Number(id) || id, quantity };
+
+      this.beginMutation();
       this.http
-        .put(`${this.base}${this.ep.update}`, {
-          productId: Number(id) || id,
-          quantity,
-        })
-        .pipe(catchError(err => {
-          console.error('[Cart] UpdateItem failed', err);
-          return of(null);
-        }))
+        .put(`${this.base}${this.ep.update}`, body)
+        .pipe(
+          catchError(err => {
+            console.error('[Cart] UpdateItem failed', err);
+            return of(null);
+          }),
+          finalize(() => this.endMutation())
+        )
         .subscribe();
     }
+  }
+
+  /**
+   * Wait for cart writes, then verify the exact server cart used by Checkout.
+   * Never create an order from a stale/partial server cart.
+   */
+  prepareForCheckout(): Observable<CartItem[]> {
+    if (!this.auth.isLoggedIn()) {
+      return throwError(() => new Error('Please sign in before checkout.'));
+    }
+
+    const expected = [...this.cartItemsSubject.value];
+
+    return this.pendingMutationsSubject.pipe(
+      filter(count => count === 0),
+      take(1),
+      switchMap(() => this.http.get<unknown>(`${this.base}${this.ep.get}`)),
+      map(res =>
+        this.apiHelper
+          .asArray<Record<string, unknown>>(res)
+          .map(raw => this.mapCartItem(raw))
+          .filter(item => !!item.id)
+          .map(item => this.enrich(item))
+      ),
+      switchMap(serverItems => {
+        if (!this.cartsMatch(expected, serverItems)) {
+          this.setItems(serverItems);
+          return throwError(
+            () =>
+              new Error(
+                'Your cart changed while syncing with the server. Please review it and place the order again.'
+              )
+          );
+        }
+
+        this.setItems(serverItems);
+        return of(serverItems);
+      })
+    );
   }
 
   toggleCart(): void {
@@ -180,26 +259,43 @@ export class CartService {
   }
 
   clearCart(): void {
-    // No dedicated clear endpoint in the API — remove items one by one
-    const ids = this.cartItemsSubject.value.map(item => item.id);
+    const items = [...this.cartItemsSubject.value];
     this.setItems([]);
     this.isCartOpenSubject.next(false);
 
-    for (const id of ids) {
-      this.pushRemoveToApi(id);
-    }
-  }
-
-  syncFromApi(): void {
     if (!this.auth.isLoggedIn()) {
       return;
     }
 
-    this.http
-      .get(`${this.base}${this.ep.get}`)
-      .pipe(catchError(() => of(null)))
-      .subscribe(res => {
-        if (res == null) {
+    for (const item of items) {
+      this.pushRemoveToApi(item.id, item.kind);
+    }
+  }
+
+  /**
+   * After Checkout the backend clears the cart — wipe local state, then
+   * confirm empty cart from GET /api/Cart.
+   */
+  clearAfterCheckout(): Observable<void> {
+    this.cancelSyncInFlight();
+    this.clearSyncRetry();
+    this.pendingRemovalIds.clear();
+    this.cartSyncGeneration++;
+    this.holdEmptyUntil = Date.now() + 60_000;
+    this.purgeLegacyStorage();
+    this.setItems([]);
+    this.isCartOpenSubject.next(false);
+
+    if (!this.auth.isLoggedIn()) {
+      return of(void 0);
+    }
+
+    const generation = this.cartSyncGeneration;
+
+    return this.http.get(`${this.base}${this.ep.get}`).pipe(
+      catchError(() => of(null)),
+      tap(res => {
+        if (generation !== this.cartSyncGeneration || res == null) {
           return;
         }
 
@@ -209,23 +305,118 @@ export class CartService {
           .filter(item => !!item.id)
           .map(item => this.enrich(item));
 
-        // Items added as a guest before signing in live only locally —
-        // push them to the account so the server stays the source of truth
-        const serverIds = new Set(serverItems.map(item => item.id));
-        const guestOnly = this.cartItemsSubject.value.filter(item => !serverIds.has(item.id));
-        for (const item of guestOnly) {
-          this.pushAddToApi(item, item.quantity);
+        this.applySyncedItems(serverItems);
+      }),
+      map(() => void 0)
+    );
+  }
+
+  /** Called by AppDataService after auth is ready — not by every page. */
+  syncFromApi(): void {
+    if (!this.auth.isLoggedIn()) {
+      return;
+    }
+
+    const generation = this.cartSyncGeneration;
+    this.cancelSyncInFlight();
+
+    this.syncInFlight = this.http
+      .get(`${this.base}${this.ep.get}`)
+      .pipe(
+        catchError(() => of(null)),
+        finalize(() => {
+          this.syncInFlight = null;
+        })
+      )
+      .subscribe(res => {
+        if (generation !== this.cartSyncGeneration) {
+          return;
         }
 
-        this.setItems([...serverItems, ...guestOnly]);
+        if (res == null) {
+          return;
+        }
+
+        const serverItems = this.apiHelper
+          .asArray<Record<string, unknown>>(res)
+          .map(raw => this.mapCartItem(raw))
+          .filter(
+            item =>
+              !!item.id &&
+              !this.pendingRemovalIds.has(this.itemKey(item.id, item.kind))
+          )
+          .map(item => this.enrich(item));
+
+        this.applySyncedItems(serverItems);
       });
+  }
+
+  private applySyncedItems(items: CartItem[]): void {
+    if (this.holdEmptyUntil > Date.now() && items.length > 0) {
+      this.setItems([]);
+      this.scheduleSyncRetry();
+      return;
+    }
+
+    if (items.length === 0) {
+      this.holdEmptyUntil = 0;
+    }
+
+    this.setItems(items);
+  }
+
+  private scheduleSyncRetry(): void {
+    if (this.syncRetryTimer || !this.auth.isLoggedIn()) {
+      return;
+    }
+
+    this.syncRetryTimer = setTimeout(() => {
+      this.syncRetryTimer = null;
+      if (this.holdEmptyUntil > Date.now()) {
+        this.syncFromApi();
+      }
+    }, 1500);
+  }
+
+  private cancelSyncInFlight(): void {
+    this.syncInFlight?.unsubscribe();
+    this.syncInFlight = null;
+  }
+
+  private clearSyncRetry(): void {
+    if (this.syncRetryTimer) {
+      clearTimeout(this.syncRetryTimer);
+      this.syncRetryTimer = null;
+    }
+  }
+
+  private purgeLegacyStorage(): void {
+    try {
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    } catch {
+      // Ignore private-mode / quota errors
+    }
   }
 
   private mapCartItem(raw: Record<string, unknown>): CartItem {
     const imageUrls = this.apiHelper.extractImageUrls(raw);
-    const id = String(raw['productId'] ?? raw['teawareId'] ?? raw['id'] ?? raw['Id'] ?? '');
+    const rawTeawareId = raw['teawareId'] ?? raw['TeawareId'];
+    const rawProductId = raw['productId'] ?? raw['ProductId'];
+    const hasTeawareId =
+      rawTeawareId != null &&
+      rawTeawareId !== '' &&
+      Number(rawTeawareId) !== 0;
+    const kind: CartItem['kind'] = hasTeawareId ? 'teaware' : 'product';
+    const id = String(
+      (hasTeawareId ? rawTeawareId : rawProductId) ??
+        raw['id'] ??
+        raw['Id'] ??
+        ''
+    );
+
     return {
       id,
+      kind,
       name: String(raw['name'] ?? raw['Name'] ?? raw['title'] ?? 'Item'),
       type: String(raw['type'] ?? raw['categoryName'] ?? raw['Type'] ?? ''),
       price: Number(raw['price'] ?? raw['unitPrice'] ?? raw['Price'] ?? 0),
@@ -234,20 +425,22 @@ export class CartService {
     };
   }
 
-  /**
-   * The API doesn't return images/full details for cart rows — fill gaps from
-   * the server catalog first (same IDs), then the current local copy, and only
-   * fall back to the static catalog as a last resort.
-   */
   private enrich(item: CartItem): CartItem {
     const missingName = !item.name || item.name === 'Item' || item.name === 'string';
     if (item.image && item.type && !missingName && item.price > 0) {
       return item;
     }
 
-    const apiCatalog = this.catalog.getProductById(item.id) ?? this.catalog.getTeawareById(item.id);
-    const local = this.cartItemsSubject.value.find(existing => existing.id === item.id);
-    const staticCatalog = [...products, ...teawares].find(entry => String(entry.id) === item.id);
+    const apiCatalog =
+      item.kind === 'teaware'
+        ? this.catalog.getTeawareById(item.id)
+        : this.catalog.getProductById(item.id);
+    const local = this.cartItemsSubject.value.find(existing =>
+      this.isSameItem(existing, item.id, item.kind)
+    );
+    const staticCatalog = (item.kind === 'teaware' ? teawares : products).find(
+      entry => String(entry.id) === item.id
+    );
 
     return {
       ...item,
@@ -258,26 +451,43 @@ export class CartService {
     };
   }
 
-  /**
-   * Signed-in users: state lives in memory + on the server (no localStorage).
-   * Guests: state is persisted locally so the cart survives a refresh.
-   */
+  /** In-memory only — never persisted to localStorage. */
   private setItems(items: CartItem[]): void {
     this.cartItemsSubject.next(items);
-
-    if (this.auth.isLoggedIn()) {
-      localStorage.removeItem(STORAGE_KEY);
-    } else {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    }
   }
 
-  private readStoredCart(): CartItem[] {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? (JSON.parse(raw) as CartItem[]) : [];
-    } catch {
-      return [];
+  private itemKey(id: string, kind: CartItem['kind']): string {
+    return `${kind}:${String(id)}`;
+  }
+
+  private isSameItem(
+    item: Pick<CartItem, 'id' | 'kind'>,
+    id: string,
+    kind: CartItem['kind']
+  ): boolean {
+    return item.id === String(id) && item.kind === kind;
+  }
+
+  private cartsMatch(expected: CartItem[], actual: CartItem[]): boolean {
+    if (expected.length !== actual.length) {
+      return false;
     }
+
+    return expected.every(item => {
+      const match = actual.find(serverItem =>
+        this.isSameItem(serverItem, item.id, item.kind)
+      );
+      return !!match && match.quantity === item.quantity;
+    });
+  }
+
+  private beginMutation(): void {
+    this.pendingMutationsSubject.next(this.pendingMutationsSubject.value + 1);
+  }
+
+  private endMutation(): void {
+    this.pendingMutationsSubject.next(
+      Math.max(0, this.pendingMutationsSubject.value - 1)
+    );
   }
 }

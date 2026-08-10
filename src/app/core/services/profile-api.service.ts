@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { catchError, distinctUntilChanged, finalize, map, shareReplay, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AddressPayload, UserAddress, UserProfile } from '../../models/profile.model';
 import { ApiResponseHelper } from './api-response.helper';
@@ -13,11 +13,42 @@ export class ProfileApiService {
   private readonly ep = environment.apiEndpoints.profile;
   private lastProfile: UserProfile | null = null;
 
+  private readonly addressesSubject = new BehaviorSubject<UserAddress[]>([]);
+  private readonly addressesLoadedSubject = new BehaviorSubject<boolean>(false);
+  private addressesSyncInFlight: Observable<UserAddress[]> | null = null;
+
+  readonly addresses$ = this.addressesSubject.asObservable();
+  readonly addressesLoaded$ = this.addressesLoadedSubject.asObservable();
+
+  get addresses(): UserAddress[] {
+    return this.addressesSubject.value;
+  }
+
+  findAddressById(id: string | number | null | undefined): UserAddress | null {
+    if (id == null || id === '') {
+      return null;
+    }
+
+    const needle = String(id);
+    return this.addressesSubject.value.find(item => String(item.id) === needle) ?? null;
+  }
+
   constructor(
     private http: HttpClient,
     private auth: AuthService,
     private apiHelper: ApiResponseHelper
-  ) {}
+  ) {
+    // AppDataService owns sync-on-login — here we only clear on logout.
+    this.auth.user$
+      .pipe(distinctUntilChanged((a, b) => (a?.id ?? a?.phone ?? null) === (b?.id ?? b?.phone ?? null)))
+      .subscribe(user => {
+        if (!user) {
+          this.addressesSubject.next([]);
+          this.addressesLoadedSubject.next(true);
+          this.addressesSyncInFlight = null;
+        }
+      });
+  }
 
   get(): Observable<UserProfile | null> {
     if (!this.auth.isLoggedIn()) {
@@ -64,13 +95,47 @@ export class ProfileApiService {
       return of([]);
     }
 
-    return this.http.get<unknown>(`${this.base}${this.ep.addresses.getAll}`).pipe(
-      map(res => this.apiHelper.asArray<UserAddress>(res).map(item => this.normalizeAddress(item))),
-      catchError(err => {
-        console.error('[Profile] GetAddresses failed', err);
-        return of([]);
-      })
-    );
+    const cached = this.addressesSubject.value;
+    if (cached.length > 0) {
+      this.syncAddresses();
+      return of(cached);
+    }
+
+    this.syncAddresses();
+    return this.addresses$;
+  }
+
+  /** Fetch addresses from API and keep an in-memory cache (deduped in-flight). */
+  syncAddresses(): void {
+    if (!this.auth.isLoggedIn() || this.addressesSyncInFlight) {
+      return;
+    }
+
+    this.addressesSyncInFlight = this.http
+      .get<unknown>(`${this.base}${this.ep.addresses.getAll}`)
+      .pipe(
+        map(res => this.apiHelper.asArray<UserAddress>(res).map(item => this.normalizeAddress(item))),
+        tap(list => {
+          this.addressesSubject.next(list);
+          this.addressesLoadedSubject.next(true);
+        }),
+        catchError(err => {
+          console.error('[Profile] GetAddresses failed', err);
+          this.addressesLoadedSubject.next(true);
+          return of(this.addressesSubject.value);
+        }),
+        finalize(() => {
+          this.addressesSyncInFlight = null;
+        }),
+        shareReplay(1)
+      );
+
+    this.addressesSyncInFlight.subscribe();
+  }
+
+  private setCachedAddresses(next: UserAddress[]): void {
+    this.addressesSubject.next(next);
+    this.addressesLoadedSubject.next(true);
   }
 
   getAddress(id: string | number): Observable<UserAddress | null> {
@@ -85,6 +150,10 @@ export class ProfileApiService {
     const body = this.toApiAddressBody(payload);
     return this.http.post<unknown>(`${this.base}${this.ep.addresses.add}`, body).pipe(
       map(res => this.normalizeAddress(this.unwrapAddress(res) || body)),
+      tap(saved => {
+        const without = this.addressesSubject.value.filter(item => item.id !== saved.id);
+        this.setCachedAddresses([...without, saved]);
+      }),
       catchError((err: HttpErrorResponse) => {
         console.error('[Profile] AddAddress failed', err.status, err.error);
         return throwError(() => err);
@@ -96,6 +165,10 @@ export class ProfileApiService {
     const body = this.toApiAddressBody({ ...payload, id });
     return this.http.put<unknown>(`${this.base}${this.ep.addresses.update}/${id}`, body).pipe(
       map(res => this.normalizeAddress(this.unwrapAddress(res) || body)),
+      tap(saved => {
+        const next = this.addressesSubject.value.map(item => (item.id === saved.id ? saved : item));
+        this.setCachedAddresses(next);
+      }),
       catchError((err: HttpErrorResponse) => {
         console.error('[Profile] UpdateAddress failed', err.status, err.error);
         return throwError(() => err);
@@ -106,6 +179,9 @@ export class ProfileApiService {
   deleteAddress(id: string | number): Observable<boolean> {
     return this.http.delete(`${this.base}${this.ep.addresses.delete}/${id}`).pipe(
       map(() => true),
+      tap(() => {
+        this.setCachedAddresses(this.addressesSubject.value.filter(item => item.id !== id));
+      }),
       catchError((err: HttpErrorResponse) => {
         console.error('[Profile] DeleteAddress failed', err.status, err.error);
         return throwError(() => err);

@@ -61,14 +61,6 @@
               </li>
             </ul>
           </div>
-
-          <div #refineDropdown class="shop-refine">
-            <button type="button" class="shop-action-btn" (click)="toggleRefine()">
-              <i class="bi bi-sliders2"></i>
-              <span class="shop-action-btn__text">Refine</span>
-              <span *ngIf="refineFilterCount" class="shop-action-btn__badge">{{ refineFilterCount }}</span>
-            </button>
-          </div>
         </div>
       </header>
 
@@ -118,7 +110,7 @@
           [gsapDelay]="i * 0.06"
           class="shop-card"
         >
-          <a [routerLink]="['/product', product.id]" class="shop-card__visual">
+          <a [routerLink]="['/product', product.id]" [queryParams]="{ kind: 'tea' }" class="shop-card__visual">
             <img [src]="product.image" [alt]="product.title" class="shop-card__image" />
             <span class="shop-card__accent" aria-hidden="true"></span>
             <button
@@ -132,7 +124,7 @@
             </button>
           </a>
           <div class="shop-card__body">
-            <a [routerLink]="['/product', product.id]" class="shop-card__name">{{ product.title }}</a>
+            <a [routerLink]="['/product', product.id]" [queryParams]="{ kind: 'tea' }" class="shop-card__name">{{ product.title }}</a>
             <div class="shop-card__meta">
               <span class="shop-card__type">{{ product.type }}</span>
               <span class="shop-card__dot" aria-hidden="true"></span>
@@ -147,32 +139,6 @@
       </div>
     </div>
   </section>
-
-  <div *ngIf="isRefineOpen" class="shop-refine-backdrop" (click)="closeRefine()" aria-hidden="true"></div>
-
-  <aside class="shop-refine-panel" [class.shop-refine-panel--open]="isRefineOpen">
-    <div class="shop-refine-panel__head">
-      <h3 class="shop-refine-panel__title">Refine</h3>
-      <button type="button" class="shop-refine-panel__close" (click)="closeRefine()" aria-label="Close refine panel">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-
-    <div class="shop-refine-panel__body">
-      <app-filter-section title="Flavor Profile" [options]="flavorOptions" [selected]="selectedFilters" (filterToggle)="toggleFilter($event)"></app-filter-section>
-      <app-filter-section title="Mood" [options]="moodOptions" [selected]="selectedFilters" (filterToggle)="toggleFilter($event)"></app-filter-section>
-      <app-filter-section title="Caffeine Level" [options]="caffeineOptions" [selected]="selectedFilters" (filterToggle)="toggleFilter($event)"></app-filter-section>
-    </div>
-
-    <div class="shop-refine-panel__foot">
-      <button type="button" class="shop-refine-panel__apply" (click)="closeRefine()">
-        Show {{ filteredProducts.length }} {{ filteredProducts.length === 1 ? 'result' : 'results' }}
-      </button>
-      <button *ngIf="refineFilterCount" type="button" class="shop-refine-panel__reset" (click)="clearRefineFilters()">
-        Clear refine filters
-      </button>
-    </div>
-  </aside>
 
   <app-footer></app-footer>
 </div>

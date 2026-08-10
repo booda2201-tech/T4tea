@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import gsap from 'gsap';
 import { CartService } from '../../core/services/cart.service';
 import { CatalogService } from '../../core/services/catalog.service';
+import { CategoriesApiService } from '../../core/services/categories-api.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
 import { Product } from '../../models/product.model';
@@ -24,14 +25,15 @@ import { Product } from '../../models/product.model';
 export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('categoryHeroVideo') categoryHeroVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('sortDropdown') sortDropdown!: ElementRef<HTMLElement>;
-  @ViewChild('refineDropdown') refineDropdown!: ElementRef<HTMLElement>;
 
   products: Product[] = [];
-  isRefineOpen = false;
   isSortOpen = false;
   selectedSort = 'featured';
   selectedFilters: string[] = [];
   isLoading = false;
+
+  /** Category pills — loaded from GET /api/Categories/GetAllCategories only. */
+  typeOptions: string[] = [];
 
   sortOptions = [
     { value: 'featured', label: 'Featured' },
@@ -40,27 +42,27 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     { value: 'newest', label: 'Newest' },
   ];
 
-  typeOptions: string[] = ['Black Tea', 'Green Tea', 'Herbal Tea', 'Oolong Tea'];
-  flavorOptions = ['Floral', 'Spiced', 'Citrus', 'Earthy', 'Minty', 'Fruity'];
-  moodOptions = ['Calm', 'Energize', 'Focus', 'Digest'];
-  caffeineOptions = ['None', 'Low', 'Medium', 'High'];
-
   private subs = new Subscription();
 
   constructor(
     private cartService: CartService,
     private wishlistService: WishlistService,
     private catalogService: CatalogService,
+    private categoriesApi: CategoriesApiService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.catalogService.ensureLoaded();
+    this.loadCategories();
 
     this.subs.add(
       this.catalogService.products$.subscribe(products => {
         this.products = products;
-        this.syncTypeOptions(products);
+        // If categories API is empty/slow, derive names from products as fallback.
+        if (!this.typeOptions.length) {
+          this.syncTypeOptionsFromProducts(products);
+        }
       })
     );
 
@@ -123,40 +125,14 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.selectedFilters.find(filter => this.typeOptions.includes(filter)) ?? null;
   }
 
-  get refineFilterCount(): number {
-    return this.selectedFilters.filter(
-      filter =>
-        this.flavorOptions.includes(filter) ||
-        this.moodOptions.includes(filter) ||
-        this.caffeineOptions.includes(filter)
-    ).length;
-  }
-
   get filteredProducts(): Product[] {
     const selectedTypes = this.selectedFilters.filter(filter => this.typeOptions.includes(filter));
-    const selectedFlavors = this.selectedFilters.filter(filter => this.flavorOptions.includes(filter));
-    const selectedMoods = this.selectedFilters.filter(filter => this.moodOptions.includes(filter));
-    const selectedCaffeine = this.selectedFilters.filter(filter => this.caffeineOptions.includes(filter));
 
-    return this.products.filter(product => {
-      if (selectedTypes.length && !selectedTypes.includes(product.type)) {
-        return false;
-      }
+    if (!selectedTypes.length) {
+      return this.products;
+    }
 
-      if (selectedFlavors.length && !selectedFlavors.includes(product.flavorProfile ?? '')) {
-        return false;
-      }
-
-      if (selectedMoods.length && !selectedMoods.includes(product.mood ?? '')) {
-        return false;
-      }
-
-      if (selectedCaffeine.length && !selectedCaffeine.includes(product.caffeine ?? '')) {
-        return false;
-      }
-
-      return true;
-    });
+    return this.products.filter(product => selectedTypes.includes(product.type));
   }
 
   get sortedProducts(): Product[] {
@@ -181,21 +157,6 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   selectSort(value: string): void {
     this.selectedSort = value;
     this.isSortOpen = false;
-  }
-
-  toggleRefine(): void {
-    this.isRefineOpen = !this.isRefineOpen;
-    if (this.isRefineOpen) {
-      this.isSortOpen = false;
-    }
-  }
-
-  closeRefine(): void {
-    this.isRefineOpen = false;
-  }
-
-  clearRefineFilters(): void {
-    this.selectedFilters = this.selectedFilters.filter(filter => this.typeOptions.includes(filter));
   }
 
   isTypeActive(type: string): boolean {
@@ -247,6 +208,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     event.stopPropagation();
     this.cartService.addToCart({
       id: product.id,
+      kind: 'product',
       name: product.title,
       type: product.type,
       price: product.price,
@@ -254,10 +216,29 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private syncTypeOptions(products: Product[]): void {
-    const fromApi = [...new Set(products.map(p => p.type).filter(Boolean))];
-    if (fromApi.length) {
-      this.typeOptions = fromApi.sort((a, b) => a.localeCompare(b));
+  private loadCategories(): void {
+    this.subs.add(
+      this.categoriesApi.getAll().subscribe({
+        next: categories => {
+          const names = [...new Set(categories.map(item => item.name).filter(Boolean))];
+          if (names.length) {
+            this.typeOptions = names.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+            return;
+          }
+          this.syncTypeOptionsFromProducts(this.products);
+        },
+        error: err => {
+          console.warn('[Shop] Categories API failed — using product categories', err);
+          this.syncTypeOptionsFromProducts(this.products);
+        },
+      })
+    );
+  }
+
+  private syncTypeOptionsFromProducts(products: Product[]): void {
+    const fromProducts = [...new Set(products.map(p => p.type).filter(Boolean))];
+    if (fromProducts.length) {
+      this.typeOptions = fromProducts.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
     }
   }
 }

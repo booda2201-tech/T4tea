@@ -15,16 +15,18 @@
         <div class="product-detail__gallery product-image">
           <div class="product-detail__main-image">
             <div class="product-detail__main-glow" aria-hidden="true"></div>
-            <img [src]="product.image" [alt]="product.title" />
+            <img [src]="activeImage" [alt]="product.title" />
           </div>
-          <div class="product-detail__thumbs">
+          <div class="product-detail__thumbs" *ngIf="galleryImages.length > 1">
             <button
-              *ngFor="let i of [1, 2, 3, 4]"
+              *ngFor="let image of galleryImages; let i = index"
               type="button"
               class="product-detail__thumb"
-              [class.product-detail__thumb--active]="i === 1"
+              [class.product-detail__thumb--active]="i === selectedImageIndex"
+              (click)="selectImage(i)"
+              [attr.aria-label]="'View image ' + (i + 1)"
             >
-              <img [src]="product.image" [alt]="product.title" />
+              <img [src]="image" [alt]="product.title + ' image ' + (i + 1)" />
             </button>
           </div>
         </div>
@@ -182,13 +184,13 @@
         </div>
         <div class="product-detail__related-grid">
           <article *ngFor="let related of relatedProducts; let i = index" appGsapAnimate="fade-up" [gsapDelay]="i * 0.08">
-            <a [routerLink]="['/product', related.id]" class="product-detail__related-media">
+            <a [routerLink]="['/product', related.id]" [queryParams]="{ kind: 'tea' }" class="product-detail__related-media">
               <span class="product-detail__related-glow" aria-hidden="true"></span>
               <img [src]="related.image" [alt]="related.title" />
               <button type="button" (click)="quickAdd(related, $event)">Quick Add</button>
             </a>
             <div class="product-detail__related-meta">
-              <a [routerLink]="['/product', related.id]" class="product-detail__related-name">{{ related.title }}</a>
+              <a [routerLink]="['/product', related.id]" [queryParams]="{ kind: 'tea' }" class="product-detail__related-name">{{ related.title }}</a>
               <div class="product-detail__related-info">
                 <span class="product-detail__related-type">{{ related.type }}</span>
                 <span class="product-detail__related-dot" aria-hidden="true"></span>

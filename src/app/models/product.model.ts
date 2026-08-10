@@ -4,6 +4,8 @@ export interface Product {
   type: string;
   price: number;
   image: string;
+  /** All product images from the API (main + gallery). */
+  images?: string[];
   flavorProfile?: string;
   mood?: string;
   caffeine?: string;
@@ -19,5 +21,7 @@ export interface Teaware {
   type: string;
   price: number;
   image: string;
+  /** All teaware images from the API (main + gallery). */
+  images?: string[];
   description: string;
 }

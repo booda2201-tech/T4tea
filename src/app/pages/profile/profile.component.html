@@ -156,18 +156,22 @@
                 class="profile-activity__row"
                 (click)="setActiveTab('orders')"
               >
-                <span class="profile-activity__icon"><i class="bi bi-bag-check"></i></span>
+                <span class="profile-activity__icon" aria-hidden="true">
+                  <i class="bi bi-bag-check"></i>
+                </span>
                 <span class="profile-activity__info">
-                  <strong>Order {{ order.id }}</strong>
+                  <strong>Order {{ orderDisplayId(order) }}</strong>
                   <small>
                     {{ order.createdAt | date: 'mediumDate' }} ·
                     {{ order.items.length }} {{ order.items.length === 1 ? 'item' : 'items' }}
                   </small>
                 </span>
-                <span class="profile-order__status" [ngClass]="'profile-order__status--' + order.status">
-                  {{ order.status }}
+                <span class="profile-activity__meta">
+                  <span class="profile-order__status" [ngClass]="'profile-order__status--' + order.status">
+                    {{ orderStatusLabel(order.status) }}
+                  </span>
+                  <span class="profile-activity__total">{{ order.total }} EGP</span>
                 </span>
-                <span class="profile-activity__total">{{ order.total }} EGP</span>
               </button>
             </div>
           </ng-container>
@@ -236,7 +240,6 @@
 
                   <div *ngIf="isGovernorateOpen" class="profile-dropdown__panel">
                     <div class="profile-dropdown__search-wrap">
-                      <i class="bi bi-search profile-dropdown__search-icon" aria-hidden="true"></i>
                       <input
                         type="text"
                         class="profile-dropdown__search"
@@ -343,55 +346,189 @@
       <ng-container *ngIf="activeTab === 'orders'">
         <section class="profile-panel profile-panel--wide">
           <div class="profile-panel__head">
-            <h2>Your Orders</h2>
+            <h2>Order History</h2>
             <span *ngIf="ordersCount$ | async as count" class="profile-panel__badge">
               {{ count }} {{ count === 1 ? 'order' : 'orders' }}
             </span>
           </div>
 
+          <p *ngIf="isLoadingOrders$ | async" class="profile-status">Loading your orders…</p>
+
           <ng-container *ngIf="orders$ | async as orders">
-            <div *ngIf="orders.length === 0" class="profile-empty">
+            <div *ngIf="!((isLoadingOrders$ | async)) && orders.length === 0" class="profile-empty">
               <div class="profile-empty__icon"><i class="bi bi-box-seam"></i></div>
-              <h3>No orders to show</h3>
-              <p>Once you place an order, it will appear here with tracking and delivery details.</p>
+              <h3>No orders yet</h3>
+              <p>Your past orders will appear here.</p>
               <a routerLink="/shop" class="profile-btn profile-btn--primary">Browse Tea</a>
             </div>
 
-            <div *ngIf="orders.length > 0" class="profile-orders">
-              <article *ngFor="let order of orders" class="profile-order">
-                <div class="profile-order__head">
-                  <div>
-                    <h3 class="profile-order__id">{{ order.id }}</h3>
+            <ng-container *ngIf="filterOrders(orders) as filteredOrders">
+              <div *ngIf="orders.length > 0" class="profile-orders-toolbar">
+                <div class="profile-orders-filters" role="tablist" aria-label="Filter orders by status">
+                  <button
+                    *ngFor="let filter of orderStatusFilters"
+                    type="button"
+                    class="profile-orders-filter"
+                    role="tab"
+                    [class.profile-orders-filter--active]="ordersStatusFilter === filter.id"
+                    [attr.aria-selected]="ordersStatusFilter === filter.id"
+                    (click)="setOrdersStatusFilter(filter.id)"
+                  >
+                    {{ filter.label }}
+                  </button>
+                </div>
+                <span class="profile-orders-range">{{ ordersRangeLabel(filteredOrders.length) }}</span>
+              </div>
+
+              <div
+                *ngIf="!((isLoadingOrders$ | async)) && filteredOrders.length === 0 && orders.length > 0"
+                class="profile-empty profile-empty--compact"
+              >
+                <div class="profile-empty__icon"><i class="bi bi-funnel"></i></div>
+                <h3>No matching orders</h3>
+                <p>Try another status filter.</p>
+              </div>
+
+              <div *ngIf="filteredOrders.length > 0" class="profile-orders">
+                <article
+                  *ngFor="let order of paginateOrders(filteredOrders)"
+                  class="profile-order"
+                  [class.profile-order--expanded]="isOrderExpanded(order.id)"
+                >
+                <button
+                  type="button"
+                  class="profile-order__summary"
+                  (click)="toggleOrderDetails(order.id)"
+                  [attr.aria-expanded]="isOrderExpanded(order.id)"
+                >
+                  <span class="profile-order__thumb" aria-hidden="true">
+                    <i class="bi bi-bag"></i>
+                  </span>
+                  <div class="profile-order__summary-main">
+                    <h3 class="profile-order__id">{{ orderDisplayId(order) }}</h3>
                     <p class="profile-order__date">
                       {{ order.createdAt | date: 'mediumDate' }} ·
-                      {{ order.paymentMethod === 'card' ? 'Card' : 'Cash on Delivery' }}
+                      {{ order.items.length }} {{ order.items.length === 1 ? 'item' : 'items' }}
                     </p>
                   </div>
                   <span class="profile-order__status" [ngClass]="'profile-order__status--' + order.status">
-                    {{ order.status }}
+                    {{ orderStatusLabel(order.status) }}
                   </span>
-                </div>
+                  <span class="profile-order__summary-total">{{ order.total }} EGP</span>
+                  <i
+                    class="bi profile-order__chevron"
+                    [class.bi-chevron-up]="isOrderExpanded(order.id)"
+                    [class.bi-chevron-down]="!isOrderExpanded(order.id)"
+                    aria-hidden="true"
+                  ></i>
+                </button>
 
-                <ul class="profile-order__items">
-                  <li *ngFor="let item of order.items">
-                    <img [src]="item.image" [alt]="item.name" />
-                    <span class="profile-order__item-name">{{ item.name }}</span>
-                    <span class="profile-order__item-qty">× {{ item.quantity }}</span>
-                    <span class="profile-order__item-price">{{ item.price * item.quantity }} EGP</span>
-                  </li>
-                </ul>
+                <div *ngIf="isOrderExpanded(order.id)" class="profile-order__details">
+                  <ul class="profile-order__items">
+                    <li *ngFor="let item of order.items">
+                      <img [src]="item.image" [alt]="item.name" />
+                      <div class="profile-order__item-copy">
+                        <span class="profile-order__item-name">{{ item.name }}</span>
+                        <span class="profile-order__item-qty">Qty {{ item.quantity }}</span>
+                      </div>
+                      <span class="profile-order__item-price">{{ item.price * item.quantity }} EGP</span>
+                    </li>
+                  </ul>
 
-                <div class="profile-order__foot">
-                  <p class="profile-order__address">
-                    <i class="bi bi-geo-alt"></i>
-                    {{ order.address.street }}, {{ order.address.city }}, {{ order.address.governorate }}
-                  </p>
-                  <p class="profile-order__total">
-                    Total <strong>{{ order.total }} EGP</strong>
-                  </p>
+                  <div class="profile-order__totals">
+                    <div class="profile-order__totals-row">
+                      <span>Subtotal</span>
+                      <span>{{ order.subtotal }} EGP</span>
+                    </div>
+                    <div class="profile-order__totals-row">
+                      <span>Shipping</span>
+                      <span>{{ order.shipping }} EGP</span>
+                    </div>
+                    <div class="profile-order__totals-row profile-order__totals-row--total">
+                      <span>Total</span>
+                      <strong>{{ order.total }} EGP</strong>
+                    </div>
+                  </div>
+
+                  <div class="profile-order__timeline" *ngIf="order.status !== 'cancelled'">
+                    <div
+                      *ngFor="let step of orderProgressSteps"
+                      class="profile-order__step"
+                      [class.profile-order__step--done]="isOrderStepComplete(order.status, step.id)"
+                      [class.profile-order__step--current]="isOrderStepCurrent(order.status, step.id)"
+                    >
+                      <span class="profile-order__step-dot" aria-hidden="true">
+                        <i class="bi bi-check2"></i>
+                      </span>
+                      <span class="profile-order__step-label">{{ step.label }}</span>
+                    </div>
+                  </div>
+
+                  <div class="profile-order__foot">
+                    <div class="profile-order__meta-card profile-order__meta-card--address">
+                      <span class="profile-order__meta-icon" aria-hidden="true">
+                        <i class="bi bi-geo-alt"></i>
+                      </span>
+                      <div class="profile-order__meta-copy">
+                        <span class="profile-order__meta-label">Delivery Address</span>
+                        <p class="profile-order__address">
+                          {{ formatOrderAddress(order) }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="profile-order__meta-card profile-order__meta-card--payment">
+                      <span class="profile-order__meta-icon" aria-hidden="true">
+                        <i class="bi bi-wallet2"></i>
+                      </span>
+                      <div class="profile-order__meta-copy">
+                        <span class="profile-order__meta-label">Payment Method</span>
+                        <p class="profile-order__payment">
+                          {{ order.paymentMethod === 'card' ? 'Paid by Card' : 'Cash on Delivery' }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </article>
+
+              <nav
+                *ngIf="getOrdersTotalPages(filteredOrders.length) > 1"
+                class="profile-orders-pagination"
+                aria-label="Order pages"
+              >
+                <button
+                  type="button"
+                  class="profile-orders-page profile-orders-page--nav"
+                  [disabled]="ordersCurrentPage === 1"
+                  (click)="setOrdersPage(ordersCurrentPage - 1)"
+                  aria-label="Previous page"
+                >
+                  <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                </button>
+
+                <button
+                  *ngFor="let page of getOrdersPageNumbers(getOrdersTotalPages(filteredOrders.length))"
+                  type="button"
+                  class="profile-orders-page"
+                  [class.profile-orders-page--active]="ordersCurrentPage === page"
+                  [attr.aria-current]="ordersCurrentPage === page ? 'page' : null"
+                  (click)="setOrdersPage(page)"
+                >
+                  {{ page }}
+                </button>
+
+                <button
+                  type="button"
+                  class="profile-orders-page profile-orders-page--nav"
+                  [disabled]="ordersCurrentPage === getOrdersTotalPages(filteredOrders.length)"
+                  (click)="setOrdersPage(ordersCurrentPage + 1)"
+                  aria-label="Next page"
+                >
+                  <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                </button>
+              </nav>
             </div>
+            </ng-container>
           </ng-container>
         </section>
       </ng-container>
@@ -403,21 +540,23 @@
             <span *ngIf="(wishlistCount$ | async) as count" class="profile-panel__badge">{{ count }} saved</span>
           </div>
 
-          <div *ngIf="(wishlistItems$ | async) as items">
+          <div *ngIf="isLoadingWishlist$ | async" class="profile-status">Loading your wishlist…</div>
+
+          <div *ngIf="!(isLoadingWishlist$ | async) && (wishlistItems$ | async) as items">
             <div *ngIf="items.length === 0" class="profile-empty">
               <div class="profile-empty__icon"><i class="bi bi-heart"></i></div>
               <h3>Nothing saved yet</h3>
               <p>Tap the heart on any blend or teaware to build your personal collection.</p>
-              <a routerLink="/teawares" class="profile-btn profile-btn--primary">Discover Teawares</a>
+              <a routerLink="/shop" class="profile-btn profile-btn--primary">Shop Tea</a>
             </div>
 
             <div *ngIf="items.length > 0" class="profile-wishlist">
               <article *ngFor="let item of items" class="profile-wishlist__item">
-                <a [routerLink]="['/product', item.id]" class="profile-wishlist__media">
+                <a [routerLink]="['/product', item.id]" [queryParams]="{ kind: productKind(item) }" class="profile-wishlist__media">
                   <img [src]="item.image" [alt]="item.name" />
                 </a>
                 <div class="profile-wishlist__body">
-                  <a [routerLink]="['/product', item.id]" class="profile-wishlist__title">{{ item.name }}</a>
+                  <a [routerLink]="['/product', item.id]" [queryParams]="{ kind: productKind(item) }" class="profile-wishlist__title">{{ item.name }}</a>
                   <p class="profile-wishlist__type">{{ item.type }}</p>
                   <span class="profile-wishlist__price">{{ item.price }} EGP</span>
                 </div>

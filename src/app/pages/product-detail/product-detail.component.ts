@@ -2,8 +2,11 @@ import { Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, combineLatest } from 'rxjs';
 import gsap from 'gsap';
+import { ApiResponseHelper } from '../../core/services/api-response.helper';
 import { CartService } from '../../core/services/cart.service';
 import { CatalogService } from '../../core/services/catalog.service';
+import { ProductsApiService } from '../../core/services/products-api.service';
+import { TeawaresApiService } from '../../core/services/teawares-api.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
 import { Product, Teaware } from '../../models/product.model';
@@ -22,8 +25,28 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   activeTab: 'description' | 'brewing' = 'description';
   isTeaware = false;
   isWishlisted = false;
+  selectedImageIndex = 0;
   private routeSub?: Subscription;
+  private detailSub?: Subscription;
   private viewReady = false;
+  private lastDetailKey: string | null = null;
+
+  get galleryImages(): string[] {
+    if (!this.product) {
+      return [];
+    }
+
+    const images = (this.product.images || []).filter(Boolean);
+    if (images.length) {
+      return [...new Set(images)];
+    }
+
+    return this.product.image ? [this.product.image] : [];
+  }
+
+  get activeImage(): string {
+    return this.galleryImages[this.selectedImageIndex] || this.product?.image || '';
+  }
 
   get bundlePrice(): number {
     if (!this.product || !this.bundleTeaware) {
@@ -36,7 +59,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     private route: ActivatedRoute,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private catalogService: CatalogService
+    private catalogService: CatalogService,
+    private productsApi: ProductsApiService,
+    private teawaresApi: TeawaresApiService,
+    private apiHelper: ApiResponseHelper
   ) {}
 
   ngOnInit(): void {
@@ -44,11 +70,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     this.routeSub = combineLatest([
       this.route.paramMap,
+      this.route.queryParamMap,
       this.catalogService.products$,
       this.catalogService.teawares$,
-    ]).subscribe(([params, products, teawares]) => {
+    ]).subscribe(([params, query, products, teawares]) => {
       const id = params.get('id');
-      this.resolveProduct(id, products, teawares);
+      const kind = (query.get('kind') || query.get('type') || '').toLowerCase();
+      this.resolveProduct(id, products, teawares, kind);
     });
   }
 
@@ -59,10 +87,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnDestroy(): void {
     this.routeSub?.unsubscribe();
+    this.detailSub?.unsubscribe();
   }
 
   setActiveTab(tab: 'description' | 'brewing'): void {
     this.activeTab = tab;
+  }
+
+  selectImage(index: number): void {
+    if (index < 0 || index >= this.galleryImages.length) {
+      return;
+    }
+    this.selectedImageIndex = index;
   }
 
   increaseQuantity(): void {
@@ -79,10 +115,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.cartService.addToCart(
       {
         id: this.product.id,
+        kind: this.isTeaware ? 'teaware' : 'product',
         name: this.product.title,
         type: this.product.type,
         price: this.product.price,
-        image: this.product.image,
+        image: this.activeImage || this.product.image,
       },
       this.quantity
     );
@@ -97,7 +134,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       name: this.product.title,
       type: this.product.type,
       price: this.product.price,
-      image: this.product.image,
+      image: this.activeImage || this.product.image,
     });
     this.isWishlisted = this.wishlistService.isWishlisted(this.product.id);
   }
@@ -107,6 +144,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     event.stopPropagation();
     this.cartService.addToCart({
       id: product.id,
+      kind: 'product',
       name: product.title,
       type: product.type,
       price: product.price,
@@ -114,18 +152,41 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     });
   }
 
-  private resolveProduct(id: string | null, products: Product[], teawares: Teaware[]): void {
-    const teaProduct = id ? products.find(p => p.id === id) : undefined;
-    const teawareProduct = id ? teawares.find(t => t.id === id) : undefined;
+  private resolveProduct(
+    id: string | null,
+    products: Product[],
+    teawares: Teaware[],
+    kind: string
+  ): void {
+    const previousId = this.product?.id ?? null;
+    const previousImages =
+      this.product && previousId != null && id != null && String(previousId) === String(id)
+        ? this.product.images
+        : undefined;
 
-    if (teawareProduct) {
+    const matchId = (itemId: string) => id != null && String(itemId) === String(id);
+    const teaProduct = id ? products.find(p => matchId(p.id)) : undefined;
+    const teawareProduct = id ? teawares.find(t => matchId(t.id)) : undefined;
+
+    const preferTeaware = kind === 'teaware' || kind === 'ware';
+    const preferTea = kind === 'tea' || kind === 'product' || kind === 'shop';
+
+    if (preferTeaware && teawareProduct) {
       this.product = teawareProduct;
       this.teaProduct = null;
       this.isTeaware = true;
-    } else if (teaProduct) {
+    } else if (preferTea && teaProduct) {
       this.product = teaProduct;
       this.teaProduct = teaProduct;
       this.isTeaware = false;
+    } else if (teaProduct && !preferTeaware) {
+      this.product = teaProduct;
+      this.teaProduct = teaProduct;
+      this.isTeaware = false;
+    } else if (teawareProduct) {
+      this.product = teawareProduct;
+      this.teaProduct = null;
+      this.isTeaware = true;
     } else if (products.length) {
       this.product = products[0];
       this.teaProduct = this.product as Product;
@@ -138,12 +199,92 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       return;
     }
 
+    // Don't lose gallery fetched from GetById when the catalog list re-emits a cover-only product.
+    if (previousImages && previousImages.length > (this.product.images?.length || 0)) {
+      this.product = {
+        ...this.product,
+        images: previousImages,
+        image: previousImages[0] || this.product.image,
+      };
+      if (this.teaProduct && !this.isTeaware) {
+        this.teaProduct = this.product as Product;
+      }
+    }
+
+    const idChanged = previousId !== this.product.id;
+
     this.relatedProducts = products.filter(p => p.id !== this.product.id).slice(0, 3);
     this.bundleTeaware = teawares[0] || (this.isTeaware ? (this.product as Teaware) : undefined!);
     this.isWishlisted = this.wishlistService.isWishlisted(this.product.id);
     this.quantity = 1;
-    window.scrollTo(0, 0);
-    this.playAnimations();
+    if (idChanged) {
+      this.selectedImageIndex = 0;
+      window.scrollTo(0, 0);
+      this.playAnimations();
+    }
+
+    if (id) {
+      const detailKey = `${this.isTeaware ? 'teaware' : 'tea'}:${id}`;
+      if (detailKey !== this.lastDetailKey) {
+        this.lastDetailKey = detailKey;
+        this.loadDetailImages(id, this.isTeaware);
+      }
+    }
+  }
+
+  /** GetById often returns the full image gallery when the list endpoint only has a cover. */
+  private loadDetailImages(id: string, isTeaware: boolean): void {
+    this.detailSub?.unsubscribe();
+
+    const request$ = isTeaware ? this.teawaresApi.getById(id) : this.productsApi.getById(id);
+
+    this.detailSub = request$.subscribe({
+      next: res => {
+        const record = this.unwrapDetail(res);
+        if (!record) {
+          return;
+        }
+
+        const urls = this.apiHelper.extractImageUrls(record);
+        if (!urls.length) {
+          return;
+        }
+
+        const merged = [
+          ...new Set([...(this.product.images || []), ...urls, this.product.image].filter(Boolean)),
+        ];
+        this.product = {
+          ...this.product,
+          image: merged[0] || this.product.image,
+          images: merged,
+        };
+
+        if (this.teaProduct && !isTeaware) {
+          this.teaProduct = this.product as Product;
+        }
+
+        if (this.selectedImageIndex >= merged.length) {
+          this.selectedImageIndex = 0;
+        }
+      },
+      error: err => {
+        console.warn('[ProductDetail] Could not load gallery images', err);
+      },
+    });
+  }
+
+  private unwrapDetail(res: unknown): Record<string, unknown> | null {
+    if (!res || typeof res !== 'object') {
+      return null;
+    }
+
+    const obj = res as Record<string, unknown>;
+    const nested = obj['data'] ?? obj['Data'] ?? obj['result'] ?? obj['Result'] ?? obj['value'] ?? obj['Value'];
+    if (nested && typeof nested === 'object' && !Array.isArray(nested)) {
+      return nested as Record<string, unknown>;
+    }
+
+    return obj;
   }
 
   private playAnimations(): void {

@@ -87,8 +87,13 @@
             </div>
 
             <div class="checkout-section__body">
-              <div *ngIf="savedAddresses.length > 0" class="checkout-saved">
+              <p *ngIf="isLoadingAddresses" class="checkout-saved__hint">Loading your saved addresses…</p>
+
+              <div *ngIf="showSavedAddressPicker" class="checkout-saved">
                 <p class="checkout-saved__label">Delivery address</p>
+                <p *ngIf="savedAddresses.length === 0" class="checkout-saved__hint">
+                  You don&apos;t have any saved addresses yet. Add one below to continue.
+                </p>
                 <div class="checkout-saved__list">
                   <button
                     *ngFor="let item of savedAddresses"
@@ -127,122 +132,127 @@
                 </div>
                 <p
                   class="checkout-field__error"
-                  *ngIf="!showAddressFields && !selectedAddressId && isInvalid('address')"
+                  *ngIf="needsSavedAddressSelection && checkoutForm.touched"
                 >
                   Please choose a saved address or add a new one
                 </p>
               </div>
 
-              <ng-container *ngIf="showAddressFields">
-              <div class="checkout-field">
-                <label class="checkout-label" for="checkout-address">Address</label>
-                <input
-                  id="checkout-address"
-                  type="text"
-                  formControlName="address"
-                  placeholder="Street, building, apartment"
-                  autocomplete="street-address"
-                  class="checkout-input"
-                  [class.checkout-input--invalid]="isInvalid('address')"
-                />
-                <p class="checkout-field__error" *ngIf="isInvalid('address')">Address is required</p>
-              </div>
-
-              <div class="checkout-grid">
-                <div class="checkout-field">
-                  <label class="checkout-label" for="checkout-city">City</label>
-                  <input
-                    id="checkout-city"
-                    type="text"
-                    formControlName="city"
-                    placeholder="City"
-                    autocomplete="address-level2"
-                    class="checkout-input"
-                    [class.checkout-input--invalid]="isInvalid('city')"
-                  />
-                  <p class="checkout-field__error" *ngIf="isInvalid('city')">City is required</p>
-                </div>
-
-                <div class="checkout-field">
-                  <label class="checkout-label">Governorate</label>
-                  <div
-                    #governorateDropdown
-                    class="checkout-dropdown"
-                    [class.checkout-dropdown--open]="isGovernorateOpen"
-                    [class.checkout-dropdown--invalid]="isInvalid('governorate')"
-                  >
-                    <button
-                      type="button"
-                      class="checkout-dropdown__trigger"
-                      (click)="toggleGovernorateDropdown()"
-                      [attr.aria-expanded]="isGovernorateOpen"
-                      aria-haspopup="listbox"
-                    >
-                      <span
-                        class="checkout-dropdown__value"
-                        [class.checkout-dropdown__value--placeholder]="!selectedGovernorate"
-                      >
-                        {{ selectedGovernorate || 'Select Governorate' }}
-                      </span>
-                      <i class="bi bi-chevron-down checkout-dropdown__chevron" aria-hidden="true"></i>
-                    </button>
-
-                    <div *ngIf="isGovernorateOpen" class="checkout-dropdown__panel">
-                      <div class="checkout-dropdown__search-wrap">
-                        <i class="bi bi-search checkout-dropdown__search-icon" aria-hidden="true"></i>
-                        <input
-                          type="text"
-                          class="checkout-dropdown__search"
-                          placeholder="Search governorate..."
-                          [(ngModel)]="governorateSearch"
-                          [ngModelOptions]="{ standalone: true }"
-                          (click)="$event.stopPropagation()"
-                        />
-                      </div>
-
-                      <ul class="checkout-dropdown__menu" role="listbox" aria-label="Governorates">
-                        <li *ngIf="filteredGovernorates.length === 0" class="checkout-dropdown__empty">
-                          No matches found
-                        </li>
-                        <li *ngFor="let governorate of filteredGovernorates" role="presentation">
-                          <button
-                            type="button"
-                            class="checkout-dropdown__option"
-                            role="option"
-                            [attr.aria-selected]="selectedGovernorate === governorate"
-                            [class.checkout-dropdown__option--active]="selectedGovernorate === governorate"
-                            (click)="selectGovernorate(governorate)"
-                          >
-                            <span>{{ governorate }}</span>
-                            <i
-                              *ngIf="selectedGovernorate === governorate"
-                              class="bi bi-check2 checkout-dropdown__check"
-                              aria-hidden="true"
-                            ></i>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
+              <div *ngIf="showAddressFields" class="profile-form profile-form--address">
+                <div class="profile-form__grid">
+                  <div class="profile-form__field">
+                    <label for="checkout-label">Label</label>
+                    <input
+                      id="checkout-label"
+                      type="text"
+                      formControlName="saveAddressLabel"
+                      placeholder="Home, Work…"
+                      [class.profile-form__input--invalid]="isInvalid('saveAddressLabel')"
+                    />
+                    <p class="profile-form__error" *ngIf="isInvalid('saveAddressLabel')">Label is required</p>
                   </div>
-                  <p class="checkout-field__error" *ngIf="isInvalid('governorate')">Governorate is required</p>
-                </div>
-              </div>
-              </ng-container>
 
-              <div *ngIf="canOfferSaveAddress" class="checkout-save-address">
-                <label class="checkout-checkbox">
-                  <input type="checkbox" formControlName="saveAddress" />
-                  <span class="checkout-checkbox__box"></span>
-                  <span>Save this address to my profile for next time</span>
-                </label>
+                  <div class="profile-form__field">
+                    <label for="checkout-postal">
+                      Postal Code <span class="profile-form__optional">(optional)</span>
+                    </label>
+                    <input id="checkout-postal" type="text" formControlName="postalCode" />
+                  </div>
 
-                <div *ngIf="wantsToSaveAddress" class="checkout-save-address__label">
-                  <input
-                    type="text"
-                    formControlName="saveAddressLabel"
-                    placeholder="Label (Home, Work…)"
-                    class="checkout-input checkout-input--sm"
-                  />
+                  <div class="profile-form__field">
+                    <label>Governorate</label>
+                    <div
+                      #governorateDropdown
+                      class="profile-dropdown"
+                      [class.profile-dropdown--open]="isGovernorateOpen"
+                      [class.profile-dropdown--invalid]="isInvalid('governorate')"
+                    >
+                      <button
+                        type="button"
+                        class="profile-dropdown__trigger"
+                        (click)="toggleGovernorateDropdown()"
+                        [attr.aria-expanded]="isGovernorateOpen"
+                        aria-haspopup="listbox"
+                      >
+                        <span
+                          class="profile-dropdown__value"
+                          [class.profile-dropdown__value--placeholder]="!selectedGovernorate"
+                        >
+                          {{ selectedGovernorate || 'Select governorate' }}
+                        </span>
+                        <i class="bi bi-chevron-down profile-dropdown__chevron" aria-hidden="true"></i>
+                      </button>
+
+                      <div *ngIf="isGovernorateOpen" class="profile-dropdown__panel">
+                        <div class="profile-dropdown__search-wrap">
+                          <input
+                            type="text"
+                            class="profile-dropdown__search"
+                            placeholder="Search governorate..."
+                            [(ngModel)]="governorateSearch"
+                            [ngModelOptions]="{ standalone: true }"
+                            (click)="$event.stopPropagation()"
+                          />
+                        </div>
+
+                        <ul class="profile-dropdown__menu" role="listbox" aria-label="Governorates">
+                          <li *ngIf="filteredGovernorates.length === 0" class="profile-dropdown__empty">
+                            No matches found
+                          </li>
+                          <li *ngFor="let governorate of filteredGovernorates" role="presentation">
+                            <button
+                              type="button"
+                              class="profile-dropdown__option"
+                              role="option"
+                              [attr.aria-selected]="selectedGovernorate === governorate"
+                              [class.profile-dropdown__option--active]="selectedGovernorate === governorate"
+                              (click)="selectGovernorate(governorate)"
+                            >
+                              <span>{{ governorate }}</span>
+                              <i
+                                *ngIf="selectedGovernorate === governorate"
+                                class="bi bi-check2 profile-dropdown__check"
+                                aria-hidden="true"
+                              ></i>
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <p class="profile-form__error" *ngIf="isInvalid('governorate')">Governorate is required</p>
+                  </div>
+
+                  <div class="profile-form__field">
+                    <label for="checkout-city">City</label>
+                    <input
+                      id="checkout-city"
+                      type="text"
+                      formControlName="city"
+                      autocomplete="address-level2"
+                      [class.profile-form__input--invalid]="isInvalid('city')"
+                    />
+                    <p class="profile-form__error" *ngIf="isInvalid('city')">City is required</p>
+                  </div>
+
+                  <div class="profile-form__field profile-form__field--full">
+                    <label for="checkout-address">Street</label>
+                    <input
+                      id="checkout-address"
+                      type="text"
+                      formControlName="address"
+                      placeholder="Street, building, apartment"
+                      autocomplete="street-address"
+                      [class.profile-form__input--invalid]="isInvalid('address')"
+                    />
+                    <p class="profile-form__error" *ngIf="isInvalid('address')">Street is required</p>
+                  </div>
+
+                  <div class="profile-form__field profile-form__field--full">
+                    <label for="checkout-notes">
+                      Notes <span class="profile-form__optional">(optional)</span>
+                    </label>
+                    <input id="checkout-notes" type="text" formControlName="notes" />
+                  </div>
                 </div>
               </div>
             </div>

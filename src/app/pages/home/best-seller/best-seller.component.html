@@ -17,7 +17,7 @@
     <div class="carousel-wrapper">
       <swiper-container #swiperRef init="false" class="best-seller-swiper">
         <swiper-slide *ngFor="let product of teaProducts">
-          <a [routerLink]="['/product', product.id]" class="product-item no-underline">
+          <a [routerLink]="['/product', product.id]" [queryParams]="{ kind: 'tea' }" class="product-item no-underline">
             <div class="hover-decor leaves-left">
               <img src="assets/imges/warda.png" alt="">
             </div>

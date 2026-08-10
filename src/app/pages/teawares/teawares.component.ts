@@ -118,6 +118,7 @@ export class TeawaresComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     this.cartService.addToCart({
       id: item.id,
+      kind: 'teaware',
       name: item.title,
       type: item.type,
       price: item.price,

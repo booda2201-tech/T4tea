@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import gsap from 'gsap';
+import { AuthService } from '../../core/services/auth.service';
 import { CartService } from '../../core/services/cart.service';
+import { CatalogService } from '../../core/services/catalog.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { WishlistItem } from '../../models/wishlist-item.model';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
@@ -13,21 +17,33 @@ import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
 export class WishlistComponent implements OnInit {
   wishlistItems$ = this.wishlistService.wishlistItems$;
   wishlistCount$ = this.wishlistService.wishlistCount$;
+  isLoggedIn$: Observable<boolean> = this.authService.user$.pipe(map(user => !!user));
 
   constructor(
     private wishlistService: WishlistService,
-    private cartService: CartService
+    private cartService: CartService,
+    private catalogService: CatalogService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Drop stale local-only junk if API session is available
-    this.wishlistService.syncFromApi();
+    if (this.authService.isLoggedIn()) {
+      this.wishlistService.refresh();
+    }
 
     gsap.from('.wishlist-hero__content', {
       opacity: 0,
       y: 20,
       duration: 0.8,
       ease: 'power2.out',
+    });
+  }
+
+  productKind(item: WishlistItem): 'tea' | 'teaware' {
+    return this.catalogService.resolveKind(item.id, {
+      name: item.name,
+      type: item.type,
+      price: item.price,
     });
   }
 
@@ -43,6 +59,7 @@ export class WishlistComponent implements OnInit {
     event.stopPropagation();
     this.cartService.addToCart({
       id: item.id,
+      kind: this.productKind(item) === 'teaware' ? 'teaware' : 'product',
       name: item.name,
       type: item.type,
       price: item.price,

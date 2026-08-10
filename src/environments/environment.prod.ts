@@ -46,5 +46,11 @@ export const environment = {
       add: '/api/Wishlist/items/AddItem',
       remove: '/api/Wishlist/items/RemoveItem',
     },
+    orders: {
+      getMyOrders: '/api/Orders/GetMyOrders',
+      getById: '/api/Orders/GetOrder',
+      checkout: '/api/Orders/Checkout',
+      cancel: '/api/Orders/CancelOrder',
+    },
   },
 };

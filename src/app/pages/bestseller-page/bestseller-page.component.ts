@@ -77,6 +77,7 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit, OnDestroy
     event.stopPropagation();
     this.cartService.addToCart({
       id: product.id,
+      kind: 'product',
       name: product.title,
       type: product.type,
       price: product.price,

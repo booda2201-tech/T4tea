@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CatalogService } from './core/services/catalog.service';
+import { AppDataService } from './core/services/app-data.service';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +12,11 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private catalogService: CatalogService
+    private appData: AppDataService
   ) {}
 
   ngOnInit(): void {
-    this.catalogService.ensureLoaded();
+    this.appData.init();
   }
 
   onSplashComplete(): void {

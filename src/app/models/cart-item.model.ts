@@ -1,5 +1,6 @@
 export interface CartItem {
   id: string;
+  kind: 'product' | 'teaware';
   name: string;
   type: string;
   price: number;
@@ -9,6 +10,7 @@ export interface CartItem {
 
 export interface CartProductInput {
   id: string;
+  kind: 'product' | 'teaware';
   name: string;
   type: string;
   price: number;

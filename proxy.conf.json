@@ -4,6 +4,8 @@
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug",
-    "followRedirects": false
+    "followRedirects": false,
+    "timeout": 120000,
+    "proxyTimeout": 120000
   }
 }

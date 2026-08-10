@@ -46,7 +46,7 @@
           [gsapDelay]="i * 0.08"
           class="shop-card"
         >
-          <a [routerLink]="['/product', product.id]" class="shop-card__visual">
+          <a [routerLink]="['/product', product.id]" [queryParams]="{ kind: 'tea' }" class="shop-card__visual">
             <img [src]="product.image" [alt]="product.title" class="shop-card__image" />
             <span class="shop-card__badge">Best Seller</span>
             <span class="shop-card__accent" aria-hidden="true"></span>
@@ -61,7 +61,7 @@
             </button>
           </a>
           <div class="shop-card__body">
-            <a [routerLink]="['/product', product.id]" class="shop-card__name">{{ product.title }}</a>
+            <a [routerLink]="['/product', product.id]" [queryParams]="{ kind: 'tea' }" class="shop-card__name">{{ product.title }}</a>
             <div class="shop-card__meta">
               <span class="shop-card__type">{{ product.type }}</span>
               <span class="shop-card__dot" aria-hidden="true"></span>

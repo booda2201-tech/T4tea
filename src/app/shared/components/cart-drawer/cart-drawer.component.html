@@ -46,7 +46,7 @@
                 <button
                   type="button"
                   class="cart-drawer__remove"
-                  (click)="removeFromCart(item.id)"
+                  (click)="removeFromCart(item)"
                   aria-label="Remove item"
                 >
                   <i class="bi bi-x-lg"></i>
@@ -58,7 +58,7 @@
                   <button
                     type="button"
                     class="cart-drawer__qty-btn"
-                    (click)="updateQuantity(item.id, item.quantity - 1)"
+                    (click)="updateQuantity(item, item.quantity - 1)"
                     aria-label="Decrease quantity"
                   >
                     <i class="bi bi-dash"></i>
@@ -67,7 +67,7 @@
                   <button
                     type="button"
                     class="cart-drawer__qty-btn"
-                    (click)="updateQuantity(item.id, item.quantity + 1)"
+                    (click)="updateQuantity(item, item.quantity + 1)"
                     aria-label="Increase quantity"
                   >
                     <i class="bi bi-plus"></i>

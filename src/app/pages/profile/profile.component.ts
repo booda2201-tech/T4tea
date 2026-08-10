@@ -8,13 +8,15 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { AuthService, AuthUser } from '../../core/services/auth.service';
 import { CartService } from '../../core/services/cart.service';
+import { CatalogService } from '../../core/services/catalog.service';
 import { OrdersService } from '../../core/services/orders.service';
 import { ProfileApiService } from '../../core/services/profile-api.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { AddressPayload, UserAddress } from '../../models/profile.model';
+import { Order, OrderStatus } from '../../models/order.model';
 import { WishlistItem } from '../../models/wishlist-item.model';
 
 type ProfileTab = 'overview' | 'addresses' | 'orders' | 'wishlist';
@@ -82,7 +84,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   readonly navItems: { id: ProfileTab; label: string; icon: string }[] = [
     { id: 'overview', label: 'Overview', icon: 'bi-grid' },
     { id: 'addresses', label: 'Addresses', icon: 'bi-geo-alt' },
-    { id: 'orders', label: 'Orders', icon: 'bi-bag' },
+    { id: 'orders', label: 'Order History', icon: 'bi-bag' },
     { id: 'wishlist', label: 'Wishlist', icon: 'bi-heart' },
   ];
 
@@ -94,10 +96,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   wishlistItems$ = this.wishlistService.wishlistItems$;
   wishlistCount$ = this.wishlistService.wishlistCount$;
+  isLoadingWishlist$ = this.wishlistService.isLoading$;
   orders$ = this.ordersService.orders$;
   ordersCount$ = this.ordersService.ordersCount$;
+  isLoadingOrders$ = this.ordersService.isLoading$;
+
+  expandedOrderId: string | null = null;
+  ordersCurrentPage = 1;
+  ordersStatusFilter: OrderStatus | 'all' = 'all';
+  readonly ordersPageSize = 5;
+  readonly orderStatusFilters: { id: OrderStatus | 'all'; label: string }[] = [
+    { id: 'all', label: 'All' },
+    { id: 'processing', label: 'Processing' },
+    { id: 'confirmed', label: 'Confirmed' },
+    { id: 'shipped', label: 'Shipped' },
+    { id: 'delivered', label: 'Delivered' },
+    { id: 'cancelled', label: 'Cancelled' },
+  ];
+  readonly orderProgressSteps: { id: OrderStatus; label: string }[] = [
+    { id: 'processing', label: 'Placed' },
+    { id: 'confirmed', label: 'Confirmed' },
+    { id: 'shipped', label: 'Shipped' },
+    { id: 'delivered', label: 'Delivered' },
+  ];
 
   private userSub?: Subscription;
+  private addressesSub?: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -105,6 +129,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private wishlistService: WishlistService,
     private ordersService: OrdersService,
     private profileApi: ProfileApiService,
+    private catalogService: CatalogService,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -136,6 +161,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.addressesSub = combineLatest([
+      this.profileApi.addresses$,
+      this.profileApi.addressesLoaded$,
+    ]).subscribe(([list, loaded]) => {
+      this.addresses = list;
+      this.isLoadingAddresses = !loaded;
+    });
+
+    // Always pull orders from the backend when opening profile
     this.ordersService.refresh();
 
     this.isLoadingProfile = true;
@@ -148,9 +182,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
             phone: String(profile.phone || profile.phoneNumber || this.user?.phone || ''),
           });
         }
-        this.wishlistService.syncFromApi();
-        this.cartService.syncFromApi();
-        this.loadAddresses();
       },
       error: () => {
         this.isLoadingProfile = false;
@@ -160,6 +191,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userSub?.unsubscribe();
+    this.addressesSub?.unsubscribe();
   }
 
   get userInitials(): string {
@@ -235,7 +267,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   setActiveTab(tab: ProfileTab): void {
     this.activeTab = tab;
     if (tab === 'addresses' && !this.addresses.length && !this.isLoadingAddresses) {
-      this.loadAddresses();
+      this.profileApi.syncAddresses();
+    }
+    if (tab === 'orders') {
+      this.profileApi.syncAddresses();
+      this.ordersService.refresh();
+    }
+    if (tab === 'wishlist') {
+      this.wishlistService.refresh();
     }
   }
 
@@ -299,15 +338,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   loadAddresses(): void {
-    this.isLoadingAddresses = true;
     this.addressError = '';
     this.profileApi.getAddresses().subscribe({
       next: list => {
         this.addresses = list;
-        this.isLoadingAddresses = false;
       },
       error: () => {
-        this.isLoadingAddresses = false;
         this.addressError = 'Could not load addresses.';
       },
     });
@@ -430,11 +466,140 @@ export class ProfileComponent implements OnInit, OnDestroy {
   addToCart(item: WishlistItem): void {
     this.cartService.addToCart({
       id: item.id,
+      kind: this.productKind(item) === 'teaware' ? 'teaware' : 'product',
       name: item.name,
       type: item.type,
       price: item.price,
       image: item.image,
     });
+  }
+
+  productKind(item: WishlistItem): 'tea' | 'teaware' {
+    return this.catalogService.resolveKind(item.id, {
+      name: item.name,
+      type: item.type,
+      price: item.price,
+    });
+  }
+
+  toggleOrderDetails(orderId: string): void {
+    this.expandedOrderId = this.expandedOrderId === orderId ? null : orderId;
+  }
+
+  setOrdersStatusFilter(filter: OrderStatus | 'all'): void {
+    this.ordersStatusFilter = filter;
+    this.ordersCurrentPage = 1;
+    this.expandedOrderId = null;
+  }
+
+  setOrdersPage(page: number): void {
+    this.ordersCurrentPage = page;
+    this.expandedOrderId = null;
+  }
+
+  filterOrders(orders: Order[]): Order[] {
+    if (this.ordersStatusFilter === 'all') {
+      return orders;
+    }
+
+    return orders.filter(order => order.status === this.ordersStatusFilter);
+  }
+
+  paginateOrders(orders: Order[]): Order[] {
+    const start = (this.ordersCurrentPage - 1) * this.ordersPageSize;
+    return orders.slice(start, start + this.ordersPageSize);
+  }
+
+  getOrdersTotalPages(totalItems: number): number {
+    return Math.max(1, Math.ceil(totalItems / this.ordersPageSize));
+  }
+
+  getOrdersPageNumbers(totalPages: number): number[] {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  ordersRangeLabel(totalItems: number): string {
+    if (totalItems === 0) {
+      return '0 orders';
+    }
+
+    const start = (this.ordersCurrentPage - 1) * this.ordersPageSize + 1;
+    const end = Math.min(this.ordersCurrentPage * this.ordersPageSize, totalItems);
+    return `${start}-${end} of ${totalItems}`;
+  }
+
+  isOrderExpanded(orderId: string): boolean {
+    return this.expandedOrderId === orderId;
+  }
+
+  orderDisplayId(order: Order): string {
+    return order.orderNumber || order.id;
+  }
+
+  orderStatusLabel(status: OrderStatus): string {
+    switch (status) {
+      case 'delivered':
+        return 'Delivered';
+      case 'shipped':
+        return 'Shipped';
+      case 'confirmed':
+        return 'Confirmed';
+      case 'cancelled':
+        return 'Cancelled';
+      default:
+        return 'Processing';
+    }
+  }
+
+  formatOrderAddress(order: Order): string {
+    const parts = [
+      order.address?.governorate,
+      order.address?.city,
+      order.address?.street,
+      order.address?.postalCode,
+    ]
+      .map(part => (part || '').trim())
+      .filter(part => part && part !== '.' && part !== '..');
+
+    if (parts.length) {
+      return parts.join(', ');
+    }
+
+    if (order.addressId != null) {
+      const saved = this.addresses.find(item => String(item.id) === String(order.addressId));
+      if (saved) {
+        return [saved.governorate, saved.city, saved.street || saved.address, saved.postalCode]
+          .map(part => (part || '').trim())
+          .filter(Boolean)
+          .join(', ');
+      }
+    }
+
+    return 'Address unavailable';
+  }
+
+  isOrderStepComplete(status: OrderStatus, step: OrderStatus): boolean {
+    if (status === 'cancelled') {
+      return step === 'processing';
+    }
+
+    const rank: Record<OrderStatus, number> = {
+      processing: 1,
+      confirmed: 2,
+      shipped: 3,
+      delivered: 4,
+      cancelled: 0,
+    };
+
+    return rank[status] >= rank[step];
+  }
+
+  isOrderStepCurrent(status: OrderStatus, step: OrderStatus): boolean {
+    if (status === 'cancelled') {
+      return false;
+    }
+
+    return status === step;
   }
 
   isInvalid(form: FormGroup, controlName: string): boolean {

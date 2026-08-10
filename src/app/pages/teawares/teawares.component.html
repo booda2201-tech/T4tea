@@ -116,7 +116,7 @@
 
 <ng-template #productCard let-item="item" let-index="index">
   <article class="teaware-card" appGsapAnimate="fade-up" [gsapDelay]="index * 0.06">
-    <a [routerLink]="['/product', item.id]" class="teaware-card__link no-underline">
+    <a [routerLink]="['/product', item.id]" [queryParams]="{ kind: 'teaware' }" class="teaware-card__link no-underline">
       <div class="teaware-card__stage">
         <div class="teaware-card__visual">
           <div class="teaware-card__halo" aria-hidden="true"></div>
