@@ -2,6 +2,8 @@ export const environment = {
   production: false,
   // Keep empty so ng serve proxy forwards /api → backend (avoids CORS)
   apiBaseUrl: '',
+  // Absolute host for product/media files (png/jpg/webp/…) while apiBaseUrl is proxied
+  mediaBaseUrl: 'https://alhendalcompany-001-site9.atempurl.com',
   apiEndpoints: {
     auth: {
       login: '/api/Auth/login',

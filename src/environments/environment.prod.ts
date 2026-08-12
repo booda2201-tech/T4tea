@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiBaseUrl: 'https://alhendalcompany-001-site9.atempurl.com',
+  mediaBaseUrl: 'https://alhendalcompany-001-site9.atempurl.com',
   apiEndpoints: {
     auth: {
       login: '/api/Auth/login',

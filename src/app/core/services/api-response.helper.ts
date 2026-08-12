@@ -4,6 +4,10 @@ import { environment } from '../../../environments/environment';
 /** يوحّد ردود الـ API اللي بتيجي Array أو جوا data/items/result/value */
 @Injectable({ providedIn: 'root' })
 export class ApiResponseHelper {
+  /** Any common raster/vector image extension — not used to reject, only to detect relative media paths. */
+  private readonly imageExt =
+    /\.(png|jpe?g|jfif|webp|gif|svg|avif|bmp|ico|heic|heif|tiff?|apng)(\?|#|$)/i;
+
   asArray<T>(payload: unknown): T[] {
     if (Array.isArray(payload)) {
       return payload as T[];
@@ -58,6 +62,22 @@ export class ApiResponseHelper {
       item['Gallery'],
       item['files'],
       item['Files'],
+      item['attachments'],
+      item['Attachments'],
+      item['media'],
+      item['Media'],
+      item['thumbnail'],
+      item['Thumbnail'],
+      item['thumbnailUrl'],
+      item['ThumbnailUrl'],
+      item['coverImage'],
+      item['CoverImage'],
+      item['coverUrl'],
+      item['CoverUrl'],
+      item['fileName'],
+      item['FileName'],
+      item['filePath'],
+      item['FilePath'],
       item['imageUrl'],
       item['ImageUrl'],
       item['image'],
@@ -92,6 +112,10 @@ export class ApiResponseHelper {
     return single ? [single] : [];
   }
 
+  /**
+   * Accepts any image type the browser can show (png/jpg/jpeg/webp/gif/svg/avif/bmp/heic/base64…).
+   * Does not filter by extension — only normalizes the URL/path.
+   */
   normalizeImageUrl(value: unknown): string | null {
     if (value && typeof value === 'object') {
       const obj = value as Record<string, unknown>;
@@ -104,8 +128,12 @@ export class ApiResponseHelper {
         obj['Path'] ??
         obj['filePath'] ??
         obj['FilePath'] ??
+        obj['fileName'] ??
+        obj['FileName'] ??
         obj['src'] ??
-        obj['Src'];
+        obj['Src'] ??
+        obj['thumbnail'] ??
+        obj['Thumbnail'];
       return this.normalizeImageUrl(nested);
     }
 
@@ -113,14 +141,20 @@ export class ApiResponseHelper {
       return null;
     }
 
-    const trimmed = value.trim();
+    let trimmed = value.trim().replace(/\\/g, '/');
     if (!trimmed) {
       return null;
     }
 
+    // Protocol-relative CDN URLs
+    if (trimmed.startsWith('//')) {
+      return `https:${trimmed}`;
+    }
+
+    // Absolute / data / blob / local assets — any mime/extension allowed
     if (
-      trimmed.startsWith('http://') ||
-      trimmed.startsWith('https://') ||
+      /^https?:\/\//i.test(trimmed) ||
+      /^data:image\//i.test(trimmed) ||
       trimmed.startsWith('data:') ||
       trimmed.startsWith('blob:') ||
       trimmed.startsWith('assets/')
@@ -128,8 +162,32 @@ export class ApiResponseHelper {
       return trimmed;
     }
 
-    if (trimmed.startsWith('/')) {
-      return `${environment.apiBaseUrl || ''}${trimmed}`;
+    // Bare base64 payload without data: prefix
+    if (/^[A-Za-z0-9+/=\s]+$/.test(trimmed) && trimmed.replace(/\s/g, '').length > 128) {
+      return `data:image/*;base64,${trimmed.replace(/\s/g, '')}`;
+    }
+
+    trimmed = trimmed.replace(/^\.\//, '');
+
+    // Relative media path → root-relative
+    if (!trimmed.startsWith('/')) {
+      const looksLikeMedia =
+        /^(uploads?|images?|media|files|content|wwwroot|static)\//i.test(trimmed) ||
+        this.imageExt.test(trimmed);
+      if (looksLikeMedia) {
+        trimmed = `/${trimmed}`;
+      } else {
+        // Unknown relative string — still return it (no format rejection)
+        return trimmed;
+      }
+    }
+
+    // Strip accidental wwwroot prefix used by some ASP.NET hosts
+    trimmed = trimmed.replace(/^\/wwwroot\//i, '/');
+
+    const mediaBase = (environment.mediaBaseUrl || environment.apiBaseUrl || '').replace(/\/$/, '');
+    if (mediaBase) {
+      return `${mediaBase}${trimmed}`;
     }
 
     return trimmed;

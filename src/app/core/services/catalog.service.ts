@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
-import { products as localProducts, teawares as localTeawares } from '../../data/products';
 import { ApiProduct, ApiTeaware } from '../../models/api-catalog.model';
 import { Product, Teaware } from '../../models/product.model';
 import { ApiResponseHelper } from './api-response.helper';
@@ -127,13 +126,14 @@ export class CatalogService {
       this.productsSubject.next(cached.products);
       this.teawaresSubject.next(cached.teawares);
       this.sourceSubject.next('api');
-      this.loaded = !this.isCacheStale(cached.savedAt);
+      // Always re-fetch so dashboard deletes are reflected; cache is only a fast first paint.
+      this.loaded = false;
       return;
     }
 
-    this.productsSubject.next([...localProducts]);
-    this.teawaresSubject.next([...localTeawares]);
-    this.sourceSubject.next('local');
+    this.productsSubject.next([]);
+    this.teawaresSubject.next([]);
+    this.sourceSubject.next('idle');
   }
 
   private loadCatalog(showLoading = true): void {
@@ -180,31 +180,31 @@ export class CatalogService {
         })
       )
       .subscribe(({ mappedProducts, mappedTeawares }) => {
-        const productsFromApi = !!(mappedProducts && mappedProducts.length);
-        const teawaresFromApi = !!(mappedTeawares && mappedTeawares.length);
+        const productsOk = mappedProducts !== null;
+        const teawaresOk = mappedTeawares !== null;
 
-        if (productsFromApi || teawaresFromApi) {
-          const nextProducts = productsFromApi ? mappedProducts! : this.productsSubject.value;
-          const nextTeawares = teawaresFromApi ? mappedTeawares! : this.teawaresSubject.value;
+        // Successful API response wins — even when the dashboard is empty.
+        if (productsOk || teawaresOk) {
+          const nextProducts = productsOk ? mappedProducts! : this.productsSubject.value;
+          const nextTeawares = teawaresOk ? mappedTeawares! : this.teawaresSubject.value;
 
-          this.productsSubject.next(nextProducts.length ? nextProducts : [...localProducts]);
-          this.teawaresSubject.next(nextTeawares.length ? nextTeawares : [...localTeawares]);
+          this.productsSubject.next(nextProducts);
+          this.teawaresSubject.next(nextTeawares);
           this.sourceSubject.next('api');
           this.errorSubject.next(null);
-          this.writeCache(this.productsSubject.value, this.teawaresSubject.value);
+          this.writeCache(nextProducts, nextTeawares);
           console.info(
-            `[Catalog] Loaded from API — products: ${productsFromApi ? mappedProducts!.length : 0}, teawares: ${teawaresFromApi ? mappedTeawares!.length : 0}`
+            `[Catalog] Loaded from API — products: ${nextProducts.length}, teawares: ${nextTeawares.length}`
           );
           return;
         }
 
-        if (!this.productsSubject.value.length && !this.teawaresSubject.value.length) {
-          this.productsSubject.next([...localProducts]);
-          this.teawaresSubject.next([...localTeawares]);
-        }
-        this.sourceSubject.next('local');
-        this.errorSubject.next('تعذر الاتصال بالسيرفر — يتم عرض البيانات المحلية');
-        console.warn('[Catalog] Falling back to local static products');
+        // Both requests failed: keep whatever we already painted from cache (if any).
+        this.sourceSubject.next(
+          this.productsSubject.value.length || this.teawaresSubject.value.length ? 'local' : 'idle'
+        );
+        this.errorSubject.next('تعذر الاتصال بالسيرفر');
+        console.warn('[Catalog] API unavailable — keeping last known catalog if any');
       });
   }
 
@@ -263,8 +263,8 @@ export class CatalogService {
       title: item.name || 'Untitled Tea',
       type: item.categoryName || 'Tea',
       price: finalPrice,
-      image: imageUrls[0] || 'assets/imges/Black Tea.png',
-      images: imageUrls.length ? imageUrls : ['assets/imges/Black Tea.png'],
+      image: imageUrls[0] || '',
+      images: imageUrls,
       description: item.description || '',
       brewingGuide: item.brewingGuide || '',
       aroma: item.brewingGuide || undefined,
@@ -287,8 +287,8 @@ export class CatalogService {
       title: item.name || 'Untitled Teaware',
       type: item.teawareCategoryName || item.categoryName || 'Teaware',
       price: finalPrice,
-      image: imageUrls[0] || 'assets/imges/Mask group (4).png',
-      images: imageUrls.length ? imageUrls : ['assets/imges/Mask group (4).png'],
+      image: imageUrls[0] || '',
+      images: imageUrls,
       description: item.description || '',
     };
   }
