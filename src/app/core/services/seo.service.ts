@@ -12,19 +12,19 @@ interface SeoCopy {
 
 const SEO_COPY: Record<SeoLang, SeoCopy> = {
   en: {
-    title: 'T4 Tea — Premium Turkish Tea',
+    title: 'T4 Tea — Premium Ceylon Tea',
     description:
-      'Shop premium Turkish tea blends, herbal infusions, and teawares at T4 Tea. Discover black, green, and herbal collections for every moment.',
+      'Shop premium Ceylon tea blends, herbal infusions, and teawares at T4 Tea. Discover black, green, and herbal collections for every moment.',
     keywords:
-      'T4 Tea, t4tea.shop, Turkish tea, black tea, green tea, herbal tea, teaware, premium tea blends, tea shop Turkey',
+      'T4 Tea, t4tea.shop, Ceylon tea, black tea, green tea, herbal tea, teaware, premium tea blends, tea shop',
     ogLocale: 'en_US',
   },
   ar: {
-    title: 'تي فور تي — شاي تركي فاخر',
+    title: 'تي فور تي — شاي سيلاني فاخر',
     description:
-      'تسوّق أجود خلطات الشاي التركي والمشروبات العشبية وأدوات الشاي من تي فور تي. اكتشف مجموعات الشاي الأسود والأخضر والعشبي لكل لحظة.',
+      'تسوّق أجود خلطات الشاي السيلاني والمشروبات العشبية وأدوات الشاي من تي فور تي. اكتشف مجموعات الشاي الأسود والأخضر والعشبي لكل لحظة.',
     keywords:
-      'تي فور تي, T4 Tea, t4tea.shop, شاي تركي, شاي أسود, شاي أخضر, شاي أعشاب, أدوات شاي, شاي فاخر',
+      'تي فور تي, T4 Tea, t4tea.shop, شاي سيلاني, شاي أسود, شاي أخضر, شاي أعشاب, أدوات شاي, شاي فاخر',
     ogLocale: 'ar_EG',
   },
 };
