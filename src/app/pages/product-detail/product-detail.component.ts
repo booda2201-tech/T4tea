@@ -31,6 +31,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   private viewReady = false;
   private lastDetailKey: string | null = null;
 
+  private static readonly AUTO_PLAY_MS = 4200;
+  private autoPlayTimer?: ReturnType<typeof setInterval>;
+  private autoPlayPaused = false;
+
   get galleryImages(): string[] {
     if (!this.product) {
       return [];
@@ -88,6 +92,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   ngOnDestroy(): void {
     this.routeSub?.unsubscribe();
     this.detailSub?.unsubscribe();
+    this.stopAutoPlay();
   }
 
   setActiveTab(tab: 'description' | 'brewing'): void {
@@ -99,6 +104,47 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       return;
     }
     this.selectedImageIndex = index;
+    // Give the visitor a full cycle on the image they picked.
+    this.restartAutoPlay();
+  }
+
+  pauseAutoPlay(): void {
+    this.autoPlayPaused = true;
+  }
+
+  resumeAutoPlay(): void {
+    this.autoPlayPaused = false;
+  }
+
+  private restartAutoPlay(): void {
+    this.stopAutoPlay();
+
+    const reducedMotion =
+      typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion || this.galleryImages.length < 2) {
+      return;
+    }
+
+    this.autoPlayTimer = setInterval(() => {
+      if (this.autoPlayPaused) {
+        return;
+      }
+
+      const total = this.galleryImages.length;
+      if (total < 2) {
+        this.stopAutoPlay();
+        return;
+      }
+
+      this.selectedImageIndex = (this.selectedImageIndex + 1) % total;
+    }, ProductDetailComponent.AUTO_PLAY_MS);
+  }
+
+  private stopAutoPlay(): void {
+    if (this.autoPlayTimer) {
+      clearInterval(this.autoPlayTimer);
+      this.autoPlayTimer = undefined;
+    }
   }
 
   increaseQuantity(): void {
@@ -221,6 +267,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.selectedImageIndex = 0;
       window.scrollTo(0, 0);
       this.playAnimations();
+      this.restartAutoPlay();
     }
 
     if (id) {
@@ -266,6 +313,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.selectedImageIndex >= merged.length) {
           this.selectedImageIndex = 0;
         }
+
+        // Gallery grew after the detail fetch — (re)start cycling through it.
+        this.restartAutoPlay();
       },
       error: err => {
         console.warn('[ProductDetail] Could not load gallery images', err);

@@ -13,9 +13,22 @@
 
       <div class="product-detail__hero">
         <div class="product-detail__gallery product-image">
-          <div class="product-detail__main-image">
+          <div
+            class="product-detail__main-image"
+            (mouseenter)="pauseAutoPlay()"
+            (mouseleave)="resumeAutoPlay()"
+          >
             <div class="product-detail__main-glow" aria-hidden="true"></div>
-            <img [src]="activeImage" [alt]="product.title" />
+            <div class="product-detail__stage" *ngIf="galleryImages.length">
+              <img
+                *ngFor="let image of galleryImages; let i = index"
+                class="product-detail__slide"
+                [class.product-detail__slide--active]="i === selectedImageIndex"
+                [src]="image"
+                [alt]="product.title"
+                [attr.aria-hidden]="i === selectedImageIndex ? null : 'true'"
+              />
+            </div>
           </div>
           <div class="product-detail__thumbs" *ngIf="galleryImages.length > 1">
             <button
