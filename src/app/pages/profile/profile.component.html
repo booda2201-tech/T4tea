@@ -558,11 +558,19 @@
                 <div class="profile-wishlist__body">
                   <a [routerLink]="['/product', item.id]" [queryParams]="{ kind: productKind(item) }" class="profile-wishlist__title">{{ item.name }}</a>
                   <p class="profile-wishlist__type">{{ item.type }}</p>
-                  <span class="profile-wishlist__price">{{ item.price }} EGP</span>
+                  <span
+                    class="profile-wishlist__price"
+                    [class.profile-wishlist__price--soon]="item.price | isComingSoon"
+                  >{{ item.price | displayPrice }}</span>
                 </div>
                 <div class="profile-wishlist__actions">
-                  <button type="button" class="profile-wishlist__btn profile-wishlist__btn--primary" (click)="addToCart(item)">
-                    Add to Cart
+                  <button
+                    type="button"
+                    class="profile-wishlist__btn profile-wishlist__btn--primary"
+                    [disabled]="item.price | isComingSoon"
+                    (click)="addToCart(item)"
+                  >
+                    {{ (item.price | isComingSoon) ? 'Coming Soon' : 'Add to Cart' }}
                   </button>
                   <button type="button" class="profile-wishlist__btn profile-wishlist__btn--ghost" (click)="removeFromWishlist(item.id)" aria-label="Remove from wishlist">
                     <i class="bi bi-heart-fill"></i>

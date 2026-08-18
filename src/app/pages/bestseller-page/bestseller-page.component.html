@@ -65,11 +65,19 @@
             <div class="shop-card__meta">
               <span class="shop-card__type">{{ product.type }}</span>
               <span class="shop-card__dot" aria-hidden="true"></span>
-              <span class="shop-card__price">{{ product.price }} EGP</span>
+              <span class="shop-card__price" [class.shop-card__price--soon]="product.price | isComingSoon">
+                {{ product.price | displayPrice }}
+              </span>
             </div>
-            <button type="button" class="shop-card__add" (click)="quickAdd(product, $event)">
-              <i class="bi bi-bag-plus" aria-hidden="true"></i>
-              <span>Add to Cart</span>
+            <button
+              type="button"
+              class="shop-card__add"
+              [class.shop-card__add--soon]="product.price | isComingSoon"
+              [disabled]="product.price | isComingSoon"
+              (click)="quickAdd(product, $event)"
+            >
+              <i *ngIf="!(product.price | isComingSoon)" class="bi bi-bag-plus" aria-hidden="true"></i>
+              <span>{{ (product.price | isComingSoon) ? 'Coming Soon' : 'Add to Cart' }}</span>
             </button>
           </div>
         </article>

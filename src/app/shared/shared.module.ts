@@ -8,6 +8,7 @@ import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.compon
 import { SearchOverlayComponent } from './components/search-overlay/search-overlay.component';
 import { FilterSectionComponent } from './components/filter-section/filter-section.component';
 import { GsapAnimateDirective } from './directives/gsap-animate.directive';
+import { DisplayPricePipe, IsComingSoonPipe } from './pipes/is-coming-soon.pipe';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,8 @@ import { GsapAnimateDirective } from './directives/gsap-animate.directive';
     SearchOverlayComponent,
     FilterSectionComponent,
     GsapAnimateDirective,
+    IsComingSoonPipe,
+    DisplayPricePipe,
   ],
   imports: [CommonModule, FormsModule, RouterModule],
   exports: [
@@ -26,6 +29,8 @@ import { GsapAnimateDirective } from './directives/gsap-animate.directive';
     SearchOverlayComponent,
     FilterSectionComponent,
     GsapAnimateDirective,
+    IsComingSoonPipe,
+    DisplayPricePipe,
     CommonModule,
     RouterModule,
     FormsModule,

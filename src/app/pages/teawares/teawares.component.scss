@@ -445,6 +445,12 @@
   font-weight: 500;
   color: var(--ink);
   white-space: nowrap;
+
+  &--soon {
+    font-style: italic;
+    letter-spacing: 0.03em;
+    color: var(--mocha, #a87d54);
+  }
 }
 
 .collection-banner {

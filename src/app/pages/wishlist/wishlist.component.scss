@@ -237,6 +237,11 @@
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--ink);
+
+  &--soon {
+    font-style: italic;
+    color: var(--mocha, #a87d54);
+  }
 }
 
 .wishlist-card__add {
@@ -266,11 +271,20 @@
     font-size: 0.875rem;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: var(--emerald);
     border-color: var(--emerald);
     color: var(--cream);
     transform: translateY(-1px);
+  }
+
+  &:disabled,
+  &--soon {
+    cursor: default;
+    background: rgba(15, 61, 46, 0.07);
+    border-color: rgba(15, 61, 46, 0.1);
+    color: rgba(15, 61, 46, 0.55);
+    transform: none;
   }
 }
 

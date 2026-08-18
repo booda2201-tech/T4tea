@@ -17,6 +17,7 @@ import { products, teawares } from '../../data/products';
 import { ApiResponseHelper } from './api-response.helper';
 import { AuthService } from './auth.service';
 import { CatalogService } from './catalog.service';
+import { isComingSoon } from '../../shared/utils/coming-soon.util';
 
 /** Legacy key — purged on startup; cart is never persisted locally. */
 const LEGACY_STORAGE_KEY = 't4tea_cart';
@@ -94,6 +95,10 @@ export class CartService {
   }
 
   addToCart(item: CartProductInput, quantity = 1): void {
+    if (isComingSoon(item.price)) {
+      return;
+    }
+
     const current = this.cartItemsSubject.value;
     const existing = current.find(i => this.isSameItem(i, item.id, item.kind));
     let next: CartItem[];

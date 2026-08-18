@@ -47,14 +47,12 @@
         <div class="product-detail__info product-info">
           <div class="product-detail__meta">
             <span class="product-detail__type">{{ product.type }}</span>
-            <div class="product-detail__rating">
-              <i *ngFor="let s of [1, 2, 3, 4, 5]" class="bi bi-star-fill"></i>
-              <span>(128)</span>
-            </div>
           </div>
 
           <h1 class="product-detail__title">{{ product.title }}</h1>
-          <p class="product-detail__price">{{ product.price }} EGP</p>
+          <p class="product-detail__price" [class.product-detail__price--soon]="isComingSoon">
+            {{ product.price | displayPrice }}
+          </p>
           <p class="product-detail__desc">{{ product.description }}</p>
 
           <div *ngIf="!isTeaware" class="product-detail__tags">
@@ -72,7 +70,7 @@
             </span>
           </div>
 
-          <div class="product-detail__actions product-detail__actions--mobile">
+          <div *ngIf="!isComingSoon" class="product-detail__actions product-detail__actions--mobile">
             <div class="product-detail__qty">
               <button type="button" (click)="decreaseQuantity()" aria-label="Decrease quantity">
                 <i class="bi bi-dash"></i>
@@ -85,7 +83,7 @@
           </div>
 
           <div class="product-detail__actions">
-            <div class="product-detail__qty">
+            <div *ngIf="!isComingSoon" class="product-detail__qty">
               <button type="button" (click)="decreaseQuantity()" aria-label="Decrease quantity">
                 <i class="bi bi-dash"></i>
               </button>
@@ -94,8 +92,13 @@
                 <i class="bi bi-plus"></i>
               </button>
             </div>
-            <button type="button" class="product-detail__add-btn" (click)="addToCart()">
-              Add to Cart
+            <button
+              type="button"
+              class="product-detail__add-btn"
+              [disabled]="isComingSoon"
+              (click)="addToCart()"
+            >
+              {{ isComingSoon ? 'Coming Soon' : 'Add to Cart' }}
             </button>
             <button
               type="button"
@@ -174,7 +177,7 @@
         </div>
       </div>
 
-      <section *ngIf="!isTeaware && bundleTeaware" class="product-detail__bundle">
+      <section *ngIf="showBundle" class="product-detail__bundle">
         <div class="product-detail__bundle-copy">
           <span>Perfect Pairing</span>
           <h3>The Ritual Bundle</h3>
@@ -200,57 +203,82 @@
             <a [routerLink]="['/product', related.id]" [queryParams]="{ kind: 'tea' }" class="product-detail__related-media">
               <span class="product-detail__related-glow" aria-hidden="true"></span>
               <img [src]="related.image" [alt]="related.title" />
-              <button type="button" (click)="quickAdd(related, $event)">Quick Add</button>
+              <button
+                type="button"
+                [disabled]="related.price | isComingSoon"
+                (click)="quickAdd(related, $event)"
+              >
+                {{ (related.price | isComingSoon) ? 'Coming Soon' : 'Quick Add' }}
+              </button>
             </a>
             <div class="product-detail__related-meta">
               <a [routerLink]="['/product', related.id]" [queryParams]="{ kind: 'tea' }" class="product-detail__related-name">{{ related.title }}</a>
               <div class="product-detail__related-info">
                 <span class="product-detail__related-type">{{ related.type }}</span>
                 <span class="product-detail__related-dot" aria-hidden="true"></span>
-                <span class="product-detail__related-price">{{ related.price }} EGP</span>
+                <span
+                  class="product-detail__related-price"
+                  [class.product-detail__related-price--soon]="related.price | isComingSoon"
+                >{{ related.price | displayPrice }}</span>
               </div>
             </div>
           </article>
         </div>
       </section>
 
-      <section class="product-detail__reviews">
-        <div class="product-detail__reviews-head">
-          <h3>Customer Reviews</h3>
-          <div class="product-detail__reviews-stars">
-            <i *ngFor="let s of [1, 2, 3, 4, 5]" class="bi bi-star-fill"></i>
+      <section class="product-detail__ritual" aria-labelledby="t4-ritual-title">
+        <div class="product-detail__section-head">
+          <div>
+            <span class="product-detail__ritual-eyebrow">How to Enjoy</span>
+            <h3 id="t4-ritual-title">{{ isTeaware ? 'Care for Your Piece' : 'A Quiet Cup' }}</h3>
           </div>
-          <p>Based on 128 reviews</p>
         </div>
-        <article class="product-detail__review-card">
-          <div class="product-detail__review-top">
-            <div class="product-detail__review-user">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" alt="Sarah M." />
-              <div>
-                <p>Sarah M.</p>
-                <span>Verified Buyer</span>
-              </div>
-            </div>
-            <div class="product-detail__review-rating">
-              <i *ngFor="let s of [1, 2, 3, 4, 5]" class="bi bi-star-fill"></i>
-            </div>
-          </div>
-          <h4>Absolutely wonderful</h4>
-          <p>
-            This tea has become a staple in my morning routine. The aroma is incredible and the taste is perfectly balanced.
-          </p>
-        </article>
-        <button type="button" class="product-detail__load-more">Load More Reviews</button>
+        <div class="product-detail__ritual-grid" *ngIf="!isTeaware">
+          <article class="product-detail__ritual-card" appGsapAnimate="fade-up">
+            <span class="product-detail__ritual-step" aria-hidden="true">01</span>
+            <h4>Prepare</h4>
+            <p>Warm your cup, then add a spoonful of {{ product.title }}.</p>
+          </article>
+          <article class="product-detail__ritual-card" appGsapAnimate="fade-up" [gsapDelay]="0.08">
+            <span class="product-detail__ritual-step" aria-hidden="true">02</span>
+            <h4>Steep</h4>
+            <p>Pour hot water and let the blend open slowly. Follow the brewing guide above.</p>
+          </article>
+          <article class="product-detail__ritual-card" appGsapAnimate="fade-up" [gsapDelay]="0.16">
+            <span class="product-detail__ritual-step" aria-hidden="true">03</span>
+            <h4>Savor</h4>
+            <p>Pause for the aroma first, then sip. This is your moment — unhurried.</p>
+          </article>
+        </div>
+        <div class="product-detail__ritual-grid" *ngIf="isTeaware">
+          <article class="product-detail__ritual-card" appGsapAnimate="fade-up">
+            <span class="product-detail__ritual-step" aria-hidden="true">01</span>
+            <h4>Rinse</h4>
+            <p>Give {{ product.title }} a gentle rinse before the first use.</p>
+          </article>
+          <article class="product-detail__ritual-card" appGsapAnimate="fade-up" [gsapDelay]="0.08">
+            <span class="product-detail__ritual-step" aria-hidden="true">02</span>
+            <h4>Pair</h4>
+            <p>Use it with a T4 blend that matches the mood of your day.</p>
+          </article>
+          <article class="product-detail__ritual-card" appGsapAnimate="fade-up" [gsapDelay]="0.16">
+            <span class="product-detail__ritual-step" aria-hidden="true">03</span>
+            <h4>Care</h4>
+            <p>Wash by hand and let it dry fully, so it stays beautiful for every ritual.</p>
+          </article>
+        </div>
       </section>
     </div>
   </div>
 
   <div class="product-detail__mobile-bar">
     <div>
-      <span class="product-detail__mobile-label">Total</span>
-      <strong>{{ product.price * quantity }} EGP</strong>
+      <span class="product-detail__mobile-label">{{ isComingSoon ? 'Status' : 'Total' }}</span>
+      <strong>{{ isComingSoon ? 'Coming Soon' : (product.price * quantity) + ' EGP' }}</strong>
     </div>
-    <button type="button" (click)="addToCart()">Add to Cart</button>
+    <button type="button" [disabled]="isComingSoon" (click)="addToCart()">
+      {{ isComingSoon ? 'Coming Soon' : 'Add to Cart' }}
+    </button>
   </div>
 
   <app-footer></app-footer>

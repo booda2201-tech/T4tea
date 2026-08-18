@@ -10,12 +10,16 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CartService } from '../../core/services/cart.service';
 import { CatalogService } from '../../core/services/catalog.service';
 import { CategoriesApiService } from '../../core/services/categories-api.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
+import { isComingSoon } from '../../shared/utils/coming-soon.util';
 import { Product } from '../../models/product.model';
+
+gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-category',
@@ -25,12 +29,15 @@ import { Product } from '../../models/product.model';
 export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('categoryHeroVideo') categoryHeroVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('sortDropdown') sortDropdown!: ElementRef<HTMLElement>;
+  @ViewChild('catalogSection') catalogSection?: ElementRef<HTMLElement>;
 
   products: Product[] = [];
   isSortOpen = false;
   selectedSort = 'featured';
   selectedFilters: string[] = [];
   isLoading = false;
+  currentPage = 1;
+  readonly pageSize = 9;
 
   /** Category pills — loaded from GET /api/Categories/GetAllCategories only. */
   typeOptions: string[] = [];
@@ -63,6 +70,8 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!this.typeOptions.length) {
           this.syncTypeOptionsFromProducts(products);
         }
+        this.ensureValidPage();
+        this.refreshListAnimations();
       })
     );
 
@@ -79,8 +88,9 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
           return;
         }
 
-        const nonType = this.selectedFilters.filter(f => !this.typeOptions.includes(f));
+        const nonType = this.selectedFilters.filter(f => !this.hasTypeOption(f));
         this.selectedFilters = [...nonType, type];
+        this.resetToFirstPage();
       })
     );
   }
@@ -122,17 +132,19 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get activeTypeFilter(): string | null {
-    return this.selectedFilters.find(filter => this.typeOptions.includes(filter)) ?? null;
+    return this.selectedFilters.find(filter => this.hasTypeOption(filter)) ?? null;
   }
 
   get filteredProducts(): Product[] {
-    const selectedTypes = this.selectedFilters.filter(filter => this.typeOptions.includes(filter));
+    const selectedTypes = this.selectedFilters.filter(filter => this.hasTypeOption(filter));
 
     if (!selectedTypes.length) {
       return this.products;
     }
 
-    return this.products.filter(product => selectedTypes.includes(product.type));
+    return this.products.filter(product =>
+      selectedTypes.some(type => this.typesMatch(type, product.type))
+    );
   }
 
   get sortedProducts(): Product[] {
@@ -150,6 +162,20 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  get pagedProducts(): Product[] {
+    const page = Math.min(Math.max(this.currentPage, 1), this.totalPages);
+    const start = (page - 1) * this.pageSize;
+    return this.sortedProducts.slice(start, start + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.sortedProducts.length / this.pageSize));
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+  }
+
   toggleSortDropdown(): void {
     this.isSortOpen = !this.isSortOpen;
   }
@@ -157,6 +183,7 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   selectSort(value: string): void {
     this.selectedSort = value;
     this.isSortOpen = false;
+    this.resetToFirstPage();
   }
 
   isTypeActive(type: string): boolean {
@@ -165,17 +192,19 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleTypeFilter(type: string, event?: Event): void {
     event?.preventDefault();
-    const withoutTypes = this.selectedFilters.filter(filter => !this.typeOptions.includes(filter));
+    const withoutTypes = this.selectedFilters.filter(filter => !this.hasTypeOption(filter));
     if (this.selectedFilters.includes(type)) {
       this.selectedFilters = withoutTypes;
     } else {
       this.selectedFilters = [...withoutTypes, type];
     }
+    this.resetToFirstPage();
   }
 
   clearTypeFilters(event?: Event): void {
     event?.preventDefault();
-    this.selectedFilters = this.selectedFilters.filter(filter => !this.typeOptions.includes(filter));
+    this.selectedFilters = this.selectedFilters.filter(filter => !this.hasTypeOption(filter));
+    this.resetToFirstPage();
   }
 
   toggleFilter(value: string): void {
@@ -184,6 +213,25 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.selectedFilters = [...this.selectedFilters, value];
     }
+    this.resetToFirstPage();
+  }
+
+  clearAllFilters(): void {
+    this.selectedFilters = [];
+    this.resetToFirstPage();
+  }
+
+  goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) {
+      return;
+    }
+    this.currentPage = page;
+    this.scrollToCatalog();
+    this.refreshListAnimations();
+  }
+
+  trackByProductId(_index: number, product: Product): string {
+    return product.id;
   }
 
   toggleWishlist(event: Event, product: Product): void {
@@ -206,6 +254,9 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
   quickAdd(product: Product, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
+    if (isComingSoon(product.price)) {
+      return;
+    }
     this.cartService.addToCart({
       id: product.id,
       kind: 'product',
@@ -233,6 +284,39 @@ export class CategoryComponent implements OnInit, AfterViewInit, OnDestroy {
         },
       })
     );
+  }
+
+  private hasTypeOption(value: string): boolean {
+    return this.typeOptions.some(option => this.typesMatch(option, value));
+  }
+
+  private typesMatch(a: string, b: string): boolean {
+    return a.trim().toLowerCase() === b.trim().toLowerCase();
+  }
+
+  private resetToFirstPage(): void {
+    this.currentPage = 1;
+    this.refreshListAnimations();
+  }
+
+  private ensureValidPage(): void {
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages;
+    }
+    if (this.currentPage < 1) {
+      this.currentPage = 1;
+    }
+  }
+
+  private scrollToCatalog(): void {
+    this.catalogSection?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  private refreshListAnimations(): void {
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
   }
 
   private syncTypeOptionsFromProducts(products: Product[]): void {

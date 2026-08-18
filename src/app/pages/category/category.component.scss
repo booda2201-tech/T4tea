@@ -83,6 +83,7 @@
   background: var(--sand, #e9dcc3);
   border-radius: 1.75rem 1.75rem 0 0;
   box-shadow: 0 -8px 32px rgba(15, 61, 46, 0.06);
+  scroll-margin-top: 5.5rem;
 
   @media (min-width: 768px) {
     margin-top: -2.25rem;
@@ -659,6 +660,12 @@
 .shop-card__price {
   font-weight: 500;
   color: rgba(45, 36, 28, 0.75);
+
+  &--soon {
+    font-style: italic;
+    letter-spacing: 0.03em;
+    color: #a87d54;
+  }
 }
 
 .shop-card__add {
@@ -690,7 +697,7 @@
     transition: transform 0.25s ease;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #0f3d2e;
     border-color: #0f3d2e;
     color: #f7efdf;
@@ -702,7 +709,7 @@
     }
   }
 
-  .shop-card:hover & {
+  .shop-card:hover &:not(:disabled):not(.shop-card__add--soon) {
     background: #0f3d2e;
     border-color: #0f3d2e;
     color: #f7efdf;
@@ -729,6 +736,33 @@
     transform: none;
     pointer-events: auto;
     background: rgba(255, 255, 255, 0.85);
+  }
+
+  &--soon,
+  &:disabled {
+    pointer-events: none;
+    cursor: default;
+    background: rgba(15, 61, 46, 0.07);
+    border-color: rgba(15, 61, 46, 0.1);
+    color: rgba(15, 61, 46, 0.55);
+    box-shadow: none;
+    opacity: 1;
+    transform: none;
+
+    &:hover,
+    .shop-card:hover & {
+      background: rgba(15, 61, 46, 0.07);
+      border-color: rgba(15, 61, 46, 0.1);
+      color: rgba(15, 61, 46, 0.55);
+      box-shadow: none;
+      transform: none;
+    }
+
+    @media (min-width: 768px) and (max-width: 1499px) {
+      pointer-events: none;
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 
@@ -764,6 +798,63 @@
   transition: background 0.2s;
 
   &:hover { background: #1c5240; }
+}
+
+.shop-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 2.25rem;
+  padding-top: 0.25rem;
+
+  @media (min-width: 768px) {
+    margin-top: 2.75rem;
+  }
+}
+
+.shop-pagination__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding: 0 0.8rem;
+  border: 1px solid rgba(15, 61, 46, 0.12);
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.5);
+  color: rgba(15, 61, 46, 0.78);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover:not(:disabled):not(.shop-pagination__btn--active) {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(15, 61, 46, 0.22);
+    color: #0f3d2e;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  &--active {
+    background: #0f3d2e;
+    border-color: #0f3d2e;
+    color: #f7efdf;
+  }
+
+  &--nav {
+    min-width: 2.4rem;
+    padding: 0;
+  }
 }
 
 @keyframes shop-fade-in {

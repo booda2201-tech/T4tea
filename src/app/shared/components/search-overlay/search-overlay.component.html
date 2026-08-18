@@ -60,7 +60,9 @@
               <h4>{{ result.title }}</h4>
               <p>{{ result.type }}</p>
             </div>
-            <span class="search-overlay__price">{{ result.price }} EGP</span>
+            <span class="search-overlay__price" [class.search-overlay__price--soon]="result.price | isComingSoon">
+              {{ result.price | displayPrice }}
+            </span>
           </button>
         </li>
       </ul>

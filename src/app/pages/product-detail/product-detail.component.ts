@@ -10,6 +10,7 @@ import { TeawaresApiService } from '../../core/services/teawares-api.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
 import { Product, Teaware } from '../../models/product.model';
+import { isComingSoon as hasNoSellablePrice } from '../../shared/utils/coming-soon.util';
 
 @Component({
   selector: 'app-product-detail',
@@ -57,6 +58,19 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       return 0;
     }
     return this.product.price + this.bundleTeaware.price - 50;
+  }
+
+  get isComingSoon(): boolean {
+    return hasNoSellablePrice(this.product?.price);
+  }
+
+  get showBundle(): boolean {
+    return (
+      !this.isTeaware &&
+      !!this.bundleTeaware &&
+      !this.isComingSoon &&
+      !hasNoSellablePrice(this.bundleTeaware.price)
+    );
   }
 
   constructor(
@@ -158,6 +172,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   addToCart(): void {
+    if (this.isComingSoon) {
+      return;
+    }
+
     this.cartService.addToCart(
       {
         id: this.product.id,
@@ -188,6 +206,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   quickAdd(product: Product, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
+    if (hasNoSellablePrice(product.price)) {
+      return;
+    }
     this.cartService.addToCart({
       id: product.id,
       kind: 'product',

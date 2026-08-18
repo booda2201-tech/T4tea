@@ -284,4 +284,10 @@
   font-weight: 600;
   color: #2d241c;
   white-space: nowrap;
+
+  &--soon {
+    font-style: italic;
+    font-weight: 500;
+    color: #a87d54;
+  }
 }

@@ -105,19 +105,19 @@
     z-index: 1;
     display: grid;
     width: 100%;
-    transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
   .product-detail__slide {
     grid-area: 1 / 1;
     opacity: 0;
-    transform: scale(0.96) translateY(10px);
+    transform: scale(0.98) translateY(6px);
     pointer-events: none;
     will-change: opacity, transform;
     transition:
-      opacity 0.95s cubic-bezier(0.22, 0.61, 0.36, 1),
-      transform 1.25s cubic-bezier(0.22, 0.61, 0.36, 1),
-      filter 0.55s ease;
+      opacity 0.38s cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1),
+      filter 0.32s ease;
   }
 
   .product-detail__slide--active {
@@ -226,23 +226,6 @@
   color: rgba(181, 97, 63, 0.92);
 }
 
-.product-detail__rating {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.15rem;
-  color: #c9a34e;
-
-  i {
-    font-size: 0.72rem;
-  }
-
-  span {
-    margin-left: 0.35rem;
-    font-size: 0.72rem;
-    color: rgba(45, 36, 28, 0.55);
-  }
-}
-
 .product-detail__title {
   margin: 0 0 0.5rem;
   font-family: inherit;
@@ -257,6 +240,12 @@
   font-size: clamp(1.15rem, 2vw, 1.35rem);
   font-weight: 500;
   color: #2d241c;
+
+  &--soon {
+    font-style: italic;
+    letter-spacing: 0.03em;
+    color: #a87d54;
+  }
 }
 
 .product-detail__desc {
@@ -379,11 +368,19 @@
   box-shadow: 0 10px 24px rgba(15, 61, 46, 0.18);
   transition:
     transform 0.18s ease,
-    box-shadow 0.18s ease;
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 14px 28px rgba(15, 61, 46, 0.22);
+  }
+
+  &:disabled {
+    background: rgba(15, 61, 46, 0.28);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
   }
 }
 
@@ -726,6 +723,13 @@
       transform 0.2s ease,
       background-color 0.18s ease;
     cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+      background: rgba(15, 61, 46, 0.08);
+      color: rgba(15, 61, 46, 0.55);
+      box-shadow: none;
+    }
   }
 
   &:hover {
@@ -797,45 +801,41 @@
   font-weight: 500;
   color: #0f3d2e;
   white-space: nowrap;
+
+  &--soon {
+    font-style: italic;
+    color: #a87d54;
+  }
 }
 
-.product-detail__reviews {
+.product-detail__ritual {
   padding-top: 2rem;
   border-top: 1px solid rgba(15, 61, 46, 0.08);
 }
 
-.product-detail__reviews-head {
-  margin-bottom: 1.25rem;
-  text-align: center;
-
-  h3 {
-    margin: 0 0 0.5rem;
-    font-family: inherit;
-    font-size: clamp(1.45rem, 3vw, 1.85rem);
-    font-weight: 400;
-    color: #0f3d2e;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.875rem;
-    color: rgba(45, 36, 28, 0.62);
-  }
-}
-
-.product-detail__reviews-stars {
-  display: flex;
-  justify-content: center;
-  gap: 0.2rem;
+.product-detail__ritual-eyebrow {
+  display: block;
   margin-bottom: 0.35rem;
-  color: #c9a34e;
-  font-size: 0.95rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(168, 125, 84, 0.92);
 }
 
-.product-detail__review-card {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 1.15rem;
+.product-detail__ritual-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+.product-detail__ritual-card {
+  padding: 1.2rem 1.15rem 1.25rem;
   border: 1px solid rgba(15, 61, 46, 0.08);
   border-radius: 1.15rem;
   background: rgba(255, 252, 247, 0.82);
@@ -843,12 +843,12 @@
   h4 {
     margin: 0 0 0.45rem;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 400;
     color: #0f3d2e;
   }
 
-  > p {
+  p {
     margin: 0;
     font-size: 0.875rem;
     font-weight: 300;
@@ -857,67 +857,14 @@
   }
 }
 
-.product-detail__review-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.85rem;
-}
-
-.product-detail__review-user {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-
-  img {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #0f3d2e;
-  }
-
-  span {
-    font-size: 0.72rem;
-    color: rgba(45, 36, 28, 0.52);
-  }
-}
-
-.product-detail__review-rating {
-  display: flex;
-  gap: 0.12rem;
-  color: #c9a34e;
-  font-size: 0.72rem;
-}
-
-.product-detail__load-more {
+.product-detail__ritual-step {
   display: block;
-  margin: 1.25rem auto 0;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid rgba(15, 61, 46, 0.18);
-  border-radius: 999px;
-  background: transparent;
-  color: #0f3d2e;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition:
-    background-color 0.18s ease,
-    color 0.18s ease;
-
-  &:hover {
-    background: #0f3d2e;
-    color: #f7efdf;
-  }
+  margin-bottom: 0.7rem;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #c9a34e;
 }
 
 .product-detail__mobile-bar {
@@ -966,6 +913,11 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     cursor: pointer;
+
+    &:disabled {
+      background: rgba(15, 61, 46, 0.28);
+      cursor: not-allowed;
+    }
   }
 }
 

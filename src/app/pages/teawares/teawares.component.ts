@@ -6,6 +6,7 @@ import { CatalogService } from '../../core/services/catalog.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { Teaware } from '../../models/product.model';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
+import { isComingSoon } from '../../shared/utils/coming-soon.util';
 
 interface TypeFilter {
   label: string;
@@ -116,6 +117,9 @@ export class TeawaresComponent implements OnInit, OnDestroy {
   quickAdd(item: Teaware, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
+    if (isComingSoon(item.price)) {
+      return;
+    }
     this.cartService.addToCart({
       id: item.id,
       kind: 'teaware',

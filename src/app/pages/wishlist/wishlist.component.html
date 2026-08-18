@@ -78,11 +78,20 @@
                 <div class="wishlist-card__meta">
                   <span class="wishlist-card__type">{{ item.type }}</span>
                   <span class="wishlist-card__dot" aria-hidden="true"></span>
-                  <span class="wishlist-card__price">{{ item.price }} EGP</span>
+                  <span
+                    class="wishlist-card__price"
+                    [class.wishlist-card__price--soon]="item.price | isComingSoon"
+                  >{{ item.price | displayPrice }}</span>
                 </div>
-                <button type="button" class="wishlist-card__add" (click)="addToCart($event, item)">
-                  <i class="bi bi-bag-plus" aria-hidden="true"></i>
-                  <span>Add to Cart</span>
+                <button
+                  type="button"
+                  class="wishlist-card__add"
+                  [class.wishlist-card__add--soon]="item.price | isComingSoon"
+                  [disabled]="item.price | isComingSoon"
+                  (click)="addToCart($event, item)"
+                >
+                  <i *ngIf="!(item.price | isComingSoon)" class="bi bi-bag-plus" aria-hidden="true"></i>
+                  <span>{{ (item.price | isComingSoon) ? 'Coming Soon' : 'Add to Cart' }}</span>
                 </button>
               </div>
             </article>

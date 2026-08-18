@@ -8,6 +8,7 @@ import { CatalogService } from '../../core/services/catalog.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { WishlistItem } from '../../models/wishlist-item.model';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
+import { isComingSoon } from '../../shared/utils/coming-soon.util';
 
 @Component({
   selector: 'app-wishlist',
@@ -57,6 +58,9 @@ export class WishlistComponent implements OnInit {
   addToCart(event: Event, item: WishlistItem): void {
     event.preventDefault();
     event.stopPropagation();
+    if (isComingSoon(item.price)) {
+      return;
+    }
     this.cartService.addToCart({
       id: item.id,
       kind: this.productKind(item) === 'teaware' ? 'teaware' : 'product',

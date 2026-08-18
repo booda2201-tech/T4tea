@@ -132,6 +132,7 @@
               <i class="bi" [class.bi-heart-fill]="isWishlisted(item.id)" [class.bi-heart]="!isWishlisted(item.id)"></i>
             </button>
             <button
+              *ngIf="!(item.price | isComingSoon)"
               type="button"
               class="teaware-card__action teaware-card__action--cart"
               (click)="quickAdd(item, $event)"
@@ -145,7 +146,9 @@
       <div class="teaware-card__meta">
         <div class="teaware-card__info">
           <h3 class="teaware-card__name font-serif">{{ item.title }}</h3>
-          <span class="teaware-card__price">{{ item.price }} EGP</span>
+          <span class="teaware-card__price" [class.teaware-card__price--soon]="item.price | isComingSoon">
+            {{ item.price | displayPrice }}
+          </span>
         </div>
         <p class="teaware-card__type">{{ item.type }}</p>
       </div>

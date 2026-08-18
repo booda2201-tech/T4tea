@@ -23,7 +23,7 @@
     </div>
   </section>
 
-  <section class="shop-catalog">
+  <section class="shop-catalog" #catalogSection>
     <div class="shop-catalog__inner">
       <header class="shop-header">
         <div class="shop-header__intro">
@@ -94,18 +94,18 @@
           {{ filter }}
           <i class="bi bi-x"></i>
         </button>
-        <button type="button" class="shop-active-tags__clear" (click)="selectedFilters = []">Clear all</button>
+        <button type="button" class="shop-active-tags__clear" (click)="clearAllFilters()">Clear all</button>
       </div>
 
       <div *ngIf="sortedProducts.length === 0" class="shop-empty">
         <p class="shop-empty__title">No teas match your selection</p>
         <p class="shop-empty__desc">Try a different blend or reset your filters.</p>
-        <button type="button" class="shop-empty__btn" (click)="selectedFilters = []">Reset Filters</button>
+        <button type="button" class="shop-empty__btn" (click)="clearAllFilters()">Reset Filters</button>
       </div>
 
-      <div class="shop-grid" *ngIf="sortedProducts.length > 0">
+      <div class="shop-grid" *ngIf="pagedProducts.length > 0">
         <article
-          *ngFor="let product of sortedProducts; let i = index"
+          *ngFor="let product of pagedProducts; let i = index; trackBy: trackByProductId"
           appGsapAnimate="fade-up"
           [gsapDelay]="i * 0.06"
           class="shop-card"
@@ -128,15 +128,61 @@
             <div class="shop-card__meta">
               <span class="shop-card__type">{{ product.type }}</span>
               <span class="shop-card__dot" aria-hidden="true"></span>
-              <span class="shop-card__price">{{ product.price }} EGP</span>
+              <span class="shop-card__price" [class.shop-card__price--soon]="product.price | isComingSoon">
+                {{ product.price | displayPrice }}
+              </span>
             </div>
-            <button type="button" class="shop-card__add" (click)="quickAdd(product, $event)">
-              <i class="bi bi-bag-plus" aria-hidden="true"></i>
-              <span>Add to Cart</span>
+            <button
+              type="button"
+              class="shop-card__add"
+              [class.shop-card__add--soon]="product.price | isComingSoon"
+              [disabled]="product.price | isComingSoon"
+              (click)="quickAdd(product, $event)"
+            >
+              <i *ngIf="!(product.price | isComingSoon)" class="bi bi-bag-plus" aria-hidden="true"></i>
+              <span>{{ (product.price | isComingSoon) ? 'Coming Soon' : 'Add to Cart' }}</span>
             </button>
           </div>
         </article>
       </div>
+
+      <nav
+        *ngIf="sortedProducts.length > pageSize"
+        class="shop-pagination"
+        aria-label="Shop pages"
+      >
+        <button
+          type="button"
+          class="shop-pagination__btn shop-pagination__btn--nav"
+          [disabled]="currentPage === 1"
+          (click)="goToPage(currentPage - 1)"
+          aria-label="Previous page"
+        >
+          <i class="bi bi-chevron-left" aria-hidden="true"></i>
+        </button>
+
+        <button
+          *ngFor="let page of pageNumbers"
+          type="button"
+          class="shop-pagination__btn"
+          [class.shop-pagination__btn--active]="currentPage === page"
+          [attr.aria-current]="currentPage === page ? 'page' : null"
+          [attr.aria-label]="'Page ' + page"
+          (click)="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+
+        <button
+          type="button"
+          class="shop-pagination__btn shop-pagination__btn--nav"
+          [disabled]="currentPage === totalPages"
+          (click)="goToPage(currentPage + 1)"
+          aria-label="Next page"
+        >
+          <i class="bi bi-chevron-right" aria-hidden="true"></i>
+        </button>
+      </nav>
     </div>
   </section>
 

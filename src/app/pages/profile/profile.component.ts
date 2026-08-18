@@ -18,6 +18,7 @@ import { WishlistService } from '../../core/services/wishlist.service';
 import { AddressPayload, UserAddress } from '../../models/profile.model';
 import { Order, OrderStatus } from '../../models/order.model';
 import { WishlistItem } from '../../models/wishlist-item.model';
+import { isComingSoon } from '../../shared/utils/coming-soon.util';
 
 type ProfileTab = 'overview' | 'addresses' | 'orders' | 'wishlist';
 
@@ -460,6 +461,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   addToCart(item: WishlistItem): void {
+    if (isComingSoon(item.price)) {
+      return;
+    }
     this.cartService.addToCart({
       id: item.id,
       kind: this.productKind(item) === 'teaware' ? 'teaware' : 'product',

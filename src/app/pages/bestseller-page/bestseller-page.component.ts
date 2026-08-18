@@ -5,6 +5,7 @@ import { CartService } from '../../core/services/cart.service';
 import { CatalogService } from '../../core/services/catalog.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { pulseWishlistButton } from '../../shared/utils/wishlist-pulse.util';
+import { isComingSoon } from '../../shared/utils/coming-soon.util';
 import { Product } from '../../models/product.model';
 
 @Component({
@@ -75,6 +76,9 @@ export class BestsellerPageComponent implements OnInit, AfterViewInit, OnDestroy
   quickAdd(product: Product, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
+    if (isComingSoon(product.price)) {
+      return;
+    }
     this.cartService.addToCart({
       id: product.id,
       kind: 'product',
